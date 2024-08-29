@@ -3,9 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary: #4a2bf1;
+  --bright-turquoise: #19c2dd;
+  --ultramarine-blue: #355bfb;
+  --light-cyan: #d1f3f8;
+  --lavender-blue: #d7defe;
+  --peach-pink: #fbcdba;
+  --red-orange: #fc5d19;
+  --dim-gray: #6a6a6a;
+  --black: #000000;
+  --sky-blue: #8af0ff;
+  --bright-cyan: #27d3ed;
+  --light-apricot: #ffc47e;
+  --vivid-orange: #ffab49;
+  --pastel-violet: #b195ff;
+  --vivid-violet: #7442ff;
+  --rich-black: #050313;
+  --gray: #4d4d4d;
+  --light-gray: #e5e5e5;
+  --lavender-mist: #eae8f3;
+  --solid-vivid-orange: #fc5d19;
+  --solid-sunset-gold: #f2c94c;
+  --solid-royal-purple: #6a13dd;
+  --solid-sky-blue: #19c1dd;
+  --solid-hot-pink: #ef5da8;
+  --solid-saffron-orange: #f2994a;
+  --white: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,4 +53,14 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+/*  ===================custom classes================== */
+.page-title{
+  @apply text-2xl font-semibold
+}
+
+.primary-btn{
+  @apply bg-primary px-6 py-2 rounded-md font-semibold flex gap-1 items-center text-white
 }

@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 6001",
+    "dev:staging": "env-cmd -f .env.staging next dev -p 6001",
+    "dev:prod": "env-cmd -f .env.prod next dev -p 6001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,9 +13,12 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.1",
     "antd": "^5.20.3",
+    "axios": "^1.7.5",
+    "env-cmd": "^10.1.0",
     "next": "14.2.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^5.3.0"
   },
   "devDependencies": {
     "eslint": "^8",
