@@ -34,7 +34,7 @@ const DetailsCategory = () => {
           <CreateNewDetailsCategory fetchProductCategories={fetchProductCategories} />
         </div>
 
-        {data && <DetailsCategoryInfo data={data} />}
+        {data && <DetailsCategoryInfo fetchProductCategories={fetchProductCategories} data={data} />}
       </div>
     </>
   );

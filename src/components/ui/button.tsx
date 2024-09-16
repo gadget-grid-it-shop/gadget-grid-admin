@@ -10,6 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary shadow hover:bg-primary/90 text-pure-white",
+        delete: "border-red text-red border text-md shadow hover:bg-red hover:text-pure-white",
+        delete_solid: "text-md shadow bg-red text-pure-white",
+        edit: "border border-vivid-orange text-vivid-orange text-md shadow hover:bg-vivid-orange hover:text-pure-white",
       },
       size: {
         default: "h-9 px-4 py-2",

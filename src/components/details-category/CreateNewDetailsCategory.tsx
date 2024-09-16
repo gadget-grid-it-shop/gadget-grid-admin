@@ -109,6 +109,7 @@ const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
           draggable: true,
           progress: undefined,
         });
+        console.log(err);
       });
   }
 
