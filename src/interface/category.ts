@@ -1,5 +1,5 @@
-export interface TCategory {
-    _id: string,
-    name: string,
-    fields: string[]
+export interface TProductCategory {
+  _id: string;
+  name: string;
+  fields: string[];
 }

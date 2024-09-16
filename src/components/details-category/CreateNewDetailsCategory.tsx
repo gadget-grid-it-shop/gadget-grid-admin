@@ -10,6 +10,12 @@ import {Button} from "../ui/button";
 import {HiMiniXMark} from "react-icons/hi2";
 import {useForm} from "react-hook-form";
 import {Form, FormField, FormItem, FormMessage} from "../ui/form";
+import axios from "axios";
+import {toast} from "react-toastify";
+
+type TProps = {
+  fetchProductCategories: () => void;
+};
 
 interface Field {
   field: string;
@@ -40,9 +46,10 @@ const generateID = () => {
   return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
 };
 
-const CreateNewDetailsCategory = () => {
+const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
   const [fields, setFields] = useState<Field[]>([]);
   const [fieldError, setFieldError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setFields([
@@ -70,6 +77,39 @@ const CreateNewDetailsCategory = () => {
       setFieldError(true);
       return;
     }
+
+    const payload = {
+      name: values.name,
+      fields: fields.map((f) => f.field),
+    };
+
+    axios
+      .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success) {
+          toast.success(res.data.message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+          });
+          fetchProductCategories();
+          setIsOpen(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("something went wrong", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
   }
 
   const handleAddField = () => {
@@ -107,11 +147,9 @@ const CreateNewDetailsCategory = () => {
     });
   };
 
-  console.log(fields);
-
   return (
     <div>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
         <DialogTrigger>
           <button className="primary-btn">
             <FaPlus /> Create Details Category
@@ -134,7 +172,6 @@ const CreateNewDetailsCategory = () => {
                   </FormItem>
                 )}
               />
-
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
                   <label>Fields *</label>

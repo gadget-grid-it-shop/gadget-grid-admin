@@ -6,7 +6,15 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {cn} from "@/lib/utils";
 import {HiMiniXMark} from "react-icons/hi2";
 
-const Dialog = DialogPrimitive.Root;
+const Dialog = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>>(
+  ({open, onOpenChange, children, ...props}) => (
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange} {...props}>
+      {children}
+    </DialogPrimitive.Root>
+  )
+);
+
+Dialog.displayName = "Dialog";
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
