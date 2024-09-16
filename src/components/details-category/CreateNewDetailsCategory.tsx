@@ -1,6 +1,8 @@
+'use client'
 import React from 'react'
 import { FaPlus } from 'react-icons/fa6'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
+
 
 const CreateNewDetailsCategory = () => {
     return (
@@ -8,12 +10,10 @@ const CreateNewDetailsCategory = () => {
             <Dialog>
                 <DialogTrigger>
 
-                    <button className='primary-btn'> <FaPlus /> Create Details Category</button>
+                    <button className='primary-btn'><FaPlus />  Create Details Category</button>
                 </DialogTrigger>
                 <DialogContent>
-                    <div className='text-black'>
-                        hello
-                    </div>
+                    <DialogTitle>Create details category</DialogTitle>
                 </DialogContent>
             </Dialog>
         </div>

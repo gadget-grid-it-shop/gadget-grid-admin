@@ -13,8 +13,8 @@ const DetailsCategory = async () => {
 
     return (
         <>
-            <div className='pt-4'>
-                <div className='flex justify-between items-center'>
+            <div className='mt-4 bg-white rounded-md p-5'>
+                <div className='flex justify-between items-center pb-4'>
                     <h4 className="text-black page-title">Product Details Category </h4>
                     <CreateNewDetailsCategory />
                 </div>

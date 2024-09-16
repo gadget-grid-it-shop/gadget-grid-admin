@@ -43,7 +43,7 @@ body {
   --vivid-violet: #7442ff;
   --rich-black: #050313;
   --gray: #4d4d4d;
-  --light-gray: #e5e5e5;
+  --light-gray: #f1f1f1;
   --lavender-mist: #eae8f3;
   --solid-vivid-orange: #fc5d19;
   --solid-sunset-gold: #f2c94c;
@@ -71,7 +71,7 @@ body {
   --vivid-violet: #7442ff;
   --rich-black: #050313;
   --gray: #b4b4b4;
-  --light-gray: #3a3a3a;
+  --light-gray: #202020;
   --lavender-mist: #eae8f3;
   --solid-vivid-orange: #fc5d19;
   --solid-sunset-gold: #f2c94c;
@@ -83,11 +83,11 @@ body {
   }
 }
 
-/* @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-} */
+.primary-btn{
+  @apply  flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium 
+}
+
+.page-title{
+  font-size: 1.5rem;
+  font-weight: 600;
+}

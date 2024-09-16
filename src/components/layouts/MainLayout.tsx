@@ -11,7 +11,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
             </div>
             <div className='min-h-screen w-full'>
                 <Navbar />
-                <div className='px-8'>
+                <div className='px-4'>
                     {children}
                 </div>
             </div>
