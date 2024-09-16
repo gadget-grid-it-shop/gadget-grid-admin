@@ -10,6 +10,7 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
+				overlay: 'var(--overlay-color)',
 				primary: "var(--primary)",
 				"bright-turquoise": "var(--bright-turquoise)",
 				"ultramarine-blue": "var(--ultramarine-blue)",

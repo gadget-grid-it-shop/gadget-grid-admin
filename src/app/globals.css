@@ -25,6 +25,7 @@ body {
 
 @layer base {
   :root {
+    --overlay-color: #00000077;
   --primary: #4a2bf1;
   --bright-turquoise: #19c2dd;
   --ultramarine-blue: #355bfb;

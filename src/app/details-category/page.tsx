@@ -1,21 +1,25 @@
-'use client'
+
+import CreateNewDetailsCategory from '@/components/details-category/CreateNewDetailsCategory';
+import DetailsCategoryInfo from '@/components/details-category/DetailsCategoryInfo';
+import axios from 'axios';
 import React from 'react'
-import { FaPlus } from "react-icons/fa6";
 
+const DetailsCategory = async () => {
 
-const DetailsCategory = () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/product-details-category/get-all`)
+    const data = res.data
 
-
+    console.log(data)
 
     return (
         <>
             <div className='pt-4'>
                 <div className='flex justify-between items-center'>
                     <h4 className="text-black page-title">Product Details Category </h4>
-                    <button className='primary-btn'> <FaPlus /> Create Details Category</button>
+                    <CreateNewDetailsCategory />
                 </div>
 
-                {/* <DetailsCategoryInfo /> */}
+                <DetailsCategoryInfo />
             </div>
 
         </>
