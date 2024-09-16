@@ -2,7 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
   --primary: #4a2bf1;
   --bright-turquoise: #19c2dd;
   --ultramarine-blue: #355bfb;
@@ -29,38 +51,42 @@
   --solid-hot-pink: #ef5da8;
   --solid-saffron-orange: #f2994a;
   --white: #fff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  }
+  .dark {
+  --primary: #2e0fdd;
+  --bright-turquoise: #19c2dd;
+  --ultramarine-blue: #355bfb;
+  --light-cyan: #d1f3f8;
+  --lavender-blue: #d7defe;
+  --peach-pink: #fbcdba;
+  --red-orange: #fc5d19;
+  --dim-gray: #6a6a6a;
+  --black: #ffffff;
+  --sky-blue: #8af0ff;
+  --bright-cyan: #27d3ed;
+  --light-apricot: #ffc47e;
+  --vivid-orange: #ffab49;
+  --pastel-violet: #b195ff;
+  --vivid-violet: #7442ff;
+  --rich-black: #050313;
+  --gray: #b4b4b4;
+  --light-gray: #3a3a3a;
+  --lavender-mist: #eae8f3;
+  --solid-vivid-orange: #fc5d19;
+  --solid-sunset-gold: #f2c94c;
+  --solid-royal-purple: #6a13dd;
+  --solid-sky-blue: #19c1dd;
+  --solid-hot-pink: #ef5da8;
+  --solid-saffron-orange: #f2994a;
+  --white: #000000;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* @layer base {
+  * {
+    @apply border-border;
   }
-}
-
-
-/*  ===================custom classes================== */
-.page-title{
-  @apply text-2xl font-semibold
-}
-
-.primary-btn{
-  @apply bg-primary px-6 py-2 rounded-md font-semibold flex gap-1 items-center text-white
-}
+  body {
+    @apply bg-background text-foreground;
+  }
+} */

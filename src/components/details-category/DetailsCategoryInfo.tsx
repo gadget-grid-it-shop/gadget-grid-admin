@@ -1,3 +1,4 @@
+import { TCategory } from '@/interface/category'
 import axios from 'axios'
 import React from 'react'
 
@@ -9,7 +10,7 @@ const DetailsCategoryInfo = async () => {
     return (
         <div className='grid grid-cols-4 gap-4'>
             {
-                data.length !== 0 && data.map(cat => <div key={cat._id}>
+                data.length !== 0 && data.map((cat: TCategory) => <div key={cat._id}>
                     <h3>{cat.name}</h3>
                 </div>)
             }
