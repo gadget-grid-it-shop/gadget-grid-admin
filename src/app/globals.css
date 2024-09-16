@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -26,68 +24,72 @@ body {
 @layer base {
   :root {
     --overlay-color: #00000077;
-  --primary: #4a2bf1;
-  --bright-turquoise: #19c2dd;
-  --ultramarine-blue: #355bfb;
-  --light-cyan: #d1f3f8;
-  --lavender-blue: #d7defe;
-  --peach-pink: #fbcdba;
-  --red-orange: #fc5d19;
-  --dim-gray: #6a6a6a;
-  --black: #000000;
-  --sky-blue: #8af0ff;
-  --bright-cyan: #27d3ed;
-  --light-apricot: #ffc47e;
-  --vivid-orange: #ffab49;
-  --pastel-violet: #b195ff;
-  --vivid-violet: #7442ff;
-  --rich-black: #050313;
-  --gray: #4d4d4d;
-  --light-gray: #f1f1f1;
-  --lavender-mist: #eae8f3;
-  --solid-vivid-orange: #fc5d19;
-  --solid-sunset-gold: #f2c94c;
-  --solid-royal-purple: #6a13dd;
-  --solid-sky-blue: #19c1dd;
-  --solid-hot-pink: #ef5da8;
-  --solid-saffron-orange: #f2994a;
-  --white: #fff;
+    --primary: hsl(249, 88%, 56%);
+    --bright-turquoise: #19c2dd;
+    --ultramarine-blue: #355bfb;
+    --light-cyan: #d1f3f8;
+    --lavender-blue: #d7defe;
+    --peach-pink: #fbcdba;
+    --red: #fc2119;
+    --red-orange: #fc5d19;
+    --dim-gray: #6a6a6a;
+    --black: #000000;
+    --border: #dadada;
+    --sky-blue: #8af0ff;
+    --bright-cyan: #27d3ed;
+    --light-apricot: #ffc47e;
+    --vivid-orange: #ffab49;
+    --pastel-violet: #b195ff;
+    --vivid-violet: #7442ff;
+    --rich-black: #050313;
+    --gray: #4d4d4d;
+    --light-gray: #f1f1f1;
+    --lavender-mist: #eae8f3;
+    --solid-vivid-orange: #fc5d19;
+    --solid-sunset-gold: #f2c94c;
+    --solid-royal-purple: #6a13dd;
+    --solid-sky-blue: #19c1dd;
+    --solid-hot-pink: #ef5da8;
+    --solid-saffron-orange: #f2994a;
+    --white: #fff;
   }
   .dark {
-  --primary: #2e0fdd;
-  --bright-turquoise: #19c2dd;
-  --ultramarine-blue: #355bfb;
-  --light-cyan: #d1f3f8;
-  --lavender-blue: #d7defe;
-  --peach-pink: #fbcdba;
-  --red-orange: #fc5d19;
-  --dim-gray: #6a6a6a;
-  --black: #ffffff;
-  --sky-blue: #8af0ff;
-  --bright-cyan: #27d3ed;
-  --light-apricot: #ffc47e;
-  --vivid-orange: #ffab49;
-  --pastel-violet: #b195ff;
-  --vivid-violet: #7442ff;
-  --rich-black: #050313;
-  --gray: #b4b4b4;
-  --light-gray: #202020;
-  --lavender-mist: #eae8f3;
-  --solid-vivid-orange: #fc5d19;
-  --solid-sunset-gold: #f2c94c;
-  --solid-royal-purple: #6a13dd;
-  --solid-sky-blue: #19c1dd;
-  --solid-hot-pink: #ef5da8;
-  --solid-saffron-orange: #f2994a;
-  --white: #000000;
+    --primary: hsl(249, 87%, 46%);
+    --bright-turquoise: #19c2dd;
+    --ultramarine-blue: #355bfb;
+    --light-cyan: #d1f3f8;
+    --lavender-blue: #d7defe;
+    --peach-pink: #fbcdba;
+    --red: #fc2119;
+    --red-orange: #fc5d19;
+    --dim-gray: #6a6a6a;
+    --black: #ffffff;
+    --border: #2b2b2b;
+    --sky-blue: #8af0ff;
+    --bright-cyan: #27d3ed;
+    --light-apricot: #ffc47e;
+    --vivid-orange: #ffab49;
+    --pastel-violet: #b195ff;
+    --vivid-violet: #7442ff;
+    --rich-black: #050313;
+    --gray: #b4b4b4;
+    --light-gray: #141414;
+    --lavender-mist: #eae8f3;
+    --solid-vivid-orange: #fc5d19;
+    --solid-sunset-gold: #f2c94c;
+    --solid-royal-purple: #6a13dd;
+    --solid-sky-blue: #19c1dd;
+    --solid-hot-pink: #ef5da8;
+    --solid-saffron-orange: #f2994a;
+    --white: #000000;
   }
 }
 
-.primary-btn{
-  @apply  flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium 
+.primary-btn {
+  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium;
 }
 
-.page-title{
+.page-title {
   font-size: 1.5rem;
   font-weight: 600;
 }
