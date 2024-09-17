@@ -13,14 +13,17 @@ const Navbar = () => {
     }, [])
 
     return (
-        <nav className='sticky top-0 bg-white px-4 py-4 shadow-md z-50'>
-            {
-                loaded && <button className='text-text' onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-                    {
-                        theme
-                    }
-                </button>
-            }
+        <nav className=''>
+            <div className='bg-white px-4 py-4 shadow-md rounded-md mt-3'>
+                {
+                    loaded && <button className='text-text' onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+                        {
+                            theme
+                        }
+                    </button>
+                }
+            </div>
+
         </nav>
     )
 }

@@ -14,9 +14,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex bg-light-gray">
       <Sidebar />
-      <div className="min-h-screen w-full">
+      <div className="min-h-screen w-full px-4">
         <Navbar />
-        <div className="px-4">{children}</div>
+        <div>{children}</div>
       </div>
       <ToastContainer theme={theme} />
     </div>

@@ -296,8 +296,8 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                         <h1 className="text-red">Detete Category</h1>
                     </DialogTitle>
                     <div>
-                        <h3>Name: {selectedCat?.name}</h3>
-                        <DialogDescription>
+                        <h3 className="text-gray pb-3">Name: {selectedCat?.name}</h3>
+                        <DialogDescription className="text-gray">
                             Do you really want to delete this details category?
                         </DialogDescription>
 
