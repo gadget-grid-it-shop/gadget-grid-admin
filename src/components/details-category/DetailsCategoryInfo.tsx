@@ -97,6 +97,9 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                             id: generateID(),
                         },
                     ]);
+                    form.reset({
+                        name: ""
+                    })
                     fetchProductCategories()
                 }
             })
@@ -155,6 +158,7 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                     progress: undefined,
                 });
                 fetchProductCategories();
+
             })
             .catch((err) => {
                 console.log(err);
@@ -187,7 +191,7 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
         <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
             {data.length !== 0 &&
                 data?.map((cat: TProductCategory) => (
-                    <div className="bg-light-gray p-4 rounded-md flex flex-col h-full" key={cat._id}>
+                    <div className="bg-light-gray p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
                         <h3 className="text-black text-lg font-semibold">{cat.name}</h3>
                         <div className="flex flex-col gap-2 pt-3 flex-grow">
                             {cat.fields?.map((field) => (
@@ -236,8 +240,8 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                                 name="name"
                                 render={({ field, fieldState }) => (
                                     <FormItem className="flex flex-col">
-                                        <label>Name *</label>
-                                        <Input {...field} className="bg-white border-gray" placeholder="Enter Product Category Name" type="text"></Input>
+                                        <label className="text-gray">Name *</label>
+                                        <Input {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>
 
                                         {fieldState.error && <FormMessage className="text-red text-sm">{fieldState.error.message}</FormMessage>}
                                     </FormItem>
@@ -245,7 +249,7 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                             />
                             <div className="flex flex-col gap-2">
                                 <div className="flex justify-between items-center">
-                                    <label>Fields *</label>
+                                    <label className="text-gray">Fields *</label>
                                     <Button onClick={handleAddField} type="button">
                                         Add Field
                                     </Button>
@@ -256,7 +260,7 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                                             <Input
                                                 defaultValue={field.field}
                                                 onChange={(e) => handleFieldChange(e.target.value, field.id)}
-                                                className="bg-white border-gray"
+                                                className="bg-white border-gray text-gray"
                                                 placeholder="Enter Field Name"
                                                 type="text"
                                             ></Input>

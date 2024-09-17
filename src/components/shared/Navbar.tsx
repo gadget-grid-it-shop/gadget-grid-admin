@@ -13,7 +13,7 @@ const Navbar = () => {
     }, [])
 
     return (
-        <nav className='sticky top-0 bg-white px-4 py-4 shadow-md'>
+        <nav className='sticky top-0 bg-white px-4 py-4 shadow-md z-50'>
             {
                 loaded && <button className='text-text' onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
                     {
