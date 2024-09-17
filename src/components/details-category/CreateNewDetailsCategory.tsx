@@ -1,17 +1,17 @@
 "use client";
 
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
-import React, {useEffect, useState} from "react";
-import {FaPlus} from "react-icons/fa6";
-import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "../ui/dialog";
-import {Input} from "../ui/input";
-import {Button} from "../ui/button";
-import {HiMiniXMark} from "react-icons/hi2";
-import {useForm} from "react-hook-form";
-import {Form, FormField, FormItem, FormMessage} from "../ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa6";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { HiMiniXMark } from "react-icons/hi2";
+import { useForm } from "react-hook-form";
+import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import axios from "axios";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 type TProps = {
   fetchProductCategories: () => void;
@@ -27,7 +27,7 @@ const nameSchema = z.object({
     .string({
       required_error: "Product category name is required",
     })
-    .min(1, {message: "Product category name is required"})
+    .min(1, { message: "Product category name is required" })
     .max(50),
 });
 
@@ -46,7 +46,7 @@ const generateID = () => {
   return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
 };
 
-const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
+const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
   const [fields, setFields] = useState<Field[]>([]);
   const [fieldError, setFieldError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -97,6 +97,12 @@ const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
             progress: undefined,
           });
           fetchProductCategories();
+          setFields([
+            {
+              field: "",
+              id: generateID(),
+            },
+          ]);
           setIsOpen(false);
         }
       })
@@ -152,19 +158,20 @@ const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
     <div>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
         <DialogTrigger>
-          <button className="primary-btn">
+          <div className="primary-btn">
             <FaPlus /> Create Details Category
-          </button>
+          </div>
         </DialogTrigger>
         <DialogContent>
           <DialogTitle>Create details category</DialogTitle>
+
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
               <FormField
                 control={form.control}
                 name="name"
-                render={({field, fieldState}) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label>Name *</label>
                     <Input {...field} className="bg-white border-gray" placeholder="Enter Product Category Name" type="text"></Input>
@@ -201,7 +208,7 @@ const CreateNewDetailsCategory = ({fetchProductCategories}: TProps) => {
                     )}
                   </div>
                 ))}
-                {fields.length === 0 && <p className="text-red text-sm">Please add at least one field</p>}
+                <DialogDescription>{fields.length === 0 && <p className="text-red text-sm">Please add at least one field</p>}</DialogDescription>
               </div>
               <Button type="submit">Submit</Button>
             </form>

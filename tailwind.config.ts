@@ -1,4 +1,4 @@
-import type {Config} from "tailwindcss";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
@@ -6,7 +6,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        overlay: "var(--overlay-color)",
+        overlay: {
+          DEFAULT: "hsla(var(--overlay-color) , var(--tw-bg-opacity, 1))"
+        },
         primary: {
           DEFAULT: "var(--primary)",
         },

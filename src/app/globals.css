@@ -23,7 +23,7 @@ body {
 
 @layer base {
   :root {
-    --overlay-color: #00000077;
+    --overlay-color: 0, 0%, 0%;
     --primary: hsl(249, 88%, 56%);
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
@@ -54,7 +54,8 @@ body {
     --white: #fff;
   }
   .dark {
-    --primary: hsl(249, 87%, 46%);
+    --overlay-color: 0, 0%, 0%;
+    --primary: hsl(249, 98%, 61%);
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
     --light-cyan: #d1f3f8;

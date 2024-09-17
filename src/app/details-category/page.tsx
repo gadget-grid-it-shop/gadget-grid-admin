@@ -1,9 +1,9 @@
 "use client";
 import CreateNewDetailsCategory from "@/components/details-category/CreateNewDetailsCategory";
 import DetailsCategoryInfo from "@/components/details-category/DetailsCategoryInfo";
-import {TProductCategory} from "@/interface/category";
+import { TProductCategory } from "@/interface/category";
 import axios from "axios";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 const DetailsCategory = () => {
   const [data, setData] = useState<TProductCategory[] | undefined>(undefined);
