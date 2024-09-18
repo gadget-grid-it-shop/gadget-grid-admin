@@ -119,10 +119,51 @@ const Sidebar = () => {
             </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             {
-                loaded && <div className='flex justify-center items-center border w-fit mx-auto rounded-full border-primary'>
-                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}>night <BsIcons.BsMoonFill /></button>
-                    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}><TbIcons.TbSunFilled />light</button>
+                loaded && <div
+                    className='flex justify-center items-center border w-fit mx-auto rounded-full shadow-lg bg-lavender-mist font-semibold'
+                >
+                    <button
+                        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                        className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
+                    >
+                        <BsIcons.BsMoonFill />
+                    </button>
+                    <button
+                        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                        className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}
+                    >
+                        <TbIcons.TbSunFilled />
+                    </button>
                 </div>
             }
         </div>

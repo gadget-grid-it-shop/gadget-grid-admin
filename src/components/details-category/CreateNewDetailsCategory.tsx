@@ -174,7 +174,7 @@ const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
                 render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label className="text-black">Name *</label>
-                    <Input {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>
+                    <Input {...field} placeholder="Enter Product Category Name" type="text"></Input>
 
                     {fieldState.error && <FormMessage className="text-red text-sm">{fieldState.error.message}</FormMessage>}
                   </FormItem>
@@ -192,7 +192,6 @@ const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
                     <div className="flex items-center gap-2">
                       <Input
                         onChange={(e) => handleFieldChange(e.target.value, field.id)}
-                        className="bg-white border-gray text-gray"
                         placeholder="Enter Field Name"
                         type="text"
                       ></Input>

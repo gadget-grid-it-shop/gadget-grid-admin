@@ -75,7 +75,7 @@ body {
     --rich-black: #050313;
     --gray: #b4b4b4;
     --light-gray: #141414;
-    --lavender-mist: #eae8f3;
+    --lavender-mist: #242430;
     --solid-vivid-orange: #fc5d19;
     --solid-sunset-gold: #f2c94c;
     --solid-royal-purple: #6a13dd;
@@ -91,6 +91,5 @@ body {
 }
 
 .page-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  @apply text-black text-[1.5rem] font-semibold;
 }
