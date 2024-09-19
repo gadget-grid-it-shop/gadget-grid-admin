@@ -16,7 +16,6 @@ import { z } from "zod";
 
 type TProps = {
     data: TProductCategory[];
-    fetchProductCategories: () => void;
 };
 
 interface Field {
@@ -48,7 +47,7 @@ const generateID = () => {
     return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
 };
 
-const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
+const DetailsCategoryInfo = ({ data }: TProps) => {
     const [openDeleteId, setOpenDeleteId] = useState<null | string>(null);
     const [openEditId, setOpenEditId] = useState<null | string>(null)
     const [selectedCat, setSelectedCat] = useState<null | TProductCategory>(null)
@@ -100,7 +99,6 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                     form.reset({
                         name: ""
                     })
-                    fetchProductCategories()
                 }
             })
             .catch(err => {
@@ -157,7 +155,6 @@ const DetailsCategoryInfo = ({ data, fetchProductCategories }: TProps) => {
                     draggable: true,
                     progress: undefined,
                 });
-                fetchProductCategories();
 
             })
             .catch((err) => {

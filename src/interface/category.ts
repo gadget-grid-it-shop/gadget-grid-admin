@@ -1,5 +1,5 @@
 export interface TProductCategory {
-  _id: string;
+  _id?: string;
   name: string;
   fields: string[];
 }

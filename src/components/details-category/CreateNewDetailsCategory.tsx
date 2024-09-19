@@ -10,12 +10,10 @@ import { Button } from "../ui/button";
 import { HiMiniXMark } from "react-icons/hi2";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { useCreateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
 
-type TProps = {
-  fetchProductCategories: () => void;
-};
+
 
 interface Field {
   field: string;
@@ -46,10 +44,13 @@ const generateID = () => {
   return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
 };
 
-const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
+const CreateNewDetailsCategory = () => {
   const [fields, setFields] = useState<Field[]>([]);
   const [fieldError, setFieldError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [createDetailsCategory] = useCreateDetailsCategoryMutation()
+
 
   useEffect(() => {
     setFields([
@@ -67,13 +68,13 @@ const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof nameSchema>) {
+  async function onSubmit(values: z.infer<typeof nameSchema>) {
     setFieldError(false);
     console.log(values);
 
-    const result = fieldSchema.safeParse(fields);
+    const validationResult = fieldSchema.safeParse(fields);
 
-    if (result.success === false) {
+    if (validationResult.success === false) {
       setFieldError(true);
       return;
     }
@@ -83,40 +84,75 @@ const CreateNewDetailsCategory = ({ fetchProductCategories }: TProps) => {
       fields: fields.map((f) => f.field),
     };
 
-    axios
-      .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.success) {
-          toast.success(res.data.message, {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-          });
-          fetchProductCategories();
-          setFields([
-            {
-              field: "",
-              id: generateID(),
-            },
-          ]);
-          setIsOpen(false);
-        }
+    const result = await createDetailsCategory(payload).unwrap()
+    console.log(result)
+    if (result.success) {
+      toast.success(result.message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
       })
-      .catch((err) => {
-        toast.error("something went wrong", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-        });
-        console.log(err);
+      form.reset(
+        {
+          name: "",
+        }
+      )
+      setFields([
+        {
+          field: "",
+          id: generateID(),
+        },
+      ]);
+      setIsOpen(false);
+    }
+
+    else {
+      toast.error("something went wrong", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
       });
+    }
+
+    // axios
+    //   .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     if (res.data.success) {
+    //       toast.success(res.data.message, {
+    //         position: "top-center",
+    //         autoClose: 3000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       })
+    //       setFields([
+    //         {
+    //           field: "",
+    //           id: generateID(),
+    //         },
+    //       ]);
+    //       setIsOpen(false);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     toast.error("something went wrong", {
+    //       position: "top-center",
+    //       autoClose: 3000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //     });
+    //     console.log(err);
+    //   });
   }
 
   const handleAddField = () => {

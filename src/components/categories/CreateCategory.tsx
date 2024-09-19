@@ -7,7 +7,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { MultiSelect } from '../ui/multiselect'
 
 type TCategoryProps = {
     parent_id?: string | null | undefined,
@@ -74,14 +73,7 @@ const CreateCategory = ({ parent_id, fetchCategories }: TCategoryProps) => {
                             }
                             <div>
                                 <label className='text-black'>Product Details Category *</label>
-                                <MultiSelect
-                                    className='mt-2 text-gray'
-                                    onValueChange={setProductDetailsCategories}
-                                    defaultValue={productDetailsCategories}
-                                    placeholder='Select product details category'
-                                    options={[]}
 
-                                />
                             </div>
                         </form>
 
