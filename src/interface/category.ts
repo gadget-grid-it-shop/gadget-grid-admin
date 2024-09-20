@@ -6,8 +6,14 @@ export interface TProductCategory {
 
 export interface TCategory {
   name: string;
-  parent_id: string;
+  parent_id: string | null;
   product_details_categories: TProductCategory[];
   _id: string;
   subCategories: TCategory[];
+}
+
+export interface TCreateCategory {
+  name: string;
+  parent_id: string | null;
+  product_details_categories: string[];
 }

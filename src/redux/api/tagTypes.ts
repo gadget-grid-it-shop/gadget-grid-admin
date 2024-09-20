@@ -1,7 +1,6 @@
 export enum tagTypes {
-    detailsCategory = 'detailsCategory'
+  detailsCategory = "detailsCategory",
+  categories = "categories",
 }
 
-export const tagTypesList = [
-    tagTypes.detailsCategory
-]
+export const tagTypesList = [tagTypes.detailsCategory, tagTypes.categories];
