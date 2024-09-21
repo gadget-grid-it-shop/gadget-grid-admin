@@ -36,7 +36,7 @@ const CreateCategory = ({parent_id}: TCategoryProps) => {
   const {data: detailsCategoryData, error, isLoading} = useGetDetailsCategoriesQuery(undefined);
   const [detailsCategoryError, setDetailsCategoryError] = useState<{error: boolean; message: string}>({error: false, message: ""});
 
-  const [createCategory, {error: createError}] = useCreateCategoryMutation();
+  const [createCategory] = useCreateCategoryMutation();
 
   const selectOptions = detailsCategoryData?.data?.map((item: TProductCategory) => {
     return {
@@ -63,6 +63,8 @@ const CreateCategory = ({parent_id}: TCategoryProps) => {
   }, [parent_id, form]);
 
   const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
+    console.log("works");
+
     setDetailsCategoryError({error: false, message: ""});
 
     const detailsCategorySchema = z.array(z.string()).min(1, {message: "Please select at least one details category"});
@@ -112,7 +114,7 @@ const CreateCategory = ({parent_id}: TCategoryProps) => {
     }
   };
 
-  console.log(createError);
+  //   console.log(createError);
 
   return (
     <div>

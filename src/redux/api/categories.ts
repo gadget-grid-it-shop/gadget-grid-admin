@@ -17,7 +17,7 @@ const categoriesApi = baseApi.injectEndpoints({
     createCategory: build.mutation({
       query: (payload: TCreateCategory) => {
         return {
-          url: "category/create",
+          url: "/category/create",
           method: "POST",
           body: payload,
         };
