@@ -37,7 +37,7 @@ interface TMenu {
     children?: TMenu[]
 }
 
-const menus = [
+const menus: TMenu[] = [
     {
         id: 1,
         title: 'Details Category',
@@ -45,24 +45,24 @@ const menus = [
         icon: "TbListDetails"
     },
     {
-        id: 1,
+        id: 2,
         title: 'Category',
         icon: 'BiCategory',
         link: '/category',
-        // children: [
-        //     {
-        //         id: 1,
-        //         title: 'Create Category',
-        //         link: '/category/create-category',
-        //         icon: 'TbCategoryPlus'
-        //     },
-        //     {
-        //         id: 2,
-        //         title: 'All Categories',
-        //         link: '/category/all-categories',
-        //         icon: ''
-        //     }
-        // ]
+    },
+    {
+        id: 3,
+        title: 'Product',
+        icon: 'MdOutlineLaptopChromebook',
+        link: '/product',
+        children: [
+            {
+                id: 1,
+                title: 'Create Product',
+                link: '/product/create-product',
+                icon: "BiAddToQueue"
+            }
+        ]
     }
 ]
 
@@ -83,6 +83,21 @@ const Sidebar = () => {
         return <IconComponent size={18} />;
     };
 
+    const isLinkActive = (link: string) => {
+        console.log(link, pathName)
+        return pathName === link || pathName.startsWith(link);
+    };
+
+
+    useEffect(() => {
+        menus.forEach(menu => {
+            if (pathName.includes(menu.link)) {
+                setOpenMenu(menu.id)
+            }
+        })
+    }, [pathName])
+
+
     return (
         <div className="h-screen sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col">
             <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
@@ -91,14 +106,15 @@ const Sidebar = () => {
                 {
                     menus.map((item: TMenu) => {
                         if (!item?.children) {
-                            return <Link className={`rounded-xl py-2 px-4 text-black flex items-center gap-2 ${pathName === item.link ? 'bg-primary text-pure-white' : ''}`} key={item.id} href={item.link}>
+                            return <Link className={`rounded-xl py-2 px-4 text-black flex items-center gap-2 ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : ''}`} key={item.id} href={item.link}>
                                 {getIcon(item.icon)}
                                 {item.title}
                             </Link>
                         }
                         else {
-                            return <div key={item.id}>
-                                <button onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)} className={`text-pure-white py-2 flex justify-between w-full items-center`}>
+
+                            return <div key={item.id} className={`${pathName.includes(item.link) && 'bg-lavender-mist rounded-md'}`}>
+                                <button onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)} className={`text-black rounded-xl py-2 px-4 flex justify-between w-full items-center `}>
                                     <div className='flex gap-2 items-center'>
                                         {getIcon(item.icon)}
                                         {item.title}
@@ -106,8 +122,8 @@ const Sidebar = () => {
 
                                     <FaIcons.FaChevronDown className={`${openMenu === item.id ? 'rotate-180' : 'rotate-0'} transition-all`} />
                                 </button>
-                                <div className='ps-3 pt-2 flex flex-col gap-1'>
-                                    {openMenu === item.id && item.children.map(child => <Link className={`rounded-xl py-2 px-4 flex items-center gap-2 ${pathName === child.link ? 'bg-white  text-pure-white' : ''}`} key={child.id} href={child.link}>
+                                <div className={`px-3 flex flex-col gap-1 ${openMenu === item.id && 'py-2'}`}>
+                                    {openMenu === item.id && item.children.map(child => <Link className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? 'bg-primary  text-pure-white' : 'text-black'}`} key={child.id} href={child.link}>
                                         {getIcon(child.icon)}
                                         {child.title}
                                     </Link>)}
@@ -117,32 +133,6 @@ const Sidebar = () => {
                     })
                 }
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
