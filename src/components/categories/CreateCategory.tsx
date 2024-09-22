@@ -13,17 +13,13 @@ import MultipleSelector from "../ui/multiselect";
 import { useCreateCategoryMutation } from "@/redux/api/categories";
 import { toast } from 'sonner'
 import { TParentCat } from "@/app/category/page";
+import { TSelectOptions } from "./interface";
 
 type TCategoryProps = {
     parent: TParentCat;
     setParent: Dispatch<SetStateAction<TParentCat>>,
     setOpen: Dispatch<SetStateAction<boolean>>,
     open: boolean
-};
-
-type TSelectOptions = {
-    label: string;
-    value: string;
 };
 
 const CategorySchema = z.object({

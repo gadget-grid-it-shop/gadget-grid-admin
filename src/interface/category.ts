@@ -17,3 +17,8 @@ export interface TCreateCategory {
   parent_id: string | null;
   product_details_categories: string[];
 }
+
+export interface TUpdateCategory {
+  name: string;
+  product_details_categories: string[];
+}

@@ -2,8 +2,9 @@
 
 import CategorySkeleton from "@/components/categories/CategorySkeleton";
 import CreateCategory from "@/components/categories/CreateCategory";
+import EditCategory from "@/components/categories/EditCategory";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TCategory } from "@/interface/category";
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery } from "@/redux/api/categories";
 import React, { useState } from "react";
@@ -27,7 +28,9 @@ const Category = () => {
   const [openCategoryIds, setOpenCategoryIds] = useState<string[] | []>([]);
   const [open, setOpen] = useState(false);
   const { data: categoryData, error, isLoading } = useGetAllCategoriesQuery(undefined);
+  const [editOpen, setEditOpen] = useState(false)
   const [deleteCategory] = useDeleteCategoryMutation()
+  const [editCategory, setEditCategory] = useState<TCategory | null>(null)
   const [deleteOpen, setDeleteOpen] = useState<TDeleteOpen>({
     open: false,
     id: ''
@@ -128,9 +131,16 @@ const Category = () => {
                     <Button onClick={() => handleAddClick(category._id, category.name)} variant={"default"} size={"sm"}>
                       <FiPlus size={14} />
                     </Button>
-                    <Button variant={"edit"} size={"sm"}>
+
+                    {/* edit category */}
+                    <Button onClick={() => {
+                      setEditCategory(category)
+                      setEditOpen(true)
+                    }} variant={"edit"} size={"sm"}>
                       <FiEdit3 />
                     </Button>
+
+
                     {category.subCategories && category.subCategories.length === 0 && (
                       <Button onClick={() => handleDeleteClick(category._id, category.name, category.subCategories.length !== 0)} variant={"delete_solid"} size={"sm"}>
                         <FaTrash />
@@ -167,6 +177,22 @@ const Category = () => {
       {!isLoading && categories.length === 0 && !error && <div className="h-48 flex justify-center items-center text-gray">No categories available</div>}
 
 
+
+
+      {/*====================== edit category modal===================== */}
+
+      <Dialog open={editOpen} onOpenChange={() => setEditOpen(!editOpen)}>
+        <DialogTrigger asChild>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Edit Category</DialogTitle>
+          <EditCategory category={editCategory} editOpen={editOpen} setEditOpen={setEditOpen} />
+        </DialogContent>
+      </Dialog>
+
+
+
+      {/*====================== delete category modal===================== */}
 
       <Dialog open={deleteOpen.open} onOpenChange={() => setDeleteOpen({ open: false, id: '' })}>
 
