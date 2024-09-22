@@ -4,27 +4,27 @@ import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import * as FaIcons from 'react-icons/fa'; // Font Awesome
+import * as FaIcons from 'react-icons/fa6'; // Font Awesome
 import * as MdIcons from 'react-icons/md'; // Material Design Icons
 import * as TiIcons from 'react-icons/ti'; // Typicons
-import * as GiIcons from 'react-icons/gi'; // Game Icons
-import * as AiIcons from 'react-icons/ai'; // Ant Design Icons
+// import * as GiIcons from 'react-icons/gi'; // Game Icons
+// import * as AiIcons from 'react-icons/ai'; // Ant Design Icons
 import * as BsIcons from 'react-icons/bs'; // Bootstrap Icons
 import * as BiIcons from 'react-icons/bi'; // Bootstrap Icons
 import * as TbIcons from 'react-icons/tb'; // Tabler Icons
-import * as IoIcons from 'react-icons/io';
+// import * as IoIcons from 'react-icons/io';
 import { useTheme } from 'next-themes';
 
 const iconLibraries = {
     ...FaIcons,
     ...MdIcons,
     ...TiIcons,
-    ...GiIcons,
-    ...AiIcons,
-    ...BsIcons,
+    // ...GiIcons,
+    // ...AiIcons,
+    // ...BsIcons,
     ...BiIcons,
     ...TbIcons,
-    ...IoIcons,
+    // ...IoIcons,
     // Add more icon libraries here if needed
 };
 
@@ -61,6 +61,12 @@ const menus: TMenu[] = [
                 title: 'Create Product',
                 link: '/product/create-product',
                 icon: "BiAddToQueue"
+            },
+            {
+                id: 2,
+                title: 'All Products',
+                link: '/product/all-products',
+                icon: "MdListAlt"
             }
         ]
     }
@@ -133,9 +139,6 @@ const Sidebar = () => {
                     })
                 }
             </div>
-
-
-
 
 
             {
