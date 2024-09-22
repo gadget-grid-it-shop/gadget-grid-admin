@@ -10,6 +10,11 @@ const DetailsCategory = () => {
   const { data, error, isLoading } = useGetDetailsCategoriesQuery(undefined)
 
 
+  if (error) {
+    return <h3>error</h3>
+  }
+
+  console.log(error)
 
   return (
     <>
@@ -30,6 +35,10 @@ const DetailsCategory = () => {
             }
           </div>
         }
+
+
+        {!isLoading && data.data.length === 0 && <div className="h-48 flex justify-center items-center text-gray">No product details categories available</div>}
+
       </div>
     </>
   );

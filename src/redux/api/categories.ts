@@ -1,6 +1,6 @@
-import {TCreateCategory} from "@/interface/category";
-import {baseApi} from "./baseApi";
-import {tagTypes} from "./tagTypes";
+import { TCreateCategory } from "@/interface/category";
+import { baseApi } from "./baseApi";
+import { tagTypes } from "./tagTypes";
 
 const categoriesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -25,7 +25,17 @@ const categoriesApi = baseApi.injectEndpoints({
 
       invalidatesTags: [tagTypes.categories],
     }),
+
+    deleteCategory: build.mutation({
+      query: (id: string) => {
+        return {
+          url: `/category/${id}`,
+          method: 'DELETE'
+        }
+      },
+      invalidatesTags: [tagTypes.categories]
+    })
   }),
 });
 
-export const {useGetAllCategoriesQuery, useCreateCategoryMutation} = categoriesApi;
+export const { useGetAllCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation } = categoriesApi;
