@@ -2,7 +2,9 @@ import { TProduct } from "@/interface/product.interface"
 import { createSlice, PayloadAction, } from "@reduxjs/toolkit"
 
 interface TInitialState {
-    product: TProduct
+    product: TProduct,
+    selectedCategoryName: string,
+    step: number
 }
 
 interface CustomPayloadAction<K extends keyof TProduct> {
@@ -40,6 +42,8 @@ const initialState: TInitialState = {
         isFeatured: false,
         sales: 0,
     },
+    selectedCategoryName: '',
+    step: 1
 }
 
 const productSlice = createSlice({
@@ -53,11 +57,21 @@ const productSlice = createSlice({
                     state.product[key] = value
                 }
             }
+        },
+        setSelectedCategoryName: (state: TInitialState, action: PayloadAction<string>) => {
+            if (action.payload) {
+                state.selectedCategoryName = action.payload
+            }
+        },
+        setCreateProductStep: (state: TInitialState, action: PayloadAction<number>) => {
+            if (action.payload) {
+                state.step = action.payload
+            }
         }
     }
 })
 
-export const { updateProduct } = productSlice.actions
+export const { updateProduct, setSelectedCategoryName, setCreateProductStep } = productSlice.actions
 
 
 export default productSlice.reducer
