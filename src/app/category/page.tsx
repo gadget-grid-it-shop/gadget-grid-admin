@@ -27,7 +27,7 @@ interface TDeleteOpen {
 const Category = () => {
   const [openCategoryIds, setOpenCategoryIds] = useState<string[] | []>([]);
   const [open, setOpen] = useState(false);
-  const { data: categoryData, error, isLoading } = useGetAllCategoriesQuery(undefined);
+  const { data: categoryData, error, isLoading } = useGetAllCategoriesQuery(true);
   const [editOpen, setEditOpen] = useState(false)
   const [deleteCategory] = useDeleteCategoryMutation()
   const [editCategory, setEditCategory] = useState<TCategory | null>(null)

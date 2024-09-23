@@ -8,6 +8,12 @@ export interface TReview {
     review: string
 }
 
+
+export interface TProductAttribute {
+    name: string,
+    fields: Record<string, string>[]
+}
+
 export interface TMeta {
     title: string,
     description: string,
@@ -35,7 +41,7 @@ export interface TProduct {
     gallery?: string[];
     thumbnail: string;
     slug: string;
-    attributes?: Record<string, string>;
+    attributes?: TProductAttribute[];
     meta?: TMeta,
     tags?: string[]
     isFeatured?: boolean,

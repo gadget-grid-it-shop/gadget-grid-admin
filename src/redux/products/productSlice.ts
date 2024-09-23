@@ -30,7 +30,7 @@ const initialState: TInitialState = {
         reviews: [],
         videos: [],
         gallery: [],
-        attributes: {},
+        attributes: [],
         meta: {
             title: '',
             description: '',
@@ -56,6 +56,8 @@ const productSlice = createSlice({
         }
     }
 })
+
+export const { updateProduct } = productSlice.actions
 
 
 export default productSlice.reducer

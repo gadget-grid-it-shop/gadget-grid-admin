@@ -5,9 +5,9 @@ import { tagTypes } from "./tagTypes";
 const categoriesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllCategories: build.query({
-      query: () => {
+      query: (isTree: boolean = true) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/category/get-all`,
+          url: `${process.env.NEXT_PUBLIC_URL}/category/get-all${!isTree ? '?isTree=false' : ''}`,
           method: "GET",
         };
       },
