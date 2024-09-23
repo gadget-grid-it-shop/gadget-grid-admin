@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import "./globals.css";
 import GlobalProvider from "@/provider/provider";
+import '@mdxeditor/editor/style.css'
 
 
 const inter = Inter({ subsets: ["latin"] });
