@@ -1,5 +1,6 @@
 'use client'
 
+import { MarkdownEditor } from '@/components/common/MarkdownEditor'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { TCategory, TProductCategory } from '@/interface/category'
@@ -17,7 +18,7 @@ const CreateProduct = () => {
     const { product, selectedCategoryName, step } = useAppSelector(state => state.products)
     const searchParams = useSearchParams()
 
-    const { attributes } = product
+    const { attributes, description } = product
 
     useEffect(() => {
 
@@ -76,38 +77,49 @@ const CreateProduct = () => {
 
 
             {
-                step === 1 && <div className='grid grid-cols-2 gap-x-10 gap-y-4'>
+                step === 1 && <div>
+                    <h2 className='text-black font-semibold text-lg pb-5'>General Information</h2>
+                    <div className='grid grid-cols-2 gap-x-10 gap-y-4'>
 
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Name *</label>
-                        <Input onChange={(e) => handleChange('name', e.target.value)} className='bg-background-foreground' placeholder='Enter Product Name' />
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Name *</label>
+                            <Input onChange={(e) => handleChange('name', e.target.value)} className='bg-background-foreground' placeholder='Enter Product Name' />
+                        </div>
+
+
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Brand *</label>
+                            <Input onChange={(e) => handleChange('brand', e.target.value)} className='bg-background-foreground' placeholder='Enter Brand Name' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Model *</label>
+                            <Input onChange={(e) => handleChange('brand', e.target.value)} className='bg-background-foreground' placeholder='Enter Brand Name' />
+                        </div>
+
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Warranty *</label>
+                            <Input onChange={(e) => handleChange('warranty', e.target.value)} className='bg-background-foreground' placeholder='Enter product name' />
+                        </div>
+
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Price *</label>
+                            <Input type='number' onChange={(e) => handleChange('price', parseInt(e.target.value))} className='bg-background-foreground' placeholder='Enter Price' />
+                        </div>
+
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Stock *</label>
+                            <Input type='number' onChange={(e) => handleChange('quantity', parseInt(e.target.value))} className='bg-background-foreground' placeholder='Enter stock' />
+                        </div>
+
+
+                        <div className='flex flex-col gap-2 col-span-2'>
+                            <label className='text-sm'>Key Features *</label>
+                            <MarkdownEditor markdown={description} onChange={(val) => handleChange('key_features', val)} />
+                        </div>
+
+
+
                     </div>
-
-
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Brand *</label>
-                        <Input onChange={(e) => handleChange('brand', e.target.value)} className='bg-background-foreground' placeholder='Enter Brand Name' />
-                    </div>
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Model *</label>
-                        <Input onChange={(e) => handleChange('brand', e.target.value)} className='bg-background-foreground' placeholder='Enter Brand Name' />
-                    </div>
-
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Warranty *</label>
-                        <Input onChange={(e) => handleChange('warranty', e.target.value)} className='bg-background-foreground' placeholder='Enter product name' />
-                    </div>
-
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Price *</label>
-                        <Input type='number' onChange={(e) => handleChange('price', parseInt(e.target.value))} className='bg-background-foreground' placeholder='Enter Price' />
-                    </div>
-
-                    <div className='flex flex-col gap-2'>
-                        <label className='text-sm'>Stock *</label>
-                        <Input type='number' onChange={(e) => handleChange('quantity', parseInt(e.target.value))} className='bg-background-foreground' placeholder='Enter stock' />
-                    </div>
-
                 </div>
             }
 

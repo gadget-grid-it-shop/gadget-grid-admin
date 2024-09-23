@@ -9,6 +9,10 @@
   }
 }
 
+ul {
+  list-style: inherit !important;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -108,4 +112,12 @@ input {
 
 .page-title {
   @apply text-black text-[1.5rem] font-semibold;
+}
+
+.mdxeditor-root-contenteditable {
+  padding: 0px 10px !important;
+}
+
+.mdxeditor-root-contenteditable ul {
+  padding: 0 30px !important;
 }
