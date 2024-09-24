@@ -14,6 +14,7 @@ import { setCreateProductStep, setSelectedCategoryName, updateProduct } from '@/
 import { useSearchParams } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { AiOutlineCloudUpload, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from 'sonner'
 
 const CreateProduct = () => {
 
@@ -23,7 +24,7 @@ const CreateProduct = () => {
     const searchParams = useSearchParams()
     const [uploadImage, { isLoading: isUploadLoading }] = useUploadImageMutation()
     const uploadImageRef = useRef<HTMLInputElement | null>(null)
-    const [galleryOpen, setGalleryOpen] = useState(true)
+    const [galleryOpen, setGalleryOpen] = useState(false)
     const { attributes, description } = product
 
     useEffect(() => {
@@ -89,8 +90,10 @@ const CreateProduct = () => {
             formData.append('type', 'product');
 
             try {
-                const res = await uploadImage(formData)
+                const res = await uploadImage(formData).unwrap()
                 console.log(res)
+                toast.success(res.message)
+                setGalleryOpen(true)
             } catch (err) {
                 console.error('Error uploading images:', err); // Handle the error
             }
