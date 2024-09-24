@@ -28,4 +28,4 @@ const uploadFileApi = baseApi.injectEndpoints({
 })
 
 
-export const { useUploadImageMutation } = uploadFileApi
+export const { useUploadImageMutation, useGetAllImagesQuery } = uploadFileApi

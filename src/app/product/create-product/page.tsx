@@ -1,6 +1,7 @@
 'use client'
 
 import { MarkdownEditor } from '@/components/common/MarkdownEditor'
+import ImageGallery from '@/components/product/ImageGallery'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -11,7 +12,7 @@ import { useUploadImageMutation } from '@/redux/api/uploadFiles'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setCreateProductStep, setSelectedCategoryName, updateProduct } from '@/redux/products/productSlice'
 import { useSearchParams } from 'next/navigation'
-import React, { ChangeEvent, useEffect, useRef } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { AiOutlineCloudUpload, AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CreateProduct = () => {
@@ -22,6 +23,7 @@ const CreateProduct = () => {
     const searchParams = useSearchParams()
     const [uploadImage, { isLoading: isUploadLoading }] = useUploadImageMutation()
     const uploadImageRef = useRef<HTMLInputElement | null>(null)
+    const [galleryOpen, setGalleryOpen] = useState(true)
     const { attributes, description } = product
 
     useEffect(() => {
@@ -157,7 +159,7 @@ const CreateProduct = () => {
                                     }
                                 </div>
                                 <div className='flex-1 flex flex-col items-center justify-center h-full border-2 border-border-color rounded-md bg-background-foreground'>
-                                    <Button>Select From Gallery</Button>
+                                    <Button onClick={() => setGalleryOpen(true)}>Select From Gallery</Button>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +211,7 @@ const CreateProduct = () => {
             }
 
 
-
+            <ImageGallery open={galleryOpen} setOpen={setGalleryOpen} />
 
         </div>
     )
