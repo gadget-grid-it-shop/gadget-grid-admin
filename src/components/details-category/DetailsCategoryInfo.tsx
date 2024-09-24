@@ -1,18 +1,18 @@
 "use client";
-import {TProductCategory} from "@/interface/category";
-import {Button} from "../ui/button";
-import {BiSolidEditAlt} from "react-icons/bi";
-import {PiTrashSimpleFill} from "react-icons/pi";
-import {Dialog, DialogContent, DialogDescription, DialogTitle} from "../ui/dialog";
-import {useEffect, useState} from "react";
-import {toast} from "react-toastify";
-import {Form, FormField, FormItem, FormMessage} from "../ui/form";
-import {Input} from "../ui/input";
-import {HiMiniXMark} from "react-icons/hi2";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
-import {useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation} from "@/redux/api/detailsCategory";
+import { TProductCategory } from "@/interface/category";
+import { Button } from "../ui/button";
+import { BiSolidEditAlt } from "react-icons/bi";
+import { PiTrashSimpleFill } from "react-icons/pi";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Form, FormField, FormItem, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { HiMiniXMark } from "react-icons/hi2";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
 
 type TProps = {
   data: TProductCategory[];
@@ -28,7 +28,7 @@ const nameSchema = z.object({
     .string({
       required_error: "Product category name is required",
     })
-    .min(1, {message: "Product category name is required"})
+    .min(1, { message: "Product category name is required" })
     .max(50),
 });
 
@@ -47,7 +47,7 @@ const generateID = () => {
   return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
 };
 
-const DetailsCategoryInfo = ({data}: TProps) => {
+const DetailsCategoryInfo = ({ data }: TProps) => {
   const [openDeleteId, setOpenDeleteId] = useState<null | string>(null);
   const [openEditId, setOpenEditId] = useState<null | string>(null);
   const [selectedCat, setSelectedCat] = useState<null | TProductCategory>(null);
@@ -79,7 +79,7 @@ const DetailsCategoryInfo = ({data}: TProps) => {
       fields: fields.map((f) => f.field),
     };
 
-    const res = await updateDetailsCategory({id: selectedCat?._id || "", payload});
+    const res = await updateDetailsCategory({ id: selectedCat?._id || "", payload });
     if (res.data.success) {
       toast.success(res.data.message, {
         position: "top-center",
@@ -181,23 +181,6 @@ const DetailsCategoryInfo = ({data}: TProps) => {
 
       setOpenDeleteId(null);
     }
-    // axios
-    //   .delete(`${process.env.NEXT_PUBLIC_URL}/product-details-category/delete/${id}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //     handleCloseModal();
-    //     toast.success(res.data.message, {
-    //       position: "top-center",
-    //       autoClose: 3000,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const handleCloseModal = () => {
@@ -226,7 +209,7 @@ const DetailsCategoryInfo = ({data}: TProps) => {
     <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
       {data.length !== 0 &&
         data?.map((cat: TProductCategory) => (
-          <div className="bg-light-gray p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
+          <div className="bg-light-gray border border-border-color p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
             <h3 className="text-black text-lg font-semibold">{cat.name}</h3>
             <div className="flex flex-col gap-2 pt-3 flex-grow">
               {cat.fields?.map((field) => (
@@ -261,6 +244,8 @@ const DetailsCategoryInfo = ({data}: TProps) => {
           </div>
         ))}
 
+
+
       {/* ==============edit category modal============ */}
 
       <Dialog open={openEditId !== null} onOpenChange={handleCloseModal}>
@@ -272,7 +257,7 @@ const DetailsCategoryInfo = ({data}: TProps) => {
               <FormField
                 control={form.control}
                 name="name"
-                render={({field, fieldState}) => (
+                render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label className="text-gray">Name *</label>
                     <Input {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>

@@ -115,7 +115,58 @@ input {
 }
 
 .mdxeditor-root-contenteditable {
+  @apply min-h-40;
   padding: 0px 10px !important;
+}
+
+.markdown-editor h1 {
+  font-size: 2rem !important;
+}
+
+.markdown-editor h2 {
+  font-size: 1.5rem !important;
+}
+
+.markdown-editor h3 {
+  font-size: 1.17rem !important;
+}
+
+.markdown-editor h4 {
+  font-size: 1rem !important;
+}
+
+.markdown-editor h5 {
+  font-size: 0.83rem !important;
+}
+
+.markdown-editor h6 {
+  font-size: 0.67rem !important;
+}
+
+.markdown-editor p {
+  font-size: 1rem !important;
+}
+
+.markdown-editor li {
+  font-size: 1rem !important;
+}
+
+.markdown-editor blockquote {
+  font-size: 1.25rem !important;
+}
+
+.markdown-editor pre,
+.markdown-editor code {
+  font-size: 0.875rem !important;
+}
+
+.markdown-editor small {
+  font-size: 0.8rem !important;
+}
+
+._selectTrigger_uazmk_307 {
+  @apply bg-background !important;
+  /* background-color: var(--background) !important; */
 }
 
 .mdxeditor-root-contenteditable ul {

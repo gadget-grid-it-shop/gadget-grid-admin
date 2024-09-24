@@ -1,7 +1,7 @@
 'use client'
 // InitializedMDXEditor.tsx
 
-
+import '@mdxeditor/editor/style.css'
 
 
 import type { ForwardedRef } from 'react'
@@ -18,13 +18,13 @@ import {
     UndoRedo,
     BoldItalicUnderlineToggles,
     BlockTypeSelect,
-    ChangeAdmonitionType,
     directivesPlugin,
     AdmonitionDirectiveDescriptor,
     frontmatterPlugin,
-    InsertFrontmatter,
     InsertThematicBreak,
-    ListsToggle
+    ListsToggle,
+    InsertTable,
+    tablePlugin
 } from '@mdxeditor/editor'
 import { useTheme } from 'next-themes'
 
@@ -38,7 +38,7 @@ export default function MarkdownEditorInitializer({
 
     return (
         <MDXEditor
-            className={`${theme} bg-background-foreground rounded-md`}
+            className={`${theme} bg-background-foreground rounded-md markdown-editor`}
             plugins={[
                 headingsPlugin(),
                 listsPlugin(),
@@ -49,18 +49,21 @@ export default function MarkdownEditorInitializer({
                 frontmatterPlugin(),
                 thematicBreakPlugin(),
                 markdownShortcutPlugin(),
+                tablePlugin(),
                 toolbarPlugin({
                     toolbarContents: () => (
-                        <>
+                        <div className='bg-lavender-mist w-full flex gap-3 py-1'>
                             {' '}
                             <UndoRedo />
                             <BoldItalicUnderlineToggles />
+                            {/* <ChangeAdmonitionType /> */}
 
                             <BlockTypeSelect />
 
+                            <InsertTable />
                             <InsertThematicBreak />
                             <ListsToggle />
-                        </>
+                        </div>
                     )
                 })
             ]}

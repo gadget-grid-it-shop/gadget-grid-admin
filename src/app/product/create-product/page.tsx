@@ -1,15 +1,18 @@
 'use client'
 
 import { MarkdownEditor } from '@/components/common/MarkdownEditor'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { TCategory, TProductCategory } from '@/interface/category'
 import { TProduct, TProductAttribute } from '@/interface/product.interface'
 import { useGetAllCategoriesQuery } from '@/redux/api/categories'
+import { useUploadImageMutation } from '@/redux/api/uploadFiles'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setCreateProductStep, setSelectedCategoryName, updateProduct } from '@/redux/products/productSlice'
 import { useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useRef } from 'react'
+import { AiOutlineCloudUpload, AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CreateProduct = () => {
 
@@ -17,7 +20,8 @@ const CreateProduct = () => {
     const dispatch = useAppDispatch()
     const { product, selectedCategoryName, step } = useAppSelector(state => state.products)
     const searchParams = useSearchParams()
-
+    const [uploadImage, { isLoading: isUploadLoading }] = useUploadImageMutation()
+    const uploadImageRef = useRef<HTMLInputElement | null>(null)
     const { attributes, description } = product
 
     useEffect(() => {
@@ -57,6 +61,7 @@ const CreateProduct = () => {
         else {
             dispatch(setCreateProductStep(1))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
 
 
@@ -65,16 +70,36 @@ const CreateProduct = () => {
     }
 
 
-    console.log(product)
+    const handleUploadClick = () => {
+        if (uploadImageRef && uploadImageRef.current) {
+            uploadImageRef.current.click()
+        }
+    }
 
+
+    const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const formData = new FormData();
+            Array.from(e.target.files).forEach((file) => {
+                formData.append('photos', file);
+            });
+
+            formData.append('type', 'product');
+
+            try {
+                const res = await uploadImage(formData)
+                console.log(res)
+            } catch (err) {
+                console.error('Error uploading images:', err); // Handle the error
+            }
+        }
+    };
 
     return (
         <div>
             <div className="flex justify-between items-center pb-4">
                 <h4 className="page-title">Create Product</h4>
             </div>
-
-
 
             {
                 step === 1 && <div>
@@ -111,14 +136,31 @@ const CreateProduct = () => {
                             <Input type='number' onChange={(e) => handleChange('quantity', parseInt(e.target.value))} className='bg-background-foreground' placeholder='Enter stock' />
                         </div>
 
-
-                        <div className='flex flex-col gap-2 col-span-2'>
+                        <div className='flex flex-col gap-2'>
                             <label className='text-sm'>Key Features *</label>
                             <MarkdownEditor markdown={description} onChange={(val) => handleChange('key_features', val)} />
                         </div>
 
-
-
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm'>Gallery *</label>
+                            <div className='flex gap-2 justify-center h-full'>
+                                <div onClick={handleUploadClick} className='border-2 cursor-pointer flex-1 border-dashed w-full h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
+                                    {
+                                        isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
+                                            <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
+                                            <p className='text-base'>uploading, please wait</p>
+                                        </div> : <>
+                                            <AiOutlineCloudUpload className='text-lavender-mist' />
+                                            <h3 className='text-base'><span className='text-primary'>Click</span> or drag and drop here</h3>
+                                            <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
+                                        </>
+                                    }
+                                </div>
+                                <div className='flex-1 flex flex-col items-center justify-center h-full border-2 border-border-color rounded-md bg-background-foreground'>
+                                    <Button>Select From Gallery</Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }

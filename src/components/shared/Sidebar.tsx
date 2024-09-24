@@ -90,7 +90,6 @@ const Sidebar = () => {
     };
 
     const isLinkActive = (link: string) => {
-        console.log(link, pathName)
         return pathName === link || pathName.startsWith(link);
     };
 
