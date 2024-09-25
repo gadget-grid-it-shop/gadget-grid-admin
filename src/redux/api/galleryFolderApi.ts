@@ -29,7 +29,6 @@ const GalleryFolderApi = baseApi.injectEndpoints({
             },
             invalidatesTags: [tagTypes.galleryFolder]
         }),
-
     })
 })
 

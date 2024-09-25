@@ -11,11 +11,12 @@ import { MdOutlineAdd } from 'react-icons/md'
 import { toast } from 'sonner'
 import { useAppDispatch } from '@/redux/hooks'
 import { updateProduct } from '@/redux/products/productSlice'
-import { useGetFoldersQuery } from '@/redux/api/galleryFolderApi'
+import { useCreateFolderMutation, useGetFoldersQuery } from '@/redux/api/galleryFolderApi'
 import { FcFolder } from "react-icons/fc";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from '../ui/breadcrumb'
 import { FaChevronRight } from 'react-icons/fa6'
 import { LuFolderPlus } from 'react-icons/lu'
+import { Input } from '../ui/input'
 
 type TProp = {
     open: boolean,
@@ -50,6 +51,9 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
     const [parentFolder, setParentFolder] = useState('')
     const { data: folders, isLoading: isFolderLoading, refetch: refetchFolders } = useGetFoldersQuery(parentFolder)
     const { data, isLoading, error, refetch: refetchGallery } = useGetAllImagesQuery(parentFolder)
+    const [createFolder] = useCreateFolderMutation()
+    const [addFolderModal, setAddFolderModal] = useState(false)
+    const [folderName, setFolderName] = useState("")
 
     const [folderCrumb, setFolderCrumb] = useState<TFolderCrumb[]>([{
         id: "",
@@ -152,11 +156,21 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
         }
     }
 
-    console.log(folderCrumb)
+    const handleAddFolder = async () => {
+        try {
+            const res = await createFolder({ name: folderName, parent_id: parentFolder }).unwrap()
+            if (res.success) {
+                setAddFolderModal(false)
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     const renderFolders = (folders: TGalleryFolder[]) => {
         return <div className='flex flex-wrap gap-5'>
-            <div onClick={handleAddFolder} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
+            <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
                 <LuFolderPlus size={25} />
                 <p className='text-sm'>Add Folder</p>
             </div>
@@ -177,108 +191,126 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
     }
 
     return (
-        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-            <DialogContent className='lg:max-w-[70vw] md:max-w-[80vw] sm:max-w-[85vw] max-w-[95vw]'>
-                <DialogTitle>
-                    Image gallery
-                </DialogTitle>
-                {
-                    selected.length > 0 && <div className='sticky -top-6 z-50 bg-background-foreground px-3 flex justify-between items-center py-2'>
-                        <h2 className='font-semibold'>{selected.length} Selected</h2>
+        <>
+            <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+                <DialogContent className='lg:max-w-[70vw] md:max-w-[80vw] sm:max-w-[85vw] max-w-[95vw]'>
+                    <DialogTitle>
+                        Image gallery
+                    </DialogTitle>
+                    {
+                        selected.length > 0 && <div className='sticky -top-6 z-50 bg-background-foreground px-3 flex justify-between items-center py-2'>
+                            <h2 className='font-semibold'>{selected.length} Selected</h2>
 
-                        <div className='flex gap-3'>
-                            <Button onClick={handleAdd} className='gap-2'><MdOutlineAdd size={18} /> Add</Button>
-                            <Button variant={'edit'} className='gap-2' onClick={() => setSelected([])}><BiSelectMultiple /> Deselect All</Button>
-                            <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-                                <DialogTrigger asChild>
-                                    <Button variant={'delete_solid'} className='gap-2'><AiOutlineDelete /> Delete</Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogTitle>Delete Photos?</DialogTitle>
-                                    <DialogDescription className="text-gray">Do you really want to delete this photos?</DialogDescription>
+                            <div className='flex gap-3'>
+                                <Button onClick={handleAdd} className='gap-2'><MdOutlineAdd size={18} /> Add</Button>
+                                <Button variant={'edit'} className='gap-2' onClick={() => setSelected([])}><BiSelectMultiple /> Deselect All</Button>
+                                <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button variant={'delete_solid'} className='gap-2'><AiOutlineDelete /> Delete</Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle>Delete Photos?</DialogTitle>
+                                        <DialogDescription className="text-gray">Do you really want to delete this photos?</DialogDescription>
 
-                                    <div className="flex w-full gap-3 pt-4">
-                                        <Button className="w-full" onClick={() => setDeleteModalOpen(false)}>
-                                            Cancel
-                                        </Button>
-                                        <Button onClick={handleDeleteImages} className="w-full" variant={"delete_solid"}>
-                                            Yes, delete it
-                                        </Button>
-                                    </div>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-
-                    </div>
-                }
-
-                {
-                    folderCrumb.length > 0 && <Breadcrumb>
-                        <BreadcrumbList>
-                            {
-                                folderCrumb.map((item, index) => <BreadcrumbItem key={item.id}>
-                                    <BreadcrumbPage>
-                                        <div className={`flex items-center gap-1 cursor-pointer ${item.id === parentFolder ? 'text-primary' : ''}`} onClick={() => handleCrumbClick(item, index)}>
-                                            {item.name} <FaChevronRight size={12} />
+                                        <div className="flex w-full gap-3 pt-4">
+                                            <Button className="w-full" onClick={() => setDeleteModalOpen(false)}>
+                                                Cancel
+                                            </Button>
+                                            <Button onClick={handleDeleteImages} className="w-full" variant={"delete_solid"}>
+                                                Yes, delete it
+                                            </Button>
                                         </div>
-                                    </BreadcrumbPage>
-                                </BreadcrumbItem>)
-                            }
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                }
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
 
-                {
-                    !isFolderLoading && folders.data.length !== 0 ? renderFolders(folders.data) : <div className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
-                        <LuFolderPlus size={25} />
-                        <p className='text-sm'>Add Folder</p>
-                    </div>
-                }
-
-                <div>
-                    {
-                        error && <div>
-                            <h2>Could not get gallery images. Please try again later</h2>
                         </div>
                     }
 
                     {
-                        !isLoading && !error ? <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 [&>div:not(:first-child)]:mt-4 rounded-md'>
-                            {
-                                data?.data?.map((imgData: TImage) => {
-                                    return <div key={imgData._id} className='relative group h-fit image-wrapper'>
-                                        <Checkbox checked={isSelected(imgData._id)} onClick={() => handleImageSelect(imgData)} className={`${isSelected(imgData._id) ? 'visible' : 'invisible'} transition-all absolute top-4 left-4 checkbox group-hover:visible size-6 bg-lavender-mist`} />
-                                        <Image className='h-auto cursor-pointer w-full rounded-md border border-border-color' src={imgData.image} height={imgData.height} width={imgData.width} alt={imgData.name} />
-
-                                        <p className='absolute invisible group-hover:visible z-30 text-xs text-pure-white bg-purple-400/30 bottom-0 p-4 break-all w-full'>{imgData.name}</p>
-                                    </div>
-                                })
-                            }
-                        </div> : <div></div>
+                        folderCrumb.length > 0 && <Breadcrumb>
+                            <BreadcrumbList>
+                                {
+                                    folderCrumb.map((item, index) => <BreadcrumbItem key={item.id}>
+                                        <BreadcrumbPage>
+                                            <div className={`flex items-center gap-1 cursor-pointer ${item.id === parentFolder ? 'text-primary' : ''}`} onClick={() => handleCrumbClick(item, index)}>
+                                                {item.name} <FaChevronRight size={12} />
+                                            </div>
+                                        </BreadcrumbPage>
+                                    </BreadcrumbItem>)
+                                }
+                            </BreadcrumbList>
+                        </Breadcrumb>
                     }
 
-
-                    <div className='min-h-52 flex justify-center items-center flex-col gap-3'>
-                        <h3>upload photos to this folder</h3>
-                        <div onClick={handleUploadClick} className='border-2 cursor-pointer flex-1 w-1/3 border-dashed h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
-                            {
-                                isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
-                                    <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
-                                    <p className='text-base'>uploading, please wait</p>
-                                </div> : <>
-                                    <AiOutlineCloudUpload className='text-lavender-mist' />
-                                    <h3 className='text-base'><span className='text-primary'>Click</span> or drag and drop here</h3>
-                                    <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
-                                </>
-                            }
+                    {
+                        !isFolderLoading && folders.data.length !== 0 ? renderFolders(folders.data) : <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
+                            <LuFolderPlus size={25} />
+                            <p className='text-sm'>Add Folder</p>
                         </div>
+                    }
+
+                    <div>
+                        {
+                            error && <div>
+                                <h2>Could not get gallery images. Please try again later</h2>
+                            </div>
+                        }
+
+                        {
+                            !isLoading && !error ? <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 [&>div:not(:first-child)]:mt-4 rounded-md'>
+                                {
+                                    data?.data?.map((imgData: TImage) => {
+                                        return <div key={imgData._id} className='relative group h-fit image-wrapper'>
+                                            <Checkbox checked={isSelected(imgData._id)} onClick={() => handleImageSelect(imgData)} className={`${isSelected(imgData._id) ? 'visible' : 'invisible'} transition-all absolute top-4 left-4 checkbox group-hover:visible size-6 bg-lavender-mist`} />
+                                            <Image className='h-auto cursor-pointer w-full rounded-md border border-border-color' src={imgData.image} height={imgData.height} width={imgData.width} alt={imgData.name} />
+
+                                            <p className='absolute invisible group-hover:visible z-30 text-xs text-pure-white bg-purple-400/30 bottom-0 p-4 break-all w-full'>{imgData.name}</p>
+                                        </div>
+                                    })
+                                }
+                            </div> : <div></div>
+                        }
+
+
+                        <div className='min-h-52 flex justify-center items-center flex-col gap-3'>
+                            <h3>upload photos to this folder</h3>
+                            <div onClick={handleUploadClick} className='border-2 cursor-pointer flex-1 w-1/3 border-dashed h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
+                                {
+                                    isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
+                                        <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
+                                        <p className='text-base'>uploading, please wait</p>
+                                    </div> : <>
+                                        <AiOutlineCloudUpload className='text-lavender-mist' />
+                                        <h3 className='text-base'><span className='text-primary'>Click</span> or drag and drop here</h3>
+                                        <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
+                                    </>
+                                }
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
+
+                </DialogContent>
+            </Dialog>
 
 
-            </DialogContent>
-        </Dialog>
+
+
+            {/* ====================create folder dialog===================== */}
+            <Dialog open={addFolderModal} onOpenChange={setAddFolderModal}>
+                <DialogContent>
+                    <DialogTitle>
+                        Add new folder
+                    </DialogTitle>
+                    <div className='flex flex-col gap-4'>
+                        <Input placeholder='folder name' value={folderName} onChange={(e) => setFolderName(e.target.value)} type='text' />
+                        <Button onClick={handleAddFolder}>Add</Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </>
     )
 }
 

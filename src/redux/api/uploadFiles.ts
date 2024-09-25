@@ -40,7 +40,8 @@ const uploadFileApi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags: [tagTypes.upload]
-        })
+        }),
+
     })
 })
 
