@@ -11,9 +11,9 @@ const uploadFileApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
 
         getAllImages: build.query({
-            query: () => {
+            query: (folder: string | null) => {
                 return {
-                    url: '/upload/get-all',
+                    url: `/upload/get-all?folder=${folder}`,
                     method: 'GET'
                 }
             },
@@ -38,7 +38,8 @@ const uploadFileApi = baseApi.injectEndpoints({
                     method: 'DELETE',
                     body: payload
                 }
-            }
+            },
+            invalidatesTags: [tagTypes.upload]
         })
     })
 })

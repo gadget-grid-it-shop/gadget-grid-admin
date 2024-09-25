@@ -3,18 +3,18 @@
 import { MarkdownEditor } from '@/components/common/MarkdownEditor'
 import ImageGallery from '@/components/product/ImageGallery'
 import { Button } from '@/components/ui/button'
+import { IoMdClose } from "react-icons/io";
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { TCategory, TProductCategory } from '@/interface/category'
 import { TProduct, TProductAttribute } from '@/interface/product.interface'
 import { useGetAllCategoriesQuery } from '@/redux/api/categories'
-import { useUploadImageMutation } from '@/redux/api/uploadFiles'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setCreateProductStep, setSelectedCategoryName, updateProduct } from '@/redux/products/productSlice'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { AiOutlineCloudUpload, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { toast } from 'sonner'
+import React, { useEffect, useState } from 'react'
+
 
 const CreateProduct = () => {
 
@@ -22,10 +22,8 @@ const CreateProduct = () => {
     const dispatch = useAppDispatch()
     const { product, selectedCategoryName, step } = useAppSelector(state => state.products)
     const searchParams = useSearchParams()
-    const [uploadImage, { isLoading: isUploadLoading }] = useUploadImageMutation()
-    const uploadImageRef = useRef<HTMLInputElement | null>(null)
     const [galleryOpen, setGalleryOpen] = useState(false)
-    const { attributes, description } = product
+    const { attributes, description, gallery } = product
 
     useEffect(() => {
 
@@ -73,32 +71,11 @@ const CreateProduct = () => {
     }
 
 
-    const handleUploadClick = () => {
-        if (uploadImageRef && uploadImageRef.current) {
-            uploadImageRef.current.click()
-        }
+    const handleRemoveFromGallery = (img: string) => {
+        const filteredGallery = gallery?.filter(image => image !== img) || []
+
+        dispatch(updateProduct({ key: 'gallery', value: filteredGallery }))
     }
-
-
-    const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const formData = new FormData();
-            Array.from(e.target.files).forEach((file) => {
-                formData.append('photos', file);
-            });
-
-            formData.append('type', 'product');
-
-            try {
-                const res = await uploadImage(formData).unwrap()
-                console.log(res)
-                toast.success(res.message)
-                setGalleryOpen(true)
-            } catch (err) {
-                console.error('Error uploading images:', err); // Handle the error
-            }
-        }
-    };
 
     return (
         <div>
@@ -143,26 +120,26 @@ const CreateProduct = () => {
 
                         <div className='flex flex-col gap-2'>
                             <label className='text-sm'>Key Features *</label>
-                            <MarkdownEditor markdown={description} onChange={(val) => handleChange('key_features', val)} />
+                            <MarkdownEditor className='max-h-56 overflow-y-auto overflow-x-hidden scrollbar-thin' markdown={description} onChange={(val) => handleChange('key_features', val)} />
                         </div>
 
                         <div className='flex flex-col gap-2'>
                             <label className='text-sm'>Gallery *</label>
-                            <div className='flex gap-2 justify-center h-full'>
-                                <div onClick={handleUploadClick} className='border-2 cursor-pointer flex-1 border-dashed w-full h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
+                            <div className={`flex gap-2 h-full bg-background-foreground items-center p-3 rounded-md flex-col ${gallery?.length === 0 && 'justify-center'}`}>
+                                {
+                                    gallery && gallery?.length <= 5 && <Button className='w-fit' onClick={() => setGalleryOpen(true)}>Select From Gallery</Button>
+                                }
+                                <div className='w-full grid grid-cols-5 gap-2 p-3'>
                                     {
-                                        isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
-                                            <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
-                                            <p className='text-base'>uploading, please wait</p>
-                                        </div> : <>
-                                            <AiOutlineCloudUpload className='text-lavender-mist' />
-                                            <h3 className='text-base'><span className='text-primary'>Click</span> or drag and drop here</h3>
-                                            <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
-                                        </>
+                                        gallery?.map((img: string) => {
+                                            return <div key={img} className='relative'>
+                                                <div onClick={() => handleRemoveFromGallery(img)} className='absolute z-40 bg-lavender-mist text-red top-2 left-2 cursor-pointer'>
+                                                    <IoMdClose />
+                                                </div>
+                                                <Image src={img} height={200} width={200} alt='gallery img' className='h-full w-full object-cover' />
+                                            </div>
+                                        })
                                     }
-                                </div>
-                                <div className='flex-1 flex flex-col items-center justify-center h-full border-2 border-border-color rounded-md bg-background-foreground'>
-                                    <Button onClick={() => setGalleryOpen(true)}>Select From Gallery</Button>
                                 </div>
                             </div>
                         </div>

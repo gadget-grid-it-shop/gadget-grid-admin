@@ -26,7 +26,7 @@ import {
     InsertTable,
     tablePlugin
 } from '@mdxeditor/editor'
-import { useTheme } from 'next-themes'
+
 
 // Only import this to the next file
 export default function MarkdownEditorInitializer({
@@ -34,11 +34,10 @@ export default function MarkdownEditorInitializer({
     ...props
 }: { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps) {
 
-    const { theme } = useTheme()
+
 
     return (
         <MDXEditor
-            className={`${theme} bg-background-foreground rounded-md markdown-editor`}
             plugins={[
                 headingsPlugin(),
                 listsPlugin(),
