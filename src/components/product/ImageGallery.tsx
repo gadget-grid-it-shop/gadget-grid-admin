@@ -11,12 +11,14 @@ import { MdOutlineAdd } from 'react-icons/md'
 import { toast } from 'sonner'
 import { useAppDispatch } from '@/redux/hooks'
 import { updateProduct } from '@/redux/products/productSlice'
-import { useCreateFolderMutation, useGetFoldersQuery } from '@/redux/api/galleryFolderApi'
+import { useCreateFolderMutation, useGetFoldersQuery, useUpdateFolderMutation } from '@/redux/api/galleryFolderApi'
 import { FcFolder } from "react-icons/fc";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from '../ui/breadcrumb'
 import { FaChevronRight } from 'react-icons/fa6'
 import { LuFolderPlus } from 'react-icons/lu'
 import { Input } from '../ui/input'
+import { BiSolidEditAlt } from "react-icons/bi";
+import { PiTrashSimpleFill } from "react-icons/pi";
 
 type TProp = {
     open: boolean,
@@ -51,9 +53,13 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
     const [parentFolder, setParentFolder] = useState('')
     const { data: folders, isLoading: isFolderLoading, refetch: refetchFolders } = useGetFoldersQuery(parentFolder)
     const { data, isLoading, error, refetch: refetchGallery } = useGetAllImagesQuery(parentFolder)
+    const [updateFolder] = useUpdateFolderMutation()
     const [createFolder] = useCreateFolderMutation()
     const [addFolderModal, setAddFolderModal] = useState(false)
     const [folderName, setFolderName] = useState("")
+    const [editOpen, setEditOpen] = useState(false)
+    const [deleteFolderOpen, setDeleteFolderOpen] = useState(false)
+    const [contextOpen, setContextOpen] = useState<string | null>(null)
 
     const [folderCrumb, setFolderCrumb] = useState<TFolderCrumb[]>([{
         id: "",
@@ -169,9 +175,43 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
         }
     }
 
-    const handleFolderRightClick = (e: MouseEvent<HTMLDivElement>) => {
+    const handleEditFolder = async (id: string) => {
+        if (folderName) {
+            try {
+                const res = await updateFolder({ id, name: folderName }).unwrap()
+                if (res.success) {
+                    toast.success(res.message)
+                    setEditOpen(false)
+                    setFolderName("")
+                    setContextOpen(null)
+                }
+            }
+            catch (err) {
+                console.log(err)
+                toast.error("Update failed, please try again later")
+            }
+        }
+        else {
+            toast.warning('Please write something')
+        }
+    }
+
+    console.log(folderName)
+
+    const handleDeleteFolder = async (id: string) => {
+
+    }
+
+    const handleContextMenu = (e: MouseEvent<HTMLDivElement>, folder: TGalleryFolder) => {
         e.preventDefault()
-        setAddFolderModal(true)
+        if (contextOpen === folder._id) {
+            setContextOpen(null)
+            setFolderName('')
+        }
+        else {
+            setContextOpen(folder._id)
+            setFolderName(folder.name)
+        }
     }
 
     const renderFolders = (folders: TGalleryFolder[]) => {
@@ -183,13 +223,52 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
             {
                 folders.map((folder: TGalleryFolder) => {
                     return <div
-                        onContextMenu={handleFolderRightClick}
+                        onContextMenu={(e) => handleContextMenu(e, folder)}
                         onTouchEnd={() => handleFolderClick(folder._id, folder.name)}
                         onDoubleClick={() => handleFolderClick(folder._id, folder.name)}
                         key={folder._id}
-                        className='bg-background text-black gap-2 w-32 min-h-32 flex flex-col shadow-sm rounded-md p-2 justify-center items-center'>
+                        className='bg-background text-black gap-2 w-32 min-h-32 flex flex-col shadow-sm rounded-md p-2 justify-center items-center relative'>
                         <FcFolder className='text-gray' size={40} />
                         <p className='text-xs line-clamp-2 text-ellipsis'>{folder.name}</p>
+
+
+                        {
+                            contextOpen && contextOpen === folder._id && <div className='absolute bottom-0 flex w-full justify-between transition-all'>
+                                <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                                    <DialogTrigger>
+                                        <Button variant={'icon'} className='text-sm'><BiSolidEditAlt /></Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle>
+                                            Edit folder name
+                                        </DialogTitle>
+                                        <div className='flex flex-col gap-4'>
+                                            <Input placeholder='folder name' defaultValue={folderName} onChange={(e) => setFolderName(e.target.value)} type='text' />
+                                            <Button onClick={() => handleEditFolder(folder._id)}>Edit</Button>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                                <Dialog open={deleteFolderOpen} onOpenChange={setDeleteFolderOpen}>
+                                    <DialogTrigger>
+                                        <Button variant={'icon'} className='text-sm'><PiTrashSimpleFill /></Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle>
+                                            Delete folder
+                                        </DialogTitle>
+
+                                        <DialogDescription className='text-red'>
+                                            <h2>Warning!</h2>
+                                            <p>This is a desctructive </p>
+                                        </DialogDescription>
+                                        <div className='flex flex-col gap-4'>
+                                            <Button onClick={() => handleDeleteFolder(folder._id)}>Edit</Button>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                        }
+
                     </div>
                 })
             }

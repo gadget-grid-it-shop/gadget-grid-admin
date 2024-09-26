@@ -64,7 +64,7 @@ const AddBasicData = () => {
 
                 <div className='flex flex-col gap-2'>
                     <label className='text-sm'>Key Features *</label>
-                    <MarkdownEditor className='max-h-56 overflow-y-auto overflow-x-hidden scrollbar-thin' markdown={description} onChange={(val) => handleChange('key_features', val)} />
+                    <MarkdownEditor className='h-56 overflow-y-auto overflow-x-hidden scrollbar-thin' markdown={description} onChange={(val) => handleChange('key_features', val)} />
                 </div>
 
                 <div className='flex flex-col gap-2'>
@@ -76,7 +76,7 @@ const AddBasicData = () => {
                         <div className='w-full grid grid-cols-5 gap-2 p-3'>
                             {
                                 gallery?.map((img: string) => {
-                                    return <div key={img} className='relative'>
+                                    return <div key={img} className='relative max-h-32'>
                                         <div onClick={() => handleRemoveFromGallery(img)} className='absolute z-40 bg-lavender-mist text-red top-2 left-2 cursor-pointer'>
                                             <IoMdClose />
                                         </div>

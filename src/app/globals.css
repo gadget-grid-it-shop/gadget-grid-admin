@@ -164,6 +164,11 @@ input {
   font-size: 0.8rem !important;
 }
 
+.markdown-editor .mdxeditor-toolbar {
+  padding: 0px;
+  /* background-color: transparent !important; */
+}
+
 ._selectTrigger_uazmk_307 {
   @apply bg-background !important;
   /* background-color: var(--background) !important; */

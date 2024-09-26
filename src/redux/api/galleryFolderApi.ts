@@ -29,7 +29,18 @@ const GalleryFolderApi = baseApi.injectEndpoints({
             },
             invalidatesTags: [tagTypes.galleryFolder]
         }),
+
+        updateFolder: build.mutation({
+            query: ({ id, name }: { id: string, name: string }) => {
+                return {
+                    url: `/gallery/update-folder/${id}`,
+                    method: 'PATCH',
+                    body: { name }
+                }
+            },
+            invalidatesTags: [tagTypes.galleryFolder]
+        })
     })
 })
 
-export const { useCreateFolderMutation, useGetFoldersQuery } = GalleryFolderApi
+export const { useCreateFolderMutation, useGetFoldersQuery, useUpdateFolderMutation } = GalleryFolderApi

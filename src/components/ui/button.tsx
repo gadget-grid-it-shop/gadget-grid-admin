@@ -13,7 +13,8 @@ const buttonVariants = cva(
         delete: "border-red text-red border text-md shadow hover:bg-red hover:text-pure-white",
         delete_solid: "text-md shadow bg-red text-pure-white",
         edit: "text-pure-white text-md shadow bg-vivid-orange",
-        default_outline: "border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary"
+        default_outline: "border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
+        icon: 'border-none p-0 m-0 text-xl'
       },
       size: {
         default: "h-9 px-4 py-2",

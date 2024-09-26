@@ -100,34 +100,6 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
         name: "",
       });
     }
-    // axios
-    //   .patch(`${process.env.NEXT_PUBLIC_URL}/product-details-category/update/${selectedCat?._id}`, payload)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     if (res.data.success) {
-    //       toast.success(res.data.message, {
-    //         position: "top-center",
-    //         autoClose: 3000,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //       });
-    //       handleCloseModal();
-    //       setFields([
-    //         {
-    //           field: "",
-    //           id: generateID(),
-    //         },
-    //       ]);
-    //       form.reset({
-    //         name: "",
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   }
 
   const handleAddField = () => {
@@ -220,18 +192,20 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
             </div>
             <div className="flex gap-3 w-full mt-3">
               <Button
+                className="text-gray"
                 onClick={() => {
                   setOpenEditId(cat?._id);
                   setSelectedCat(cat);
                 }}
-                variant={"edit"}
+                variant={"icon"}
                 size={"icon"}
               >
                 <BiSolidEditAlt size={20} />
               </Button>
 
               <Button
-                variant={"delete"}
+                className="text-gray"
+                variant={"icon"}
                 size={"icon"}
                 onClick={() => {
                   setOpenDeleteId(cat?._id);
