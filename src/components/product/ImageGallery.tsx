@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useRef, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { useDeleteImagesMutation, useGetAllImagesQuery, useUploadImageMutation } from '@/redux/api/uploadFiles'
 import { TImage } from '@/interface/image'
@@ -161,6 +161,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
             const res = await createFolder({ name: folderName, parent_id: parentFolder }).unwrap()
             if (res.success) {
                 setAddFolderModal(false)
+                setFolderName('')
             }
         }
         catch (err) {
@@ -168,15 +169,25 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
         }
     }
 
+    const handleFolderRightClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        setAddFolderModal(true)
+    }
+
     const renderFolders = (folders: TGalleryFolder[]) => {
         return <div className='flex flex-wrap gap-5'>
             <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
-                <LuFolderPlus size={25} />
+                <LuFolderPlus className='text-gray' size={25} />
                 <p className='text-sm'>Add Folder</p>
             </div>
             {
                 folders.map((folder: TGalleryFolder) => {
-                    return <div onDoubleClick={() => handleFolderClick(folder._id, folder.name)} key={folder._id} className='bg-background text-black gap-2 w-32 min-h-32 flex flex-col shadow-sm rounded-md p-2 justify-center items-center'>
+                    return <div
+                        onContextMenu={handleFolderRightClick}
+                        onTouchEnd={() => handleFolderClick(folder._id, folder.name)}
+                        onDoubleClick={() => handleFolderClick(folder._id, folder.name)}
+                        key={folder._id}
+                        className='bg-background text-black gap-2 w-32 min-h-32 flex flex-col shadow-sm rounded-md p-2 justify-center items-center'>
                         <FcFolder className='text-gray' size={40} />
                         <p className='text-xs line-clamp-2 text-ellipsis'>{folder.name}</p>
                     </div>
@@ -245,7 +256,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
 
                     {
                         !isFolderLoading && folders.data.length !== 0 ? renderFolders(folders.data) : <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
-                            <LuFolderPlus size={25} />
+                            <LuFolderPlus className='text-gray' size={25} />
                             <p className='text-sm'>Add Folder</p>
                         </div>
                     }
@@ -274,15 +285,15 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
 
 
                         <div className='min-h-52 flex justify-center items-center flex-col gap-3'>
-                            <h3>upload photos to this folder</h3>
-                            <div onClick={handleUploadClick} className='border-2 cursor-pointer flex-1 w-1/3 border-dashed h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
+                            <div onClick={handleUploadClick} className='border-2 min-w-44 px-3 cursor-pointer flex-1 w-1/3 border-dashed h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
                                 {
                                     isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
                                         <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
                                         <p className='text-base'>uploading, please wait</p>
                                     </div> : <>
+                                        <h3 className='text-base'>upload photos to this folder</h3>
                                         <AiOutlineCloudUpload className='text-lavender-mist' />
-                                        <h3 className='text-base'><span className='text-primary'>Click</span> or drag and drop here</h3>
+                                        <h3 className='text-base text-primary'>Click here</h3>
                                         <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
                                     </>
                                 }
