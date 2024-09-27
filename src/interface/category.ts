@@ -22,3 +22,6 @@ export interface TUpdateCategory {
   name: string;
   product_details_categories: string[];
 }
+
+
+console.log('first')

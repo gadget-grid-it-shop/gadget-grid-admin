@@ -82,7 +82,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
     useEffect(() => {
         refetchFolders()
         refetchGallery()
-    }, [parentFolder])
+    }, [parentFolder, refetchFolders, refetchGallery])
 
 
     const isSelected = (id: string) => {
@@ -198,9 +198,9 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
 
     console.log(folderName)
 
-    const handleDeleteFolder = async (id: string) => {
+    // const handleDeleteFolder = async (id: string) => {
 
-    }
+    // }
 
     const handleContextMenu = (e: MouseEvent<HTMLDivElement>, folder: TGalleryFolder) => {
         e.preventDefault()
@@ -262,7 +262,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                                             <p>This is a desctructive </p>
                                         </DialogDescription>
                                         <div className='flex flex-col gap-4'>
-                                            <Button onClick={() => handleDeleteFolder(folder._id)}>Edit</Button>
+                                            {/* <Button onClick={() => handleDeleteFolder(folder._id)}>Edit</Button> */}
                                         </div>
                                     </DialogContent>
                                 </Dialog>

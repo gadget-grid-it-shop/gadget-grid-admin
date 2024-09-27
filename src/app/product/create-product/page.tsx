@@ -16,7 +16,7 @@ const CreateProduct = () => {
     const searchParams = useSearchParams()
 
     useEffect(() => {
-        const step = searchParams.get('step')
+        const step = searchParams.get('step') || ""
 
         if (step) {
             dispatch(setCreateProductStep(parseInt(step)))
@@ -24,30 +24,30 @@ const CreateProduct = () => {
         else {
             dispatch(setCreateProductStep(1))
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams])
+    }, [searchParams, dispatch])
 
 
 
     return (
-        <div>
-            <div className="flex justify-between items-center pb-4">
-                <h4 className="page-title">Create Product</h4>
-            </div>
-
+        <>
             {
-                step === 1 && <AddBasicData />
+                searchParams && <div>
+                    <div className="flex justify-between items-center pb-4">
+                        <h4 className="page-title">Create Product</h4>
+                    </div>
+
+                    {
+                        step === 1 && <AddBasicData />
+                    }
+
+                    {/* ===============step 2 specification====================== */}
+                    {
+                        step === 2 && <AddSpecifications />
+                    }
+
+                </div>
             }
-
-            {/* ===============step 2 specification====================== */}
-            {
-                step === 2 && <AddSpecifications />
-            }
-
-
-
-
-        </div>
+        </>
     )
 }
 

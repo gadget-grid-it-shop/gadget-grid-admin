@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import GlobalProvider from "@/provider/provider";
 import '@mdxeditor/editor/style.css'
+import { Suspense } from "react";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <GlobalProvider>
-          {children}
+          <Suspense>
+            {children}
+          </Suspense>
         </GlobalProvider>
       </body>
     </html>

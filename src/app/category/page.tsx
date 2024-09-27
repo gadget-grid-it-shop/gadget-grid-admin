@@ -110,7 +110,9 @@ const Category = () => {
           const { subCategories } = category;
 
           return (
-            <div key={category._id} className={`rounded-md my-2 bg-background-foreground ${level === 0 ? "px-3 py-3" : "pt-2"}`}>
+            <div key={category._id} className={`rounded-md py-3 px-3 my-2 ${level === 0 ? "px-3" : "pt-2"} ${level === 1 ? 'bg-background mx-3 p-3' : 'bg-background-foreground'}`}>
+              {level === 1 && <h2 className="pb-3 ps-6 text-center text-base">Subcategories</h2>}
+              {level === 2 && <h2 className="pb-3 ps-12 text-center text-base">Brands</h2>}
               <div className="grid grid-cols-2">
                 <button
                   onClick={(e) => handleArrowClick(e, category._id, subCategories.length > 0)}
@@ -128,9 +130,11 @@ const Category = () => {
                 <div className="flex justify-between">
                   <h2>10</h2>
                   <div className="flex gap-2">
-                    <Button onClick={() => handleAddClick(category._id, category.name)} variant={"default"} size={"sm"}>
-                      <FiPlus size={14} />
-                    </Button>
+                    {
+                      level <= 1 && <Button onClick={() => handleAddClick(category._id, category.name)} variant={"default"} size={"sm"}>
+                        <FiPlus size={14} />
+                      </Button>
+                    }
 
                     {/* edit category */}
                     <Button onClick={() => {
