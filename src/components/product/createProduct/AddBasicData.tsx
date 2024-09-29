@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { TProduct } from '@/interface/product.interface'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { updateProduct } from '@/redux/products/productSlice'
+import { updateProduct } from '@/redux/reducers/products/productSlice'
 import React, { useState } from 'react'
 import { IoMdClose } from "react-icons/io";
 import Image from 'next/image'

@@ -162,6 +162,8 @@ const Category = () => {
     );
   };
 
+  console.log(isLoading, error, categories)
+
   return (
     <div className="text-black">
       <div className="flex justify-between items-center pb-4">
@@ -177,8 +179,10 @@ const Category = () => {
         </div>
       </div>
 
-      <div className="mt-3 rounded-md">{!isLoading && !error ? renderCategory(categories, 0) : <CategorySkeleton />}</div>
-      {!isLoading && categories.length === 0 && !error && <div className="h-48 flex justify-center items-center text-gray">No categories available</div>}
+      {isLoading && <CategorySkeleton />}
+
+      <div className="mt-3 rounded-md">{!isLoading && categories.length > 0 && renderCategory(categories, 0)}</div>
+      {!isLoading && error && <div className="h-48 flex justify-center items-center text-gray">No categories available</div>}
 
 
 

@@ -1,39 +1,22 @@
 
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import * as FaIcons from 'react-icons/fa6'; // Font Awesome
-import * as MdIcons from 'react-icons/md'; // Material Design Icons
-import * as TiIcons from 'react-icons/ti'; // Typicons
-// import * as GiIcons from 'react-icons/gi'; // Game Icons
-// import * as AiIcons from 'react-icons/ai'; // Ant Design Icons
-import * as BsIcons from 'react-icons/bs'; // Bootstrap Icons
-import * as BiIcons from 'react-icons/bi'; // Bootstrap Icons
-import * as TbIcons from 'react-icons/tb'; // Tabler Icons
-// import * as IoIcons from 'react-icons/io';
+import { MdOutlineLaptopChromebook, MdListAlt } from 'react-icons/md';
+import { BiCategory, BiAddToQueue } from 'react-icons/bi';
+import { TbListDetails, TbSunFilled } from 'react-icons/tb';
+import { BsMoonFill } from 'react-icons/bs';
+
 import { useTheme } from 'next-themes';
-
-const iconLibraries = {
-    ...FaIcons,
-    ...MdIcons,
-    ...TiIcons,
-    // ...GiIcons,
-    // ...AiIcons,
-    // ...BsIcons,
-    ...BiIcons,
-    ...TbIcons,
-    // ...IoIcons,
-    // Add more icon libraries here if needed
-};
-
+import { FaChevronDown } from 'react-icons/fa6';
 
 interface TMenu {
     id: number,
     title: string,
     link: string,
-    icon: string,
+    icon: ReactNode,
     children?: TMenu[]
 }
 
@@ -42,31 +25,31 @@ const menus: TMenu[] = [
         id: 1,
         title: 'Details Category',
         link: '/details-category',
-        icon: "TbListDetails"
+        icon: <TbListDetails />
     },
     {
         id: 2,
         title: 'Category',
-        icon: 'BiCategory',
+        icon: <BiCategory />,
         link: '/category',
     },
     {
         id: 3,
         title: 'Product',
-        icon: 'MdOutlineLaptopChromebook',
+        icon: <MdOutlineLaptopChromebook />,
         link: '/product',
         children: [
             {
                 id: 1,
                 title: 'Create Product',
                 link: '/product/create-product',
-                icon: "BiAddToQueue"
+                icon: <BiAddToQueue />
             },
             {
                 id: 2,
                 title: 'All Products',
                 link: '/product/all-products',
-                icon: "MdListAlt"
+                icon: <MdListAlt />
             }
         ]
     }
@@ -82,12 +65,6 @@ const Sidebar = () => {
     useEffect(() => {
         setLoaded(true)
     }, [])
-
-    const getIcon = (iconName: string) => {
-        const IconComponent = iconLibraries[iconName as keyof typeof iconLibraries];
-        if (!IconComponent) return null; // Return null if the icon is not found
-        return <IconComponent size={18} />;
-    };
 
     const isLinkActive = (link: string) => {
         return pathName === link || pathName.startsWith(link);
@@ -112,7 +89,7 @@ const Sidebar = () => {
                     menus.map((item: TMenu) => {
                         if (!item?.children) {
                             return <Link className={`rounded-xl py-2 px-4 text-black flex items-center gap-2 ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : ''}`} key={item.id} href={item.link}>
-                                {getIcon(item.icon)}
+                                {item.icon}
                                 {item.title}
                             </Link>
                         }
@@ -121,15 +98,15 @@ const Sidebar = () => {
                             return <div key={item.id} className={`${pathName.includes(item.link) && 'bg-lavender-mist rounded-md'}`}>
                                 <button onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)} className={`text-black rounded-xl py-2 px-4 flex justify-between w-full items-center `}>
                                     <div className='flex gap-2 items-center'>
-                                        {getIcon(item.icon)}
+                                        {item.icon}
                                         {item.title}
                                     </div>
 
-                                    <FaIcons.FaChevronDown className={`${openMenu === item.id ? 'rotate-180' : 'rotate-0'} transition-all`} />
+                                    <FaChevronDown className={`${openMenu === item.id ? 'rotate-180' : 'rotate-0'} transition-all`} />
                                 </button>
                                 <div className={`px-3 flex flex-col gap-1 ${openMenu === item.id && 'py-2'}`}>
                                     {openMenu === item.id && item.children.map(child => <Link className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? 'bg-primary  text-pure-white' : 'text-black'}`} key={child.id} href={child.link}>
-                                        {getIcon(child.icon)}
+                                        {child.icon}
                                         {child.title}
                                     </Link>)}
                                 </div>
@@ -148,13 +125,13 @@ const Sidebar = () => {
                         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                         className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
                     >
-                        <BsIcons.BsMoonFill />
+                        <BsMoonFill />
                     </button>
                     <button
                         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
                         className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}
                     >
-                        <TbIcons.TbSunFilled />
+                        <TbSunFilled />
                     </button>
                 </div>
             }
