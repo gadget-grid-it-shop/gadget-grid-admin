@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
+import { toast } from 'sonner'
 // import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -31,12 +32,12 @@ const LoginPage = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const res = await login(values.email, values.password);
 
-        if ('err' in res) {
-            // Handle error case
-            console.error(res.err);
-        } else {
-            // Handle success case
-            console.log('Login successful:', res.token);
+        if (res.err) {
+            toast.error(res.err.message)
+        }
+
+        else if (res.success === true) {
+            toast.success(res.message)
         }
     }
 
