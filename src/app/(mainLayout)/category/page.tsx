@@ -102,6 +102,11 @@ const Category = () => {
   }
 
 
+  if (error) {
+    toast.error(error?.data?.message as string || 'failed to get category data')
+  }
+
+
   const renderCategory = (categories: TCategory[], level: number) => {
     return (
       <div className="">

@@ -2,11 +2,12 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { verifyToken } from '@/lib/utils'
+import axiosInstance from '@/lib/axiosInstance'
+// import { verifyToken } from '@/lib/utils'
 import { useAppDispatch } from '@/redux/hooks'
 import { updateAuthData } from '@/redux/reducers/auth/authSlice'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
@@ -22,7 +23,8 @@ const formSchema = z.object({
 const LoginPage = () => {
 
     const [passwordHidden, setPasswordHidden] = useState(true)
-    // const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -36,11 +38,21 @@ const LoginPage = () => {
     function onSubmit(values: z.infer<typeof formSchema>) {
         const { email, password } = values
 
-        axios.post(`${process.env.NEXT_PUBLIC_URL}/auth/admin-login`, { email, password })
+        axiosInstance.post(`/auth/admin-login`, { email, password })
             .then(res => {
                 toast.success(res.data.message)
-                const decodedData = verifyToken(res?.data?.data?.accessToken as string)
-                console.log(decodedData)
+                // const decodedData = verifyToken(res?.data?.data?.accessToken as string)
+                dispatch(updateAuthData({
+                    isAuthenticated: true,
+                    token: res.data.data.accessToken,
+                    isVerified: false,
+                    permissions: [],
+                    role: null,
+                    user: null
+                }))
+                setTimeout(() => {
+                    router.push('/')
+                }, 100);
             }).catch(err => {
                 console.log(err)
             })
@@ -48,10 +60,10 @@ const LoginPage = () => {
 
     return (
         <div className='h-screen bg-background-foreground text-black relative w-screen overflow-hidden flex justify-center items-center'>
-            <div className='size-80 rounded-full bg-lavender-mist absolute -left-16 -bottom-9'></div>
-            <div className='size-[500px] rounded-full bg-light-cyan absolute -right-20 -top-36'></div>
+            <div className='lg:size-80 md:size-64 size-40 rounded-full bg-lavender-mist absolute -left-16 -bottom-9'></div>
+            <div className='lg:size-[500px] md:size-[400px] size-80 rounded-full bg-light-cyan absolute -right-20 -top-36'></div>
 
-            <div className='min-h-[60vh] bg-background shadow-lg w-1/3 rounded-lg p-8 px-10 flex flex-col justify-center'>
+            <div className='min-h-[60vh] bg-background shadow-lg lg:w-1/3 md:w-1/2 w-[90vw] rounded-lg p-8 px-10 flex flex-col justify-center z-50'>
                 <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Welcome Back!</h2>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>

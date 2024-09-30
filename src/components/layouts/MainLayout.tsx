@@ -9,10 +9,10 @@ import { useTheme } from "next-themes";
 import Sidebar from "../shared/Sidebar";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/lib/axiosInstance";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const { theme } = useTheme();
-
   const [hydrated, setHydrated] = useState(false)
   const { isAuthenticated } = useAppSelector(s => s.auth)
   const router = useRouter()
@@ -21,9 +21,24 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     setHydrated(true)
   }, [])
 
+  console.log(isAuthenticated)
+
   if (!isAuthenticated) {
     router.push('/login')
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      axiosInstance.get('/auth/getMyData')
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }, [isAuthenticated])
+
 
   return (
     <>
