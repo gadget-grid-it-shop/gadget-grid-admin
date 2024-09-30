@@ -2,8 +2,11 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import login from '@/serverActions/auth/login'
+import { verifyToken } from '@/lib/utils'
+import { useAppDispatch } from '@/redux/hooks'
+import { updateAuthData } from '@/redux/reducers/auth/authSlice'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
@@ -19,26 +22,28 @@ const formSchema = z.object({
 const LoginPage = () => {
 
     const [passwordHidden, setPasswordHidden] = useState(true)
+    // const dispatch = useAppDispatch()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: '',
-            password: ''
+            email: 'khanmahmud994@gmail.com',
+            password: 'Mahmud@994'
         }
     })
 
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res = await login(values.email, values.password);
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        const { email, password } = values
 
-        if (res.err) {
-            toast.error(res.err.message)
-        }
-
-        else if (res.success === true) {
-            toast.success(res.message)
-        }
+        axios.post(`${process.env.NEXT_PUBLIC_URL}/auth/admin-login`, { email, password })
+            .then(res => {
+                toast.success(res.data.message)
+                const decodedData = verifyToken(res?.data?.data?.accessToken as string)
+                console.log(decodedData)
+            }).catch(err => {
+                console.log(err)
+            })
     }
 
     return (

@@ -1,5 +1,5 @@
 import { TRole, TUser } from "@/interface/auth.interface";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TInitialState = {
     isAuthenticated: boolean,
@@ -13,12 +13,18 @@ const initialState: TInitialState = {
     user: null
 }
 
+
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialState,
     reducers: {
-
+        updateAuthData: (state, action: PayloadAction<TInitialState>) => {
+            state = action.payload
+        }
     }
 })
+
+export const { updateAuthData } = authSlice.actions
 
 export default authSlice.reducer
