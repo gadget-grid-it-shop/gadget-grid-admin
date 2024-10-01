@@ -375,7 +375,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                                         <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
                                         <p className='text-base'>uploading, please wait</p>
                                     </div> : <>
-                                        <h3 className='text-base'>upload photos to this folder</h3>
+                                        <h3 className='text-base text-center'>upload photos to this folder</h3>
                                         <AiOutlineCloudUpload className='text-lavender-mist' />
                                         <h3 className='text-base text-primary'>Click here</h3>
                                         <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />

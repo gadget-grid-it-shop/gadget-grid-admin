@@ -32,7 +32,7 @@ const AddBasicData = () => {
     return (
         <div>
             <h2 className='text-black font-semibold text-lg pb-5'>General Information</h2>
-            <div className='grid grid-cols-2 gap-x-10 gap-y-4'>
+            <div className='grid md:grid-cols-2 gap-x-10 gap-y-4 grid-cols-1'>
 
                 <div className='flex flex-col gap-2'>
                     <label className='text-sm'>Name *</label>
@@ -71,7 +71,7 @@ const AddBasicData = () => {
 
                 <div className='flex flex-col gap-2'>
                     <label className='text-sm'>Gallery *</label>
-                    <div className={`flex gap-2 h-full bg-background-foreground items-center p-3 rounded-md flex-col ${gallery?.length === 0 && 'justify-center'}`}>
+                    <div className={`min-h-52 flex gap-2 h-full bg-background-foreground items-center p-3 rounded-md flex-col ${gallery?.length === 0 && 'justify-center'}`}>
                         {
                             gallery && gallery?.length <= 5 && <Button className='w-fit' onClick={() => setGalleryOpen(true)}>Select From Gallery</Button>
                         }

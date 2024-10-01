@@ -25,7 +25,7 @@ const Navbar = () => {
         <nav className=''>
             <div className='bg-white px-4 py-4 shadow-md rounded-md mt-3 flex justify-between'>
                 {
-                    !isDesktopOrLaptop && <Button onClick={() => dispatch(setMenuOpen(true))} variant={'icon'}><HiMiniBars3BottomLeft /></Button>
+                    !isDesktopOrLaptop && <Button className="px-0" onClick={() => dispatch(setMenuOpen(true))} variant={'icon'}><HiMiniBars3BottomLeft /></Button>
                 }
                 {
                     isAuthenticated && <Button variant={'delete'} onClick={handleLogout}>Logout</Button>
