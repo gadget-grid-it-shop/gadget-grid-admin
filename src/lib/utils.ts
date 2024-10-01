@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { jwtDecode } from "jwt-decode";
+import { TGenericErrorResponse } from "@/interface/error.interface";
+import { toast } from "sonner";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -10,4 +12,15 @@ export function cn(...inputs: ClassValue[]) {
 export const verifyToken = (token: string) => {
   const decoded = jwtDecode(token)
   return decoded
+}
+
+
+export const globalError = (error: unknown) => {
+  const typeError = error as { data: TGenericErrorResponse }
+
+  if (typeError.data) {
+    toast.error(typeError.data.message)
+  } else {
+    toast.error('An unknown error occurred');
+  }
 }

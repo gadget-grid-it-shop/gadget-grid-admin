@@ -347,7 +347,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
 
                     <div>
                         {
-                            error && <div>
+                            !isLoading && typeof (error) === 'object' && <div>
                                 <h2 className='text-center'>Could not get gallery images. Please try again later</h2>
                             </div>
                         }

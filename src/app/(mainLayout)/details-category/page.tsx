@@ -2,20 +2,21 @@
 import CreateNewDetailsCategory from "@/components/details-category/CreateNewDetailsCategory";
 import DetailsCategoryInfo from "@/components/details-category/DetailsCategoryInfo";
 import DetailsCategorySkeleton from "@/components/details-category/DetailsCategorySkeleton";
+// import { globalError } from "@/lib/utils";
 import { useGetDetailsCategoriesQuery } from "@/redux/api/detailsCategory";
-import { toast } from "sonner";
 
 const DetailsCategory = () => {
   // const [data, setData] = useState<TProductCategory[] | undefined>(undefined);
 
   const { data, error, isLoading } = useGetDetailsCategoriesQuery(undefined)
 
-  if (error) {
-    console.log(error)
-    toast.error(error.data.message)
-    return <h3>error</h3>
-  }
 
+  // if (!isLoading && error) {
+  //   globalError(error)
+  //   return <h3>error</h3>
+  // }
+
+  console.log(error)
 
   return (
     <>
