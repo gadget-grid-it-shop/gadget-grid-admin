@@ -1,9 +1,11 @@
-import { store } from "@/redux/store";
 import axios from "axios";
+import { getAccessToken } from "./utils";
+
+const isClient = typeof window !== 'undefined';
 
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_URL,
-    timeout: 8000,
+    timeout: 20000,
     headers: {
         Accept: 'application/json'
     },
@@ -12,9 +14,11 @@ const axiosInstance = axios.create({
 
 
 axiosInstance.interceptors.request.use((config) => {
-    const { token } = store.getState().auth
-    if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`
+    if (isClient) {
+        const token = getAccessToken()
+        if (token) {
+            config.headers['Authorization'] = `${token}`
+        }
     }
     return config
 })

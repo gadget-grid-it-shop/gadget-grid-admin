@@ -179,7 +179,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
 
   return (
     <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
-      {data.length !== 0 &&
+      {data?.length !== 0 &&
         data?.map((cat: TProductCategory) => (
           <div className="bg-light-gray border border-border-color p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
             <h3 className="text-black text-lg font-semibold">{cat.name}</h3>

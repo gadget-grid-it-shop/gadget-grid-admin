@@ -2,19 +2,18 @@
 import CreateNewDetailsCategory from "@/components/details-category/CreateNewDetailsCategory";
 import DetailsCategoryInfo from "@/components/details-category/DetailsCategoryInfo";
 import DetailsCategorySkeleton from "@/components/details-category/DetailsCategorySkeleton";
-// import { globalError } from "@/lib/utils";
+import { globalError } from "@/lib/utils";
 import { useGetDetailsCategoriesQuery } from "@/redux/api/detailsCategory";
 
 const DetailsCategory = () => {
-  // const [data, setData] = useState<TProductCategory[] | undefined>(undefined);
 
   const { data, error, isLoading } = useGetDetailsCategoriesQuery(undefined)
 
 
-  // if (!isLoading && error) {
-  //   globalError(error)
-  //   return <h3>error</h3>
-  // }
+  if (!isLoading && error) {
+    globalError(error)
+    return <h3>error</h3>
+  }
 
   console.log(error)
 
@@ -27,7 +26,7 @@ const DetailsCategory = () => {
         </div>
 
         {!isLoading ?
-          <DetailsCategoryInfo data={data.data} />
+          <DetailsCategoryInfo data={data?.data} />
           :
           <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
             {
@@ -39,7 +38,7 @@ const DetailsCategory = () => {
         }
 
 
-        {!isLoading && data.data.length === 0 && <div className="h-48 flex justify-center items-center text-gray">No product details categories available</div>}
+        {!isLoading && data?.data?.length === 0 && <div className="h-48 flex justify-center items-center text-gray">No product details categories available</div>}
 
       </div>
     </>

@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { jwtDecode } from "jwt-decode";
 import { TGenericErrorResponse } from "@/interface/error.interface";
 import { toast } from "sonner";
+import { store } from "@/redux/store";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,5 +23,15 @@ export const globalError = (error: unknown) => {
     toast.error(typeError.data.message)
   } else {
     toast.error('An unknown error occurred');
+  }
+}
+
+export const getAccessToken = () => {
+  const { token } = store.getState().auth
+  if (token) {
+    return token
+  }
+  else {
+    return null
   }
 }
