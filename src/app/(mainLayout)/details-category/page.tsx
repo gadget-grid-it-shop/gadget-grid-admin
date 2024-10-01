@@ -20,7 +20,7 @@ const DetailsCategory = () => {
   return (
     <>
       <div>
-        <div className="flex justify-between items-center pb-4">
+        <div className="flex justify-between items-center pb-4 lg:flex-row max-[640px]:flex-col max-[640px]:items-start gap-2">
           <h4 className="page-title">Product Details Category </h4>
           <CreateNewDetailsCategory />
         </div>

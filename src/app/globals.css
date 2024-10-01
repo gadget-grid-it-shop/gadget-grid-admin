@@ -107,11 +107,11 @@ input {
 }
 
 .primary-btn {
-  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium;
+  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium text-sm sm:text-base;
 }
 
 .page-title {
-  @apply text-black text-[1.5rem] font-semibold;
+  @apply text-black lg:text-[1.5rem] text-[1.2rem] font-semibold;
 }
 
 .mdxeditor-root-contenteditable {

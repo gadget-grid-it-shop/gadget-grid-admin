@@ -94,65 +94,68 @@ const Sidebar = () => {
 
 
     return (
-        <div className={`${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} h-screen [@media(min-width:1200px)]:sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col fixed z-50`}>
-            <div className='flex justify-between gap-5'>
-                <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
-                {
-                    !isDesktopOrLaptop && <Button onClick={() => handleClose(false)} variant={'icon'} className='border border-border-color'><MdOutlineClose /></Button>
-                }
-            </div>
-
-            <div className='pt-8 flex flex-col gap-3 flex-grow'>
-                {
-                    menus.map((item: TMenu) => {
-                        if (!item?.children) {
-                            return <Link className={`rounded-xl py-2 px-4 text-black flex items-center gap-2 ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : ''}`} key={item.id} href={item.link}>
-                                {item.icon}
-                                {item.title}
-                            </Link>
-                        }
-                        else {
-
-                            return <div key={item.id} className={`${pathName.includes(item.link) && 'bg-lavender-mist rounded-md'}`}>
-                                <button onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)} className={`text-black rounded-xl py-2 px-4 flex justify-between w-full items-center `}>
-                                    <div className='flex gap-2 items-center'>
-                                        {item.icon}
-                                        {item.title}
-                                    </div>
-
-                                    <FaChevronDown className={`${openMenu === item.id ? 'rotate-180' : 'rotate-0'} transition-all`} />
-                                </button>
-                                <div className={`px-3 flex flex-col gap-1 ${openMenu === item.id && 'py-2'}`}>
-                                    {openMenu === item.id && item.children.map(child => <Link className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? 'bg-primary  text-pure-white' : 'text-black'}`} key={child.id} href={child.link}>
-                                        {child.icon}
-                                        {child.title}
-                                    </Link>)}
-                                </div>
-                            </div>
-                        }
-                    })
-                }
-            </div>
-
-
-            {
-                loaded && <div
-                    className='flex justify-center items-center border w-fit mx-auto rounded-full shadow-lg bg-lavender-mist font-semibold'
-                >
-                    <button
-                        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                        className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
-                    >
-                        <BsMoonFill />
-                    </button>
-                    <button
-                        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                        className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}
-                    >
-                        <TbSunFilled />
-                    </button>
+        <div>
+            {isMenuOpen && <div className='w-screen h-screen fixed z-30 bg-overlay bg-opacity-45'></div>}
+            <div className={`${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} h-screen [@media(min-width:1200px)]:sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col fixed z-50`}>
+                <div className='flex justify-between gap-5'>
+                    <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
+                    {
+                        !isDesktopOrLaptop && <Button onClick={() => handleClose(false)} variant={'icon'} className='border border-border-color'><MdOutlineClose /></Button>
+                    }
                 </div>
-            }
+
+                <div className='pt-8 flex flex-col gap-3 flex-grow'>
+                    {
+                        menus.map((item: TMenu) => {
+                            if (!item?.children) {
+                                return <Link className={`rounded-xl py-2 px-4 text-black flex items-center gap-2 ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : ''}`} key={item.id} href={item.link}>
+                                    {item.icon}
+                                    {item.title}
+                                </Link>
+                            }
+                            else {
+
+                                return <div key={item.id} className={`${pathName.includes(item.link) && 'bg-lavender-mist rounded-md'}`}>
+                                    <button onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)} className={`text-black rounded-xl py-2 px-4 flex justify-between w-full items-center `}>
+                                        <div className='flex gap-2 items-center'>
+                                            {item.icon}
+                                            {item.title}
+                                        </div>
+
+                                        <FaChevronDown className={`${openMenu === item.id ? 'rotate-180' : 'rotate-0'} transition-all`} />
+                                    </button>
+                                    <div className={`px-3 flex flex-col gap-1 ${openMenu === item.id && 'py-2'}`}>
+                                        {openMenu === item.id && item.children.map(child => <Link className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? 'bg-primary  text-pure-white' : 'text-black'}`} key={child.id} href={child.link}>
+                                            {child.icon}
+                                            {child.title}
+                                        </Link>)}
+                                    </div>
+                                </div>
+                            }
+                        })
+                    }
+                </div>
+
+
+                {
+                    loaded && <div
+                        className='flex justify-center items-center border w-fit mx-auto rounded-full shadow-lg bg-lavender-mist font-semibold'
+                    >
+                        <button
+                            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                            className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
+                        >
+                            <BsMoonFill />
+                        </button>
+                        <button
+                            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                            className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}
+                        >
+                            <TbSunFilled />
+                        </button>
+                    </div>
+                }
+            </div>
         </div>
     )
 }
