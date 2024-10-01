@@ -4,13 +4,17 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MdOutlineLaptopChromebook, MdListAlt } from 'react-icons/md';
+import { MdOutlineLaptopChromebook, MdListAlt, MdOutlineClose } from 'react-icons/md';
 import { BiCategory, BiAddToQueue } from 'react-icons/bi';
 import { TbListDetails, TbSunFilled } from 'react-icons/tb';
 import { BsMoonFill } from 'react-icons/bs';
+import { useMediaQuery } from 'react-responsive'
 
 import { useTheme } from 'next-themes';
 import { FaChevronDown } from 'react-icons/fa6';
+import { Button } from '../ui/button';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 
 interface TMenu {
     id: number,
@@ -59,8 +63,13 @@ const Sidebar = () => {
     const { theme, setTheme } = useTheme()
     const pathName = usePathname()
     const [openMenu, setOpenMenu] = useState<number | null>(null)
-
     const [loaded, setLoaded] = useState(false)
+    const { isMenuOpen } = useAppSelector(s => s.general)
+    const dispatch = useAppDispatch()
+
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-width: 1200px)'
+    })
 
     useEffect(() => {
         setLoaded(true)
@@ -69,6 +78,10 @@ const Sidebar = () => {
     const isLinkActive = (link: string) => {
         return pathName === link || pathName.startsWith(link);
     };
+
+    const handleClose = (value: boolean) => {
+        dispatch(setMenuOpen(value))
+    }
 
 
     useEffect(() => {
@@ -81,8 +94,13 @@ const Sidebar = () => {
 
 
     return (
-        <div className="h-screen sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col">
-            <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
+        <div className={`${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} h-screen [@media(min-width:1200px)]:sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col fixed z-50`}>
+            <div className='flex justify-between gap-5'>
+                <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
+                {
+                    !isDesktopOrLaptop && <Button onClick={() => handleClose(false)} variant={'icon'} className='border border-border-color'><MdOutlineClose /></Button>
+                }
+            </div>
 
             <div className='pt-8 flex flex-col gap-3 flex-grow'>
                 {

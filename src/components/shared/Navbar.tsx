@@ -1,26 +1,34 @@
 'use client'
 
-import { useTheme } from 'next-themes'
-import React, { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { Button } from "../ui/button"
+import { resetAuthData } from "@/redux/reducers/auth/authSlice"
+import { useMediaQuery } from "react-responsive"
+import { HiMiniBars3BottomLeft } from "react-icons/hi2"
+import { setMenuOpen } from "@/redux/reducers/general/generalReducer"
+
 
 const Navbar = () => {
 
-    const { theme, setTheme } = useTheme()
-    const [loaded, setLoaded] = useState(false)
+    const { isAuthenticated } = useAppSelector(s => s.auth)
+    // const { isMenuOpen } = useAppSelector(s => s.general)
+    const dispatch = useAppDispatch()
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-width: 1200px)'
+    })
 
-    useEffect(() => {
-        setLoaded(true)
-    }, [])
+    const handleLogout = () => {
+        dispatch(resetAuthData())
+    }
 
     return (
         <nav className=''>
-            <div className='bg-white px-4 py-4 shadow-md rounded-md mt-3'>
+            <div className='bg-white px-4 py-4 shadow-md rounded-md mt-3 flex justify-between'>
                 {
-                    loaded && <button className='text-text' onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-                        {
-                            theme
-                        }
-                    </button>
+                    !isDesktopOrLaptop && <Button onClick={() => dispatch(setMenuOpen(true))} variant={'icon'}><HiMiniBars3BottomLeft /></Button>
+                }
+                {
+                    isAuthenticated && <Button variant={'delete'} onClick={handleLogout}>Logout</Button>
                 }
             </div>
 

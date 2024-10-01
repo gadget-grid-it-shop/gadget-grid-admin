@@ -32,10 +32,11 @@ const authSlice = createSlice({
             state.permissions = action.payload.permissions;
             state.isVerified = action.payload.isVerified;
             state.token = action.payload.token;
-        }
+        },
+        resetAuthData: () => initialState
     }
 })
 
-export const { updateAuthData } = authSlice.actions
+export const { updateAuthData, resetAuthData } = authSlice.actions
 
 export default authSlice.reducer
