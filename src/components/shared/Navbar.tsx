@@ -6,6 +6,7 @@ import { resetAuthData } from "@/redux/reducers/auth/authSlice"
 import { useMediaQuery } from "react-responsive"
 import { HiMiniBars3BottomLeft } from "react-icons/hi2"
 import { setMenuOpen } from "@/redux/reducers/general/generalReducer"
+import { clearCookie } from "@/actions/logout"
 
 
 const Navbar = () => {
@@ -19,6 +20,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         dispatch(resetAuthData())
+        clearCookie()
     }
 
     return (

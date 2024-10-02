@@ -95,8 +95,8 @@ const Sidebar = () => {
 
     return (
         <div>
-            {isMenuOpen && <div className='w-screen h-screen fixed z-30 bg-overlay bg-opacity-45'></div>}
-            <div className={`${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} h-screen [@media(min-width:1200px)]:sticky top-0 w-[320px] bg-white p-4 shadow-md overflow-y-auto flex flex-col fixed z-50`}>
+            {isMenuOpen && !isDesktopOrLaptop && <div className='w-screen h-screen fixed z-30 bg-overlay bg-opacity-45'></div>}
+            <div className={`${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} h-screen min-[1200px]:sticky top-0 2xl:w-[320px] lg:w-[280px] p-4 shadow-md overflow-y-auto flex flex-col fixed z-50 ${!isDesktopOrLaptop ? 'bg-background-foreground' : ' bg-background'}`}>
                 <div className='flex justify-between gap-5'>
                     <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
                     {
