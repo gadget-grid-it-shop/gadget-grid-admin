@@ -177,3 +177,7 @@ input {
 .mdxeditor-root-contenteditable ul {
   padding: 0 30px !important;
 }
+
+.mdxeditor-popup-container {
+  position: fixed !important;
+}

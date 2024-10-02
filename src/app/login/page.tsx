@@ -7,6 +7,7 @@ import axiosInstance from '@/lib/axiosInstance'
 import { useAppDispatch } from '@/redux/hooks'
 import { updateAuthData } from '@/redux/reducers/auth/authSlice'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -63,7 +64,8 @@ const LoginPage = () => {
             <div className='lg:size-80 md:size-64 size-40 rounded-full bg-lavender-mist absolute -left-16 -bottom-9'></div>
             <div className='lg:size-[500px] md:size-[400px] size-80 rounded-full bg-light-cyan absolute -right-20 -top-36'></div>
 
-            <div className='min-h-[60vh] bg-background shadow-lg lg:w-1/3 md:w-1/2 w-[90vw] rounded-lg p-8 px-10 flex flex-col justify-center z-50'>
+            <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
+                <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
                 <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Welcome Back!</h2>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
