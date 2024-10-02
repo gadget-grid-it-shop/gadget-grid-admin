@@ -3,7 +3,16 @@ import { baseApi } from './api/baseApi'
 import productReducer from './reducers/products/productSlice'
 import authSlice from './reducers/auth/authSlice'
 import storage from 'redux-persist/lib/storage'
-import { persistStore, persistReducer } from 'redux-persist'
+import {
+    persistStore,
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+} from 'redux-persist'
 import generalSlice from './reducers/general/generalReducer'
 
 const persistConfig = {
@@ -22,7 +31,11 @@ export const store = configureStore({
     },
 
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(baseApi.middleware),
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            }
+        }).concat(baseApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
