@@ -4,10 +4,16 @@ const nextConfig = {
         remotePatterns: [
             {
                 hostname: '**',
-                pathname: '**'
-            }
-        ]
-    }
+                pathname: '**',
+            },
+        ],
+    },
 };
 
-export default nextConfig;
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+    enabled: process.env.ANALYZE === 'true',
+});
+
+export default withBundleAnalyzer(nextConfig);

@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setCreateProductStep } from '@/redux/products/productSlice'
+import { setCreateProductStep } from '@/redux/reducers/products/productSlice'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import AddBasicData from '@/components/product/createProduct/AddBasicData';

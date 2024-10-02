@@ -6,7 +6,7 @@ import { TCategory, TProductCategory } from '@/interface/category'
 import { TProductAttribute } from '@/interface/product.interface'
 import { useGetAllCategoriesQuery } from '@/redux/api/categories'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setSelectedCategoryName, updateProduct } from '@/redux/products/productSlice'
+import { setSelectedCategoryName, updateProduct } from '@/redux/reducers/products/productSlice'
 import React, { useEffect } from 'react'
 
 const AddSpecifications = () => {
@@ -19,7 +19,7 @@ const AddSpecifications = () => {
     useEffect(() => {
 
         if (selectedCategoryName) {
-            const category: TCategory = categoryData.data.find((cat: TCategory) => cat.name === selectedCategoryName)
+            const category: TCategory = categoryData?.data.find((cat: TCategory) => cat.name === selectedCategoryName)
             if (category) {
                 const attributes = category.product_details_categories.map((item: TProductCategory) => {
                     return {

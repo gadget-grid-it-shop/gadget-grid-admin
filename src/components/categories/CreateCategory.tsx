@@ -12,7 +12,7 @@ import { TProductCategory } from "@/interface/category";
 import MultipleSelector from "../ui/multiselect";
 import { useCreateCategoryMutation } from "@/redux/api/categories";
 import { toast } from 'sonner'
-import { TParentCat } from "@/app/category/page";
+import { TParentCat } from "@/app/(mainLayout)/category/page";
 import { TSelectOptions } from "./interface";
 
 type TCategoryProps = {

@@ -7,7 +7,7 @@ const categoriesApi = baseApi.injectEndpoints({
     getAllCategories: build.query({
       query: (isTree: boolean = true) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/category/get-all${!isTree ? '?isTree=false' : ''}`,
+          url: `/category/get-all${!isTree ? '?isTree=false' : ''}`,
           method: "GET",
         };
       },

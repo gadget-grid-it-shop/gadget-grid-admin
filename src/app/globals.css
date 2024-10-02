@@ -78,7 +78,7 @@ input {
     --primary: hsl(249, 98%, 61%);
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
-    --light-cyan: #d1f3f8;
+    --light-cyan: #2f3738;
     --lavender-blue: #d7defe;
     --peach-pink: #fbcdba;
     --red: #b31812;
@@ -107,11 +107,11 @@ input {
 }
 
 .primary-btn {
-  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium;
+  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium text-sm sm:text-base;
 }
 
 .page-title {
-  @apply text-black text-[1.5rem] font-semibold;
+  @apply text-black lg:text-[1.5rem] text-[1.2rem] font-semibold;
 }
 
 .mdxeditor-root-contenteditable {
@@ -176,4 +176,8 @@ input {
 
 .mdxeditor-root-contenteditable ul {
   padding: 0 30px !important;
+}
+
+.mdxeditor-popup-container {
+  position: fixed !important;
 }

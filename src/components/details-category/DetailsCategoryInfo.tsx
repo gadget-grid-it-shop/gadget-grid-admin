@@ -178,8 +178,8 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
   console.log(fields);
 
   return (
-    <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-4">
-      {data.length !== 0 &&
+    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4">
+      {data?.length !== 0 &&
         data?.map((cat: TProductCategory) => (
           <div className="bg-light-gray border border-border-color p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
             <h3 className="text-black text-lg font-semibold">{cat.name}</h3>
@@ -234,7 +234,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
                 render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label className="text-gray">Name *</label>
-                    <Input {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>
+                    <Input autoFocus={false} {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>
 
                     {fieldState.error && <FormMessage className="text-red text-sm">{fieldState.error.message}</FormMessage>}
                   </FormItem>

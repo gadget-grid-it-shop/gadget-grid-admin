@@ -10,7 +10,7 @@ import { AiOutlineCloudUpload, AiOutlineDelete, AiOutlineLoading3Quarters } from
 import { MdOutlineAdd } from 'react-icons/md'
 import { toast } from 'sonner'
 import { useAppDispatch } from '@/redux/hooks'
-import { updateProduct } from '@/redux/products/productSlice'
+import { updateProduct } from '@/redux/reducers/products/productSlice'
 import { useCreateFolderMutation, useGetFoldersQuery, useUpdateFolderMutation } from '@/redux/api/galleryFolderApi'
 import { FcFolder } from "react-icons/fc";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from '../ui/breadcrumb'
@@ -51,7 +51,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
     const uploadImageRef = useRef<HTMLInputElement | null>(null)
     const dispatch = useAppDispatch()
     const [parentFolder, setParentFolder] = useState('')
-    const { data: folders, isLoading: isFolderLoading, refetch: refetchFolders } = useGetFoldersQuery(parentFolder)
+    const { data: folders, isLoading: isFolderLoading, refetch: refetchFolders, error: folderFetchError } = useGetFoldersQuery(parentFolder)
     const { data, isLoading, error, refetch: refetchGallery } = useGetAllImagesQuery(parentFolder)
     const [updateFolder] = useUpdateFolderMutation()
     const [createFolder] = useCreateFolderMutation()
@@ -169,9 +169,14 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                 setAddFolderModal(false)
                 setFolderName('')
             }
+            else {
+                toast.error(res?.message)
+            }
         }
-        catch (err) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        catch (err: any) {
             console.log(err)
+            toast.error(err?.data?.message)
         }
     }
 
@@ -334,7 +339,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                     }
 
                     {
-                        !isFolderLoading && folders.data.length !== 0 ? renderFolders(folders.data) : <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
+                        !isFolderLoading && !folderFetchError && folders?.data?.length !== 0 ? renderFolders(folders.data) : <div onClick={() => setAddFolderModal(true)} className='bg-lavender-mist size-32 rounded-md flex flex-col gap-2 justify-center items-center'>
                             <LuFolderPlus className='text-gray' size={25} />
                             <p className='text-sm'>Add Folder</p>
                         </div>
@@ -342,8 +347,8 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
 
                     <div>
                         {
-                            error && <div>
-                                <h2>Could not get gallery images. Please try again later</h2>
+                            !isLoading && typeof (error) === 'object' && <div>
+                                <h2 className='text-center'>Could not get gallery images. Please try again later</h2>
                             </div>
                         }
 
@@ -363,14 +368,14 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                         }
 
 
-                        <div className='min-h-52 flex justify-center items-center flex-col gap-3'>
+                        <div className='min-h-52 flex justify-center items-center flex-col gap-3 mt-4'>
                             <div onClick={handleUploadClick} className='border-2 min-w-44 px-3 cursor-pointer flex-1 w-1/3 border-dashed h-full rounded-md border-lavender-mist bg-background text-8xl flex flex-col justify-center items-center'>
                                 {
                                     isUploadLoading ? <div className='flex flex-col gap-2 justify-center items-center'>
                                         <AiOutlineLoading3Quarters className='animate-spin text-primary text-6xl' />
                                         <p className='text-base'>uploading, please wait</p>
                                     </div> : <>
-                                        <h3 className='text-base'>upload photos to this folder</h3>
+                                        <h3 className='text-base text-center'>upload photos to this folder</h3>
                                         <AiOutlineCloudUpload className='text-lavender-mist' />
                                         <h3 className='text-base text-primary'>Click here</h3>
                                         <input name='photos' onChange={handleImageUpload} ref={uploadImageRef} type="file" className='hidden' multiple accept='image/*' />
