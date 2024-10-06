@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MdOutlineLaptopChromebook, MdListAlt, MdOutlineClose } from 'react-icons/md';
 import { BiCategory, BiAddToQueue } from 'react-icons/bi';
-import { TbListDetails, TbSunFilled } from 'react-icons/tb';
-import { BsMoonFill } from 'react-icons/bs';
+import { TbListDetails } from 'react-icons/tb';
+
 import { useMediaQuery } from 'react-responsive'
 
-import { useTheme } from 'next-themes';
+
 import { FaChevronDown } from 'react-icons/fa6';
 import { Button } from '../ui/button';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -60,10 +60,10 @@ const menus: TMenu[] = [
 ]
 
 const Sidebar = () => {
-    const { theme, setTheme } = useTheme()
+
     const pathName = usePathname()
     const [openMenu, setOpenMenu] = useState<number | null>(null)
-    const [loaded, setLoaded] = useState(false)
+
     const { isMenuOpen } = useAppSelector(s => s.general)
     const dispatch = useAppDispatch()
 
@@ -71,9 +71,7 @@ const Sidebar = () => {
         query: '(min-width: 1200px)'
     })
 
-    useEffect(() => {
-        setLoaded(true)
-    }, [])
+
 
     const isLinkActive = (link: string) => {
         return pathName === link || pathName.startsWith(link);
@@ -137,24 +135,7 @@ const Sidebar = () => {
                 </div>
 
 
-                {
-                    loaded && <div
-                        className='flex justify-center items-center border w-fit mx-auto rounded-full shadow-lg bg-lavender-mist font-semibold'
-                    >
-                        <button
-                            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                            className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
-                        >
-                            <BsMoonFill />
-                        </button>
-                        <button
-                            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                            className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? 'bg-primary text-pure-white' : ''}`}
-                        >
-                            <TbSunFilled />
-                        </button>
-                    </div>
-                }
+
             </div>
         </div>
     )

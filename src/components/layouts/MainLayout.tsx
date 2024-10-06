@@ -23,7 +23,6 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     setHydrated(true)
   }, [])
 
-  console.log(isAuthenticated)
 
   useEffect(() => {
     if (isAuthenticated) {

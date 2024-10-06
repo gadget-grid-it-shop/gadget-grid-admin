@@ -47,7 +47,7 @@ export interface TUser {
     name: TUserName,
     password: string,
     isActive: boolean,
-    role: 'customer' | string,
+    role: TRole,
     isDeleted: boolean,
     isVarified: boolean,
     isMasterAdmin?: boolean
