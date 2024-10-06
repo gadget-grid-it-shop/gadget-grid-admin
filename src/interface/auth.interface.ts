@@ -26,13 +26,30 @@ export interface TRole {
     permissions: TPermission[]
 }
 
+export interface TUserName {
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+}
+
+export interface TAddress {
+    street?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+}
+
 
 export interface TUser {
+    address: TAddress,
     email: string,
+    name: TUserName,
     password: string,
     isActive: boolean,
     role: 'customer' | string,
     isDeleted: boolean,
     isVarified: boolean,
     isMasterAdmin?: boolean
+    profilePicture: string
 }

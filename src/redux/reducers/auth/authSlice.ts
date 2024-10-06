@@ -1,6 +1,11 @@
 import { TPermission, TRole, TUser } from "@/interface/auth.interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type TSetUserData = {
+    user: TUser,
+    permissions: TPermission[]
+}
+
 type TInitialState = {
     isAuthenticated: boolean,
     role: TRole | null,
@@ -33,10 +38,14 @@ const authSlice = createSlice({
             state.isVerified = action.payload.isVerified;
             state.token = action.payload.token;
         },
-        resetAuthData: () => initialState
+        resetAuthData: () => initialState,
+        setUserData: (state, action: PayloadAction<TSetUserData>) => {
+            state.user = action.payload.user
+            state.permissions = action.payload.permissions
+        }
     }
 })
 
-export const { updateAuthData, resetAuthData } = authSlice.actions
+export const { updateAuthData, resetAuthData, setUserData } = authSlice.actions
 
 export default authSlice.reducer
