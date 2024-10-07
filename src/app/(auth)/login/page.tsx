@@ -32,6 +32,8 @@ const LoginPage = () => {
     const dispatch = useAppDispatch()
     const [resetTab, setResetTab] = useState(false)
     const router = useRouter()
+    const [sendingReset, setSendingReset] = useState(false)
+    const [isLogging, setlogging] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -51,6 +53,7 @@ const LoginPage = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const { email, password } = values
+        setlogging(true)
 
         axiosInstance.post(`/auth/admin-login`, { email, password })
             .then(res => {
@@ -64,22 +67,28 @@ const LoginPage = () => {
                     role: null,
                     user: null
                 }))
+                setlogging(false)
                 setTimeout(() => {
                     router.push('/')
                 }, 100);
             }).catch(err => {
                 globalError(err.response)
+                setlogging(false)
             })
     }
 
     function resetFormSubmit(values: z.infer<typeof resetFormSchema>) {
         const { email } = values
+        setSendingReset(true)
 
         axiosInstance.post(`/auth/send-verification`, { email })
             .then(res => {
                 toast.success(res.data.message)
+                setSendingReset(false)
             }).catch(err => {
+                console.log(err.response)
                 globalError(err.response)
+                setSendingReset(false)
             })
     }
 
@@ -121,19 +130,19 @@ const LoginPage = () => {
                                     )}
                                 />
 
-                                <Button className='mt-3'>Login</Button>
+                                <Button loading={isLogging} className='mt-3'>Login</Button>
                             </form>
                         </Form>
-                        <button type='button' className='text-sm'>Forgot password? <span onClick={() => setResetTab(true)} className='text-primary text-base'>reset</span></button>
+                        <button type='button' className='text-base mt-3'>Forgot password? <span onClick={() => setResetTab(true)} className='text-primary text-base'>reset</span></button>
                     </div>
                     :
 
 
-                    <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
+                    <div className='min-h-[40vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
 
                         <Form {...resetForm}>
                             <form onSubmit={resetForm.handleSubmit(resetFormSubmit)} className='flex flex-col gap-5'>
-                                <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
+                                <Image className='mx-auto' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
                                 <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Forgot Password!</h2>
                                 <FormField
                                     control={resetForm.control}
@@ -146,9 +155,13 @@ const LoginPage = () => {
                                     )}
                                 />
 
-                                <Button className='mt-3'>Send Reset Link</Button>
+                                <Button loading={sendingReset} className='mt-3'>Send Reset Link</Button>
                             </form>
                         </Form>
+
+                        <button type='button' className='text-base mt-3'>Go back to <span onClick={() => setResetTab(false)} className='text-primary text-base'>login</span></button>
+
+
                     </div>
             }
         </>

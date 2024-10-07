@@ -49,7 +49,7 @@ const ResetPassword = () => {
                 router.push('/login')
             })
             .catch(err => {
-                globalError(err.response)
+                globalError(err)
             })
     }
 
