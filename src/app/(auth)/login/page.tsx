@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Form, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import axiosInstance from '@/lib/axiosInstance'
+import { globalError } from '@/lib/utils'
 // import { verifyToken } from '@/lib/utils'
 import { useAppDispatch } from '@/redux/hooks'
 import { updateAuthData } from '@/redux/reducers/auth/authSlice'
@@ -21,10 +22,15 @@ const formSchema = z.object({
     password: z.string({ required_error: "Please enter your password" })
 })
 
+const resetFormSchema = z.object({
+    email: z.string().email('Invalid email'),
+})
+
 const LoginPage = () => {
 
     const [passwordHidden, setPasswordHidden] = useState(true)
     const dispatch = useAppDispatch()
+    const [resetTab, setResetTab] = useState(false)
     const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -32,6 +38,13 @@ const LoginPage = () => {
         defaultValues: {
             email: 'khanmahmud994@gmail.com',
             password: 'Mahmud@994'
+        }
+    })
+
+    const resetForm = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(resetFormSchema),
+        defaultValues: {
+            email: 'khanmahmud994@gmail.com',
         }
     })
 
@@ -55,51 +68,90 @@ const LoginPage = () => {
                     router.push('/')
                 }, 100);
             }).catch(err => {
-                console.log(err)
+                globalError(err.response)
+            })
+    }
+
+    function resetFormSubmit(values: z.infer<typeof resetFormSchema>) {
+        const { email } = values
+
+        axiosInstance.post(`/auth/send-verification`, { email })
+            .then(res => {
+                toast.success(res.data.message)
+            }).catch(err => {
+                globalError(err.response)
             })
     }
 
     return (
 
-        <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
-            <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
-            <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Welcome Back!</h2>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
-                    <FormField
-                        control={form.control}
-                        name='email'
-                        render={({ field }) => (
-                            <FormItem>
-                                <label>Email *</label>
-                                <Input className='bg-background-foreground' {...field} type='email' placeholder='Enter your email' />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name='password'
-                        render={({ field }) => (
-                            <FormItem>
-                                <label>Password *</label>
-                                <div className='relative'>
-                                    <Input className='bg-background-foreground' {...field} type={passwordHidden ? 'password' : 'text'} placeholder='Enter your password' />
-                                    <button type='button' className='absolute right-2 top-1/2 -translate-y-1/2' onClick={() => setPasswordHidden(!passwordHidden)}>
-                                        {
-                                            passwordHidden ? <FaRegEyeSlash /> : <FaRegEye />
-                                        }
-                                    </button>
-                                </div>
-                            </FormItem>
-                        )}
-                    />
+        <>
+            {
+                !resetTab ?
+                    <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
+                        <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
+                        <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Welcome Back!</h2>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
+                                <FormField
+                                    control={form.control}
+                                    name='email'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <label>Email *</label>
+                                            <Input className='bg-background-foreground' {...field} type='email' placeholder='Enter your email' />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='password'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <label>Password *</label>
+                                            <div className='relative'>
+                                                <Input className='bg-background-foreground' {...field} type={passwordHidden ? 'password' : 'text'} placeholder='Enter your password' />
+                                                <button type='button' className='absolute right-2 top-1/2 -translate-y-1/2' onClick={() => setPasswordHidden(!passwordHidden)}>
+                                                    {
+                                                        passwordHidden ? <FaRegEyeSlash /> : <FaRegEye />
+                                                    }
+                                                </button>
+                                            </div>
+                                        </FormItem>
+                                    )}
+                                />
 
-                    <Button className='mt-3'>Login</Button>
+                                <Button className='mt-3'>Login</Button>
+                            </form>
+                        </Form>
+                        <button type='button' className='text-sm'>Forgot password? <span onClick={() => setResetTab(true)} className='text-primary text-base'>reset</span></button>
+                    </div>
+                    :
 
-                    <button type='button' className='text-sm'>Forgot password? <span className='text-primary text-base'>reset</span></button>
-                </form>
-            </Form>
-        </div>
+
+                    <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
+
+                        <Form {...resetForm}>
+                            <form onSubmit={resetForm.handleSubmit(resetFormSubmit)} className='flex flex-col gap-5'>
+                                <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
+                                <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Forgot Password!</h2>
+                                <FormField
+                                    control={resetForm.control}
+                                    name='email'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <label>Email *</label>
+                                            <Input className='bg-background-foreground' {...field} type='email' placeholder='Enter your email' />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <Button className='mt-3'>Send Reset Link</Button>
+                            </form>
+                        </Form>
+                    </div>
+            }
+        </>
 
     )
 }

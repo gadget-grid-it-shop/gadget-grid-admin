@@ -103,7 +103,6 @@ const ResetPassword = () => {
 
                     <Button className='mt-3'>Reset</Button>
 
-                    <button type='button' className='text-sm'>Forgot password? <span className='text-primary text-base'>reset</span></button>
                 </form>
             </Form>
         </div>
