@@ -14,6 +14,7 @@ import { useCreateCategoryMutation } from "@/redux/api/categories";
 import { toast } from 'sonner'
 import { TParentCat } from "@/app/(mainLayout)/category/page";
 import { TSelectOptions } from "./interface";
+import { globalError } from "@/lib/utils";
 
 type TCategoryProps = {
     parent: TParentCat;
@@ -34,7 +35,7 @@ const CreateCategory = ({ parent, open, setOpen, setParent }: TCategoryProps) =>
     const { data: detailsCategoryData, error, isLoading } = useGetDetailsCategoriesQuery(undefined);
     const [detailsCategoryError, setDetailsCategoryError] = useState<{ error: boolean; message: string }>({ error: false, message: "" });
 
-    const [createCategory] = useCreateCategoryMutation();
+    const [createCategory, { isLoading: isCreatingCategory }] = useCreateCategoryMutation();
 
     const selectOptions = detailsCategoryData?.data?.map((item: TProductCategory) => {
         return {
@@ -93,8 +94,6 @@ const CreateCategory = ({ parent, open, setOpen, setParent }: TCategoryProps) =>
         try {
             const res = await createCategory(payload).unwrap();
 
-            console.log(res);
-
             if (res.success) {
                 toast.success(res.message)
 
@@ -106,7 +105,7 @@ const CreateCategory = ({ parent, open, setOpen, setParent }: TCategoryProps) =>
                 setDetailsCategories([])
             }
         } catch (err) {
-            console.log(err);
+            globalError(err)
         }
     };
 
@@ -163,7 +162,7 @@ const CreateCategory = ({ parent, open, setOpen, setParent }: TCategoryProps) =>
                                 )}
                                 {detailsCategoryError.error && <p className="text-red text-sm">{detailsCategoryError.message}</p>}
                             </div>
-                            <Button>Create</Button>
+                            <Button loading={isCreatingCategory}>Create</Button>
                         </form>
                     </Form>
                 </DialogContent>

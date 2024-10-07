@@ -24,7 +24,7 @@ const GalleryFolderApi = baseApi.injectEndpoints({
                 return {
                     url: `/gallery/create-folder`,
                     method: 'POST',
-                    body: payload
+                    data: payload
                 }
             },
             invalidatesTags: [tagTypes.galleryFolder]
@@ -35,7 +35,7 @@ const GalleryFolderApi = baseApi.injectEndpoints({
                 return {
                     url: `/gallery/update-folder/${id}`,
                     method: 'PATCH',
-                    body: { name }
+                    data: { name }
                 }
             },
             invalidatesTags: [tagTypes.galleryFolder]

@@ -23,7 +23,7 @@ export const axiosBaseQuery =
                 const result = await axiosInstance({
                     url: baseUrl + url,
                     method,
-                    data,
+                    data: method !== 'GET' ? data : undefined,
                     params,
                     headers: {
                         ...headers,

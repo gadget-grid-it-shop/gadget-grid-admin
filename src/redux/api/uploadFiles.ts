@@ -25,7 +25,7 @@ const uploadFileApi = baseApi.injectEndpoints({
                 return {
                     url: '/upload/upload-image',
                     method: 'POST',
-                    body: formData
+                    data: formData
                 }
             },
             invalidatesTags: [tagTypes.upload]
@@ -36,7 +36,7 @@ const uploadFileApi = baseApi.injectEndpoints({
                 return {
                     url: '/upload/delete-images',
                     method: 'DELETE',
-                    body: payload
+                    data: payload
                 }
             },
             invalidatesTags: [tagTypes.upload]

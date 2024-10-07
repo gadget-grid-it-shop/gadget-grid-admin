@@ -19,7 +19,7 @@ const categoriesApi = baseApi.injectEndpoints({
         return {
           url: "/category/create",
           method: "POST",
-          body: payload,
+          data: payload,
         };
       },
 
@@ -42,7 +42,7 @@ const categoriesApi = baseApi.injectEndpoints({
         return {
           url: `/category/${id}`,
           method: 'PATCH',
-          body: payload
+          data: payload
         }
       },
       invalidatesTags: [tagTypes.categories]
