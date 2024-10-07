@@ -19,8 +19,9 @@ export const verifyToken = (token: string) => {
 export const globalError = (error: unknown) => {
   const typeError = error as { data: TGenericErrorResponse }
 
+  console.log(typeError)
   if (typeError.data) {
-    toast.error(typeError.data.message)
+    toast.error(typeError.data.errorSources[0]?.message)
   } else {
     toast.error('An unknown error occurred');
   }

@@ -66,9 +66,9 @@ const Navbar = () => {
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-72">
+                            <DropdownMenuContent className="w-72 pb-4 -right-10">
                                 <DropdownMenuLabel >
-                                    <div className="bg-primary rounded-tl-md rounded-tr-md text-pure-white px-3 py-4 flex justify-between">
+                                    <div className="bg-primary rounded-tl-md rounded-tr-md text-pure-white px-3 py-4 flex justify-between items-center">
                                         <div>
                                             <h2 className="capitalize font-semibold text-pure-white pb-1">{`${user?.name.firstName} ${user?.name.middleName} ${user?.name.lastName}`}</h2>
                                             <h3 className="text-pure-white text-sm">Role: {user?.role?.role}</h3>
