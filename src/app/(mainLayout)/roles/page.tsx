@@ -6,6 +6,7 @@ import { globalError } from '@/lib/utils'
 import { TRole } from '@/interface/auth.interface'
 import { useGetRolesQuery } from '@/redux/api/rolesApi'
 import React from 'react'
+import { Button } from '@/components/ui/button'
 
 const Roles = () => {
 
@@ -41,26 +42,25 @@ const Roles = () => {
                         <TableBody>
                             {
                                 rolesData?.data?.map((role: TRole, i: number) => <TableRow key={role._id}>
-                                    <TableCell className="font-medium ">{i + 1}</TableCell>
-                                    <TableCell className='text-primary font-semibold capitalize'>{role.role}</TableCell>
+                                    <TableCell className="font-medium w-48">{i + 1}</TableCell>
+                                    <TableCell className='text-primary font-semibold capitalize w-80'>{role.role}</TableCell>
                                     <TableCell>
                                         <p className='line-clamp-2 overflow-hidden text-ellipsis whitespace-normal max-w-[400px]'>
                                             {role.description}
                                         </p>
                                     </TableCell>
-                                    <TableCell className="text-right">
-
+                                    <TableCell className="flex gap-3">
+                                        <Button variant={'view_button'} size={'base'}></Button>
+                                        <Button variant={'edit_button'} size={'base'}></Button>
+                                        <Button variant={'delete_button'} size={'base'}></Button>
                                     </TableCell>
                                 </TableRow>)
                             }
                         </TableBody>
                     </Table>
-                // <div>
-                //     {
-                //         rolesData?.data?.map((role: TRole) => <div key={role._id}></div>)
-                //     }
-                // </div>
             }
+
+
         </div>
     )
 }
