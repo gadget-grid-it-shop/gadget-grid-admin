@@ -1,8 +1,6 @@
 "use client";
 import { TProductCategory } from "@/interface/category";
 import { Button } from "../ui/button";
-import { BiSolidEditAlt } from "react-icons/bi";
-import { PiTrashSimpleFill } from "react-icons/pi";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -199,27 +197,23 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
             </div>
             <div className="flex gap-3 w-full mt-3">
               <Button
-                className="text-gray"
                 onClick={() => {
                   setOpenEditId(cat?._id);
                   setSelectedCat(cat);
                 }}
-                variant={"icon"}
-                size={"icon"}
+                variant={"edit_button"}
+                size={"base"}
               >
-                <BiSolidEditAlt size={20} />
               </Button>
 
               <Button
-                className="text-gray"
-                variant={"icon"}
-                size={"icon"}
+                variant={"delete_button"}
+                size={"base"}
                 onClick={() => {
                   setOpenDeleteId(cat?._id);
                   setSelectedCat(cat);
                 }}
               >
-                <PiTrashSimpleFill />
               </Button>
             </div>
           </div>
