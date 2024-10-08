@@ -18,7 +18,7 @@ const Roles = () => {
     console.log(rolesData?.data)
 
     return (
-        <div>
+        <div className='w-full'>
             <div className="flex justify-between items-center pb-4">
                 <h4 className="page-title">User Roles</h4>
                 {/* <CreateCategory open={open} setOpen={setOpen} parent={parent} setParent={setParent} /> */}
@@ -29,7 +29,7 @@ const Roles = () => {
             {
                 isLoading ? <RolesSkeleton /> :
 
-                    <Table>
+                    <Table className=''>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Serial</TableHead>
@@ -41,9 +41,13 @@ const Roles = () => {
                         <TableBody>
                             {
                                 rolesData?.data?.map((role: TRole, i: number) => <TableRow key={role._id}>
-                                    <TableCell className="font-medium">{i + 1}</TableCell>
-                                    <TableCell>{role.role}</TableCell>
-                                    <TableCell>{role.description}</TableCell>
+                                    <TableCell className="font-medium ">{i + 1}</TableCell>
+                                    <TableCell className='text-primary font-semibold capitalize'>{role.role}</TableCell>
+                                    <TableCell>
+                                        <p className='line-clamp-2 overflow-hidden text-ellipsis whitespace-normal max-w-[400px]'>
+                                            {role.description}
+                                        </p>
+                                    </TableCell>
                                     <TableCell className="text-right">
 
                                     </TableCell>
