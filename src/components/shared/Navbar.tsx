@@ -100,7 +100,7 @@ const Navbar = () => {
                             >
                                 <button
                                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                    className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-pure-white text-primary'}`}
+                                    className={`flex text-black items-center gap-2 px-3 py-2 h-full rounded-full ${theme === 'light' ? '' : 'bg-primary text-pure-white'}`}
                                 >
                                     <BsMoonFill />
                                 </button>

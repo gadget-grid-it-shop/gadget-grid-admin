@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Form, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import axiosInstance from '@/lib/axiosInstance'
-import { globalError } from '@/lib/utils'
+import { globalError } from '@/components/utilities/utils'
 // import { verifyToken } from '@/lib/utils'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setResetSentTime, updateAuthData } from '@/redux/reducers/auth/authSlice'
@@ -16,9 +16,8 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
 import { toast } from 'sonner'
 // import { toast } from 'sonner'
 import { z } from 'zod'
-import dayjs from 'dayjs'
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
+import dayjs from '@/components/utilities/Customdayjs'
+
 
 const formSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -91,18 +90,16 @@ const LoginPage = () => {
     function resetFormSubmit(values: z.infer<typeof resetFormSchema>) {
         const resetLinkSentMinutes = dayjs().diff(dayjs(resetSentTime), 'minutes')
 
-        console.log(resetLinkSentMinutes)
-
         if (resetSentTime !== null && resetLinkSentMinutes <= 5) {
             return toast.warning(`A email with reset link has already been sent to your address. Please try again ${dayjs(resetSentTime)?.add(5, 'minutes')?.from(dayjs())}`)
         }
-        dispatch(setResetSentTime(dayjs().toISOString()))
         const { email } = values
         setSendingReset(true)
 
         axiosInstance.post(`/auth/forgot-password`, { email })
             .then(res => {
                 toast.success(res.data.message)
+                dispatch(setResetSentTime(dayjs().toISOString()))
                 setSendingReset(false)
             }).catch(err => {
                 console.log(err.response)

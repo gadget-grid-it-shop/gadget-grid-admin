@@ -14,6 +14,7 @@ type TInitialState = {
     isVerified: boolean,
     token: string | null,
     resetSentTime?: string | null,
+    verificationSentTime?: string | null
 }
 
 const initialState: TInitialState = {
@@ -23,7 +24,8 @@ const initialState: TInitialState = {
     permissions: [],
     isVerified: false,
     token: null,
-    resetSentTime: null
+    resetSentTime: null,
+    verificationSentTime: null
 }
 
 
@@ -47,10 +49,14 @@ const authSlice = createSlice({
         },
         setResetSentTime: (state, action: PayloadAction<string | null>) => {
             state.resetSentTime = action.payload
+        },
+
+        setVerificationSentTime: (state, action: PayloadAction<string | null>) => {
+            state.verificationSentTime = action.payload
         }
     }
 })
 
-export const { updateAuthData, resetAuthData, setUserData, setResetSentTime } = authSlice.actions
+export const { updateAuthData, resetAuthData, setUserData, setResetSentTime, setVerificationSentTime } = authSlice.actions
 
 export default authSlice.reducer

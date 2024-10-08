@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import { toast } from "react-toastify";
 import { useCreateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
-import { globalError } from "@/lib/utils";
+import { globalError } from "@/components/utilities/utils";
 
 
 

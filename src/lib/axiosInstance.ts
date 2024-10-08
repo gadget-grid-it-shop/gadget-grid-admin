@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "./utils";
+import { getAccessToken } from "../components/utilities/utils";
 
 const isClient = typeof window !== 'undefined';
 

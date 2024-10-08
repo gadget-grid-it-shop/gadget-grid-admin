@@ -6,7 +6,7 @@ import EditCategory from "@/components/categories/EditCategory";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TCategory } from "@/interface/category";
-import { globalError } from "@/lib/utils";
+import { globalError } from "@/components/utilities/utils";
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery } from "@/redux/api/categories";
 import React, { useState } from "react";
 import { FaAngleDown, FaTrash } from "react-icons/fa6";
