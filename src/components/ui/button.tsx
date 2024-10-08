@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { PiTrashSimpleFill } from "react-icons/pi";
 
 import { cn } from "@/lib/utils";
-import { FiLoader } from "react-icons/fi";
+import { FiLoader, FiPlus } from "react-icons/fi";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { HiEye } from "react-icons/hi2";
 
@@ -19,9 +19,10 @@ const buttonVariants = cva(
         edit: "text-pure-white text-md shadow bg-vivid-orange",
         default_outline: "border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
         icon: 'border-none p-0 m-0 text-xl',
-        view_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
+        create_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
         edit_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-vivid-orange hover:text-pure-white hover:bg-vivid-orange",
-        delete_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-red hover:text-pure-white hover:bg-red"
+        delete_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-red hover:text-pure-white hover:bg-red",
+        view_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-bright-turquoise text-bright-turquoise hover:text-pure-white hover:bright-turquoise"
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -50,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, va
   const Comp = asChild ? Slot : "button";
   return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} disabled={loading}>
     {
-      loading ? <FiLoader className="animate-spin" size={20} /> : variant === 'delete_button' ? <PiTrashSimpleFill /> : variant === 'edit_button' ? <BiSolidEditAlt /> : variant === 'view_button' ? <HiEye /> : children
+      loading ? <FiLoader className="animate-spin" size={20} /> : variant === 'delete_button' ? <PiTrashSimpleFill /> : variant === 'edit_button' ? <BiSolidEditAlt /> : variant === 'view_button' ? <HiEye /> : variant === 'create_button' ? <FiPlus /> : children
     }
   </Comp>;
 });
