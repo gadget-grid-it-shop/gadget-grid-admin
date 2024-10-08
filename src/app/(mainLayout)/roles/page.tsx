@@ -1,12 +1,12 @@
 'use client'
 
-import RolesSkeleton from '@/components/roles/RolesSkeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { globalError } from '@/lib/utils'
 import { TRole } from '@/interface/auth.interface'
 import { useGetRolesQuery } from '@/redux/api/rolesApi'
 import React from 'react'
 import { Button } from '@/components/ui/button'
+import TableSkeleton from '@/components/shared/TableSkeleton'
 
 const Roles = () => {
 
@@ -28,7 +28,7 @@ const Roles = () => {
             {!isLoading && error !== undefined && <div className="h-48 flex justify-center items-center text-gray">Could not get roles</div>}
 
             {
-                isLoading ? <RolesSkeleton /> :
+                isLoading ? <TableSkeleton /> :
 
                     <Table className=''>
                         <TableHeader>
