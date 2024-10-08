@@ -62,20 +62,26 @@ const LoginPage = () => {
 
         axiosInstance.post(`/auth/admin-login`, { email, password })
             .then(res => {
-                toast.success(res.data.message)
-                // const decodedData = verifyToken(res?.data?.data?.accessToken as string)
-                dispatch(updateAuthData({
-                    isAuthenticated: true,
-                    token: res.data.data.accessToken,
-                    isVerified: false,
-                    permissions: [],
-                    role: null,
-                    user: null
-                }))
-                setlogging(false)
-                setTimeout(() => {
-                    router.push('/')
-                }, 100);
+                console.log(res.data)
+                if (res.data?.data?.isVerified === false) {
+                    toast.warning(res.data.message)
+                    router.push('/verify-email')
+                }
+                else {
+                    toast.success(res.data.message)
+                    dispatch(updateAuthData({
+                        isAuthenticated: res.data.data.token !== null,
+                        token: res.data.data.accessToken,
+                        isVerified: true,
+                        permissions: [],
+                        role: null,
+                        user: null
+                    }))
+                    setlogging(false)
+                    setTimeout(() => {
+                        router.push('/')
+                    }, 100);
+                }
             }).catch(err => {
                 globalError(err.response)
                 setlogging(false)
@@ -88,7 +94,7 @@ const LoginPage = () => {
         console.log(resetLinkSentMinutes)
 
         if (resetSentTime !== null && resetLinkSentMinutes <= 5) {
-            return toast.warning(`A email with reset link has been already sent to your address. Please try again ${dayjs(resetSentTime)?.add(5, 'minutes')?.from(dayjs())}`)
+            return toast.warning(`A email with reset link has already been sent to your address. Please try again ${dayjs(resetSentTime)?.add(5, 'minutes')?.from(dayjs())}`)
         }
         dispatch(setResetSentTime(dayjs().toISOString()))
         const { email } = values
@@ -156,7 +162,7 @@ const LoginPage = () => {
                         <Form {...resetForm}>
                             <form onSubmit={resetForm.handleSubmit(resetFormSubmit)} className='flex flex-col gap-5'>
                                 <Image className='mx-auto' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
-                                <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Forgot Password!</h2>
+                                <h2 className='text-2xl font-bold text-center text-primary'>Forgot Password!</h2>
                                 <FormField
                                     control={resetForm.control}
                                     name='email'

@@ -57,7 +57,7 @@ const ResetPassword = () => {
 
         <div className='min-h-[60vh] bg-background shadow-lg 2xl:w-1/3 lg:w-1/2 md:w-[70vw] w-[90vw] rounded-lg p-8 min-[540px]:px-10 px-5 flex flex-col justify-center z-50'>
             <Image className='mx-auto pb-4' src={'/gadget-grid-logo.png'} height={100} width={200} alt='gadget grid logo' />
-            <h2 className='text-2xl font-bold text-center pb-6 text-primary'>Reset Password!</h2>
+            <h2 className='text-2xl font-bold text-center pb-4 text-primary'>Reset Password!</h2>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
                     <FormField
