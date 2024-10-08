@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-import { cn } from "@/components/utilities/utils";
+import { cn } from "@/lib/utils";
 import { HiMiniXMark } from "react-icons/hi2";
 
 const Dialog = React.forwardRef<HTMLDivElement, React.ComponentPropsWithRef<typeof DialogPrimitive.Root>>(

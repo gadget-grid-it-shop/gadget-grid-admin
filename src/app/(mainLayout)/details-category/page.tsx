@@ -3,7 +3,7 @@
 import CreateNewDetailsCategory from "@/components/details-category/CreateNewDetailsCategory";
 import DetailsCategoryInfo from "@/components/details-category/DetailsCategoryInfo";
 import DetailsCategorySkeleton from "@/components/details-category/DetailsCategorySkeleton";
-import { globalError } from "@/components/utilities/utils";
+import { globalError } from "@/lib/utils";
 import { useGetDetailsCategoriesQuery } from "@/redux/api/detailsCategory";
 
 const DetailsCategory = () => {

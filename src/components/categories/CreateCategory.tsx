@@ -14,7 +14,7 @@ import { useCreateCategoryMutation } from "@/redux/api/categories";
 import { toast } from 'sonner'
 import { TParentCat } from "@/app/(mainLayout)/category/page";
 import { TSelectOptions } from "./interface";
-import { globalError } from "@/components/utilities/utils";
+import { globalError } from "@/lib/utils";
 
 type TCategoryProps = {
     parent: TParentCat;

@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
-import { globalError } from "@/components/utilities/utils";
+import { globalError } from "@/lib/utils";
 
 type TProps = {
   data: TProductCategory[];

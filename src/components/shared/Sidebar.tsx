@@ -15,6 +15,7 @@ import { FaChevronDown } from 'react-icons/fa6';
 import { Button } from '../ui/button';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
+import { FaUsersCog } from 'react-icons/fa';
 
 interface TMenu {
     id: number,
@@ -56,6 +57,12 @@ const menus: TMenu[] = [
                 icon: <MdListAlt />
             }
         ]
+    },
+    {
+        id: 4,
+        title: 'Roles',
+        link: '/roles',
+        icon: <FaUsersCog size={20} />
     }
 ]
 

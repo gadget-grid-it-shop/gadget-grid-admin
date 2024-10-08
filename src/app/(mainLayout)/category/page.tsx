@@ -6,7 +6,7 @@ import EditCategory from "@/components/categories/EditCategory";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TCategory } from "@/interface/category";
-import { globalError } from "@/components/utilities/utils";
+import { globalError } from "@/lib/utils";
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery } from "@/redux/api/categories";
 import React, { useState } from "react";
 import { FaAngleDown, FaTrash } from "react-icons/fa6";
@@ -186,7 +186,7 @@ const Category = () => {
       {isLoading && <CategorySkeleton />}
 
       <div className="mt-3 rounded-md">{!isLoading && categories.length > 0 && renderCategory(categories, 0)}</div>
-      {!isLoading && !error && <div className="h-48 flex justify-center items-center text-gray">No categories available</div>}
+      {!isLoading && error !== undefined && (<div className="h-48 flex justify-center items-center text-gray">No categories available</div>)}
 
 
 

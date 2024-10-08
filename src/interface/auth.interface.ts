@@ -22,7 +22,9 @@ export interface TPermission {
 
 
 export interface TRole {
-    role: 'string',
+    _id: string,
+    role: string,
+    description?: string,
     permissions: TPermission[]
 }
 
