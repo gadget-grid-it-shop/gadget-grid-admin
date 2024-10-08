@@ -27,7 +27,7 @@ const detailsCategoryApi = baseApi.injectEndpoints({
     deleteDetailsCategory: build.mutation({
       query: (id) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/product-details-category/delete/${id}`,
+          url: `/product-details-category/delete/${id}`,
           method: "DELETE",
         };
       },
@@ -37,7 +37,7 @@ const detailsCategoryApi = baseApi.injectEndpoints({
     updateDetailsCategory: build.mutation({
       query: ({ id, payload }: { id: string; payload: Pick<TProductCategory, "name" | "fields"> }) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/product-details-category/update/${id}`,
+          url: `/product-details-category/update/${id}`,
           method: "PATCH",
           data: payload,
         };

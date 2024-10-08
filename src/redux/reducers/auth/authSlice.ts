@@ -12,7 +12,8 @@ type TInitialState = {
     user: TUser | null,
     permissions: TPermission[],
     isVerified: boolean,
-    token: string | null
+    token: string | null,
+    resetSentTime?: string | null,
 }
 
 const initialState: TInitialState = {
@@ -21,7 +22,8 @@ const initialState: TInitialState = {
     user: null,
     permissions: [],
     isVerified: false,
-    token: null
+    token: null,
+    resetSentTime: null
 }
 
 
@@ -42,10 +44,13 @@ const authSlice = createSlice({
         setUserData: (state, action: PayloadAction<TSetUserData>) => {
             state.user = action.payload.user
             state.permissions = action.payload.permissions
+        },
+        setResetSentTime: (state, action: PayloadAction<string | null>) => {
+            state.resetSentTime = action.payload
         }
     }
 })
 
-export const { updateAuthData, resetAuthData, setUserData } = authSlice.actions
+export const { updateAuthData, resetAuthData, setUserData, setResetSentTime } = authSlice.actions
 
 export default authSlice.reducer

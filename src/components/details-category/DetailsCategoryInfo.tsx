@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
+import { globalError } from "@/lib/utils";
 
 type TProps = {
   data: TProductCategory[];
@@ -53,7 +54,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
   const [selectedCat, setSelectedCat] = useState<null | TProductCategory>(null);
   const [fields, setFields] = useState<Field[]>([]);
   const [fieldError, setFieldError] = useState(false);
-  const [deleteDetailsCategory] = useDeleteDetailsCategoryMutation();
+  const [deleteDetailsCategory, { isLoading: isDeleting }] = useDeleteDetailsCategoryMutation();
   const [updateDetailsCategory] = useUpdateDetailsCategoryMutation();
 
   const form = useForm<z.infer<typeof nameSchema>>({
@@ -65,8 +66,6 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
 
   async function onSubmit(values: z.infer<typeof nameSchema>) {
     setFieldError(false);
-    console.log(values);
-
     const result = fieldSchema.safeParse(fields);
 
     if (result.success === false) {
@@ -79,26 +78,31 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
       fields: fields.map((f) => f.field),
     };
 
-    const res = await updateDetailsCategory({ id: selectedCat?._id || "", payload });
-    if (res.data.success) {
-      toast.success(res.data.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-      });
-      handleCloseModal();
-      setFields([
-        {
-          field: "",
-          id: generateID(),
-        },
-      ]);
-      form.reset({
-        name: "",
-      });
+    try {
+      const res = await updateDetailsCategory({ id: selectedCat?._id || "", payload }).unwrap();
+      if (res.success) {
+        toast.success(res.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+        });
+        handleCloseModal();
+        setFields([
+          {
+            field: "",
+            id: generateID(),
+          },
+        ]);
+        form.reset({
+          name: "",
+        });
+      }
+    }
+    catch (err) {
+      globalError(err)
     }
   }
 
@@ -138,20 +142,24 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
   };
 
   const handleDelete = async (id: string | null) => {
-    const res = await deleteDetailsCategory(id);
+    try {
+      const res = await deleteDetailsCategory(id).unwrap();
+      if (res.success) {
+        toast.success(res.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+        });
 
-    console.log(res);
-    if (res.data.success) {
-      toast.success(res.data.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-      });
-
+      }
       setOpenDeleteId(null);
+    }
+    catch (err) {
+      globalError(err)
+      setOpenDeleteId(null)
     }
   };
 
@@ -175,7 +183,6 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
     }
   }, [openEditId, selectedCat, form]);
 
-  console.log(fields);
 
   return (
     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4">
@@ -291,7 +298,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
               <Button className="w-full" onClick={handleCloseModal}>
                 Cancel
               </Button>
-              <Button onClick={() => handleDelete(openDeleteId)} className="w-full" variant={"delete_solid"}>
+              <Button loading={isDeleting} onClick={() => handleDelete(openDeleteId)} className="w-full" variant={"delete_solid"}>
                 Yes, delete it
               </Button>
             </div>

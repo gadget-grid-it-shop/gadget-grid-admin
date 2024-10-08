@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input'
 import axiosInstance from '@/lib/axiosInstance'
 import { globalError } from '@/lib/utils'
 // import { verifyToken } from '@/lib/utils'
-import { useAppDispatch } from '@/redux/hooks'
-import { updateAuthData } from '@/redux/reducers/auth/authSlice'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { setResetSentTime, updateAuthData } from '@/redux/reducers/auth/authSlice'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -16,6 +16,9 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
 import { toast } from 'sonner'
 // import { toast } from 'sonner'
 import { z } from 'zod'
+import dayjs from 'dayjs'
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const formSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -34,6 +37,8 @@ const LoginPage = () => {
     const router = useRouter()
     const [sendingReset, setSendingReset] = useState(false)
     const [isLogging, setlogging] = useState(false)
+
+    const { resetSentTime } = useAppSelector(s => s.auth)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -78,10 +83,18 @@ const LoginPage = () => {
     }
 
     function resetFormSubmit(values: z.infer<typeof resetFormSchema>) {
+        const resetLinkSentMinutes = dayjs().diff(dayjs(resetSentTime), 'minutes')
+
+        console.log(resetLinkSentMinutes)
+
+        if (resetSentTime !== null && resetLinkSentMinutes <= 5) {
+            return toast.warning(`A email with reset link has been already sent to your address. Please try again ${dayjs(resetSentTime)?.add(5, 'minutes')?.from(dayjs())}`)
+        }
+        dispatch(setResetSentTime(dayjs().toISOString()))
         const { email } = values
         setSendingReset(true)
 
-        axiosInstance.post(`/auth/send-verification`, { email })
+        axiosInstance.post(`/auth/forgot-password`, { email })
             .then(res => {
                 toast.success(res.data.message)
                 setSendingReset(false)
