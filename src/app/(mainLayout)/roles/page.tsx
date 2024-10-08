@@ -4,13 +4,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { globalError } from '@/lib/utils'
 import { TRole } from '@/interface/auth.interface'
 import { useGetRolesQuery } from '@/redux/api/rolesApi'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import TableSkeleton from '@/components/shared/TableSkeleton'
+import ViewRoleModal from '@/components/roles/ViewRoleModal'
 
 const Roles = () => {
 
     const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined)
+    const [veiwData, setViewData] = useState<TRole | null>(null)
 
     if (!isLoading && error) {
         globalError(error)
@@ -50,7 +52,7 @@ const Roles = () => {
                                         </p>
                                     </TableCell>
                                     <TableCell className="flex gap-3">
-                                        <Button variant={'view_button'} size={'base'}></Button>
+                                        <Button onClick={() => setViewData(role)} variant={'view_button'} size={'base'}></Button>
                                         <Button variant={'edit_button'} size={'base'}></Button>
                                         <Button variant={'delete_button'} size={'base'}></Button>
                                     </TableCell>
@@ -60,7 +62,7 @@ const Roles = () => {
                     </Table>
             }
 
-
+            <ViewRoleModal viewData={veiwData} setOpen={setViewData} />
         </div>
     )
 }
