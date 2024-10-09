@@ -2,23 +2,28 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { globalError } from '@/lib/utils'
-import { TRole } from '@/interface/auth.interface'
+import { TPermission, TRole } from '@/interface/auth.interface'
 import { useGetRolesQuery } from '@/redux/api/rolesApi'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import TableSkeleton from '@/components/shared/TableSkeleton'
 import ViewRoleModal from '@/components/roles/ViewRoleModal'
+import { useAppSelector } from '@/redux/hooks'
+import EditRoleModal from '@/components/roles/EditRoleModal'
 
 const Roles = () => {
 
     const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined)
     const [veiwData, setViewData] = useState<TRole | null>(null)
+    const [editData, setEditData] = useState<TRole | null>(null)
+    const { permissions } = useAppSelector(s => s.auth)
+
+    const rolePermission: TPermission | undefined = permissions.find(p => p.feature === 'role')
 
     if (!isLoading && error) {
         globalError(error)
     }
 
-    console.log(rolesData?.data)
 
     return (
         <div className='w-full'>
@@ -53,8 +58,8 @@ const Roles = () => {
                                     </TableCell>
                                     <TableCell className="flex gap-3">
                                         <Button onClick={() => setViewData(role)} variant={'view_button'} size={'base'}></Button>
-                                        <Button variant={'edit_button'} size={'base'}></Button>
-                                        <Button variant={'delete_button'} size={'base'}></Button>
+                                        {rolePermission?.access.update && <Button onClick={() => setEditData(role)} variant={'edit_button'} size={'base'}></Button>}
+                                        {rolePermission?.access.delete && <Button variant={'delete_button'} size={'base'}></Button>}
                                     </TableCell>
                                 </TableRow>)
                             }
@@ -63,6 +68,7 @@ const Roles = () => {
             }
 
             <ViewRoleModal viewData={veiwData} setOpen={setViewData} />
+            <EditRoleModal editData={editData} setOpen={setEditData} />
         </div>
     )
 }
