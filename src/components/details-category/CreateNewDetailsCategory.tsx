@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import { toast } from "react-toastify";
 import { useCreateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
+import { globalError } from "@/lib/utils";
 
 
 
@@ -49,7 +50,7 @@ const CreateNewDetailsCategory = () => {
   const [fieldError, setFieldError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [createDetailsCategory] = useCreateDetailsCategoryMutation()
+  const [createDetailsCategory, { isLoading: isSubmitting }] = useCreateDetailsCategoryMutation()
 
 
   useEffect(() => {
@@ -84,43 +85,36 @@ const CreateNewDetailsCategory = () => {
       fields: fields.map((f) => f.field),
     };
 
-    const result = await createDetailsCategory(payload).unwrap()
-    console.log(result)
-    if (result.success) {
-      toast.success(result.message, {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-      })
-      form.reset(
-        {
-          name: "",
-        }
-      )
-      setFields([
-        {
-          field: "",
-          id: generateID(),
-        },
-      ]);
-      setIsOpen(false);
+    try {
+      const result = await createDetailsCategory(payload).unwrap()
+      if (result.success) {
+        toast.success(result.message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+        })
+        form.reset(
+          {
+            name: "",
+          }
+        )
+        setFields([
+          {
+            field: "",
+            id: generateID(),
+          },
+        ]);
+        setIsOpen(false);
+      }
     }
 
-    else {
-      toast.error("something went wrong", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-      });
+    catch (err) {
+      globalError(err)
     }
 
-    // axios
     //   .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
     //   .then((res) => {
     //     console.log(res.data);
@@ -245,7 +239,7 @@ const CreateNewDetailsCategory = () => {
                 ))}
                 <DialogDescription>{fields.length === 0 && <p className="text-red text-sm">Please add at least one field</p>}</DialogDescription>
               </div>
-              <Button type="submit">Submit</Button>
+              <Button loading={isSubmitting} type="submit">Submit</Button>
             </form>
           </Form>
         </DialogContent>

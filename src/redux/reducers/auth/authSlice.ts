@@ -1,13 +1,20 @@
 import { TPermission, TRole, TUser } from "@/interface/auth.interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type TSetUserData = {
+    user: TUser,
+    permissions: TPermission[]
+}
+
 type TInitialState = {
     isAuthenticated: boolean,
     role: TRole | null,
     user: TUser | null,
     permissions: TPermission[],
     isVerified: boolean,
-    token: string | null
+    token: string | null,
+    resetSentTime?: string | null,
+    verificationSentTime?: string | null
 }
 
 const initialState: TInitialState = {
@@ -16,7 +23,9 @@ const initialState: TInitialState = {
     user: null,
     permissions: [],
     isVerified: false,
-    token: null
+    token: null,
+    resetSentTime: null,
+    verificationSentTime: null
 }
 
 
@@ -33,10 +42,21 @@ const authSlice = createSlice({
             state.isVerified = action.payload.isVerified;
             state.token = action.payload.token;
         },
-        resetAuthData: () => initialState
+        resetAuthData: () => initialState,
+        setUserData: (state, action: PayloadAction<TSetUserData>) => {
+            state.user = action.payload.user
+            state.permissions = action.payload.permissions
+        },
+        setResetSentTime: (state, action: PayloadAction<string | null>) => {
+            state.resetSentTime = action.payload
+        },
+
+        setVerificationSentTime: (state, action: PayloadAction<string | null>) => {
+            state.verificationSentTime = action.payload
+        }
     }
 })
 
-export const { updateAuthData, resetAuthData } = authSlice.actions
+export const { updateAuthData, resetAuthData, setUserData, setResetSentTime, setVerificationSentTime } = authSlice.actions
 
 export default authSlice.reducer

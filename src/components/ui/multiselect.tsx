@@ -1,13 +1,13 @@
 "use client";
 
-import {Command as CommandPrimitive, useCommandState} from "cmdk";
-import {X} from "lucide-react";
+import { Command as CommandPrimitive, useCommandState } from "cmdk";
+import { X } from "lucide-react";
 import * as React from "react";
-import {forwardRef, useEffect} from "react";
+import { forwardRef, useEffect } from "react";
 
-import {Badge} from "@/components/ui/badge";
-import {Command, CommandGroup, CommandItem, CommandList} from "@/components/ui/command";
-import {cn} from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 export interface Option {
   value: string;
@@ -142,7 +142,7 @@ function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
  *
  * @reference: https://github.com/hsuanyi-chou/shadcn-ui-expansions/issues/34#issuecomment-1949561607
  **/
-const CommandEmpty = forwardRef<HTMLDivElement, React.ComponentProps<typeof CommandPrimitive.Empty>>(({className, ...props}, forwardedRef) => {
+const CommandEmpty = forwardRef<HTMLDivElement, React.ComponentProps<typeof CommandPrimitive.Empty>>(({ className, ...props }, forwardedRef) => {
   const render = useCommandState((state) => state.filtered.count === 0);
 
   if (!render) return null;
@@ -330,7 +330,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
 
     const CreatableItem = () => {
       if (!creatable) return undefined;
-      if (isOptionsExist(options, [{value: inputValue, label: inputValue}]) || selected.find((s) => s.value === inputValue)) {
+      if (isOptionsExist(options, [{ value: inputValue, label: inputValue }]) || selected.find((s) => s.value === inputValue)) {
         return undefined;
       }
 
@@ -348,7 +348,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
               return;
             }
             setInputValue("");
-            const newOptions = [...selected, {value, label: value}];
+            const newOptions = [...selected, { value, label: value }];
             setSelected(newOptions);
             onChange?.(newOptions);
           }}

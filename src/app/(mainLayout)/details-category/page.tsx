@@ -1,4 +1,5 @@
 "use client";
+
 import CreateNewDetailsCategory from "@/components/details-category/CreateNewDetailsCategory";
 import DetailsCategoryInfo from "@/components/details-category/DetailsCategoryInfo";
 import DetailsCategorySkeleton from "@/components/details-category/DetailsCategorySkeleton";
@@ -15,7 +16,6 @@ const DetailsCategory = () => {
     return <h3>error</h3>
   }
 
-  console.log(error)
 
   return (
     <>

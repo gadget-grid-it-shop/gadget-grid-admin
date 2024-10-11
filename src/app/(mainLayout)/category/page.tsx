@@ -9,8 +9,7 @@ import { TCategory } from "@/interface/category";
 import { globalError } from "@/lib/utils";
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery } from "@/redux/api/categories";
 import React, { useState } from "react";
-import { FaAngleDown, FaTrash } from "react-icons/fa6";
-import { FiEdit3, FiPlus } from "react-icons/fi";
+import { FaAngleDown } from "react-icons/fa6";
 import { LuLocate } from "react-icons/lu";
 import { toast } from "sonner";
 
@@ -136,8 +135,7 @@ const Category = () => {
                   <h2>10</h2>
                   <div className="flex gap-2">
                     {
-                      level <= 1 && <Button onClick={() => handleAddClick(category._id, category.name)} variant={"default"} size={"sm"}>
-                        <FiPlus size={14} />
+                      level <= 1 && <Button onClick={() => handleAddClick(category._id, category.name)} variant={"create_button"} size={"base"}>
                       </Button>
                     }
 
@@ -145,14 +143,12 @@ const Category = () => {
                     <Button onClick={() => {
                       setEditCategory(category)
                       setEditOpen(true)
-                    }} variant={"edit"} size={"sm"}>
-                      <FiEdit3 />
+                    }} variant={"edit_button"} size={"base"}>
                     </Button>
 
 
                     {category.subCategories && category.subCategories.length === 0 && (
-                      <Button onClick={() => handleDeleteClick(category._id, category.name, category.subCategories.length !== 0)} variant={"delete_solid"} size={"sm"}>
-                        <FaTrash />
+                      <Button onClick={() => handleDeleteClick(category._id, category.name, category.subCategories.length !== 0)} variant={"delete_button"} size={"base"}>
                       </Button>
                     )}
                   </div>
@@ -186,7 +182,7 @@ const Category = () => {
       {isLoading && <CategorySkeleton />}
 
       <div className="mt-3 rounded-md">{!isLoading && categories.length > 0 && renderCategory(categories, 0)}</div>
-      {!isLoading && !error && <div className="h-48 flex justify-center items-center text-gray">No categories available</div>}
+      {!isLoading && error !== undefined && (<div className="h-48 flex justify-center items-center text-gray">No categories available</div>)}
 
 
 

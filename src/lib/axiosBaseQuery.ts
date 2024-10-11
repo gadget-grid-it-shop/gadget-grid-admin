@@ -22,9 +22,12 @@ export const axiosBaseQuery =
       const result = await axiosInstance({
         url: baseUrl + url,
         method,
-        data,
+        data: method !== "GET" ? data : undefined,
         params,
-        headers,
+        headers: {
+          ...headers,
+          "Content-Type": contentType || "application/json",
+        },
       });
       return {data: result.data};
     } catch (axiosError) {

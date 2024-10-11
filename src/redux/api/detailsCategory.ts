@@ -1,6 +1,6 @@
-import {TProductCategory} from "@/interface/category";
-import {baseApi} from "./baseApi";
-import {tagTypes} from "./tagTypes";
+import { TProductCategory } from "@/interface/category";
+import { baseApi } from "./baseApi";
+import { tagTypes } from "./tagTypes";
 
 const detailsCategoryApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -18,7 +18,7 @@ const detailsCategoryApi = baseApi.injectEndpoints({
         return {
           url: "/product-details-category/create",
           method: "POST",
-          body: payload,
+          data: payload,
         };
       },
       invalidatesTags: [tagTypes.detailsCategory],
@@ -27,7 +27,7 @@ const detailsCategoryApi = baseApi.injectEndpoints({
     deleteDetailsCategory: build.mutation({
       query: (id) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/product-details-category/delete/${id}`,
+          url: `/product-details-category/delete/${id}`,
           method: "DELETE",
         };
       },
@@ -35,11 +35,11 @@ const detailsCategoryApi = baseApi.injectEndpoints({
     }),
 
     updateDetailsCategory: build.mutation({
-      query: ({id, payload}: {id: string; payload: Pick<TProductCategory, "name" | "fields">}) => {
+      query: ({ id, payload }: { id: string; payload: Pick<TProductCategory, "name" | "fields"> }) => {
         return {
-          url: `${process.env.NEXT_PUBLIC_URL}/product-details-category/update/${id}`,
+          url: `/product-details-category/update/${id}`,
           method: "PATCH",
-          body: payload,
+          data: payload,
         };
       },
       invalidatesTags: [tagTypes.detailsCategory],
@@ -47,5 +47,5 @@ const detailsCategoryApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useGetDetailsCategoriesQuery, useCreateDetailsCategoryMutation, useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation} =
+export const { useGetDetailsCategoriesQuery, useCreateDetailsCategoryMutation, useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } =
   detailsCategoryApi;
