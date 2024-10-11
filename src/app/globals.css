@@ -44,7 +44,7 @@ input {
 @layer base {
   :root {
     --overlay-color: 0, 0%, 0%;
-    --primary: hsl(249, 88%, 56%);
+    --primary: #4a2cf2;
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
     --light-cyan: #d1f3f8;
