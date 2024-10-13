@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "../ui/dialog";
 import {FiPlus} from "react-icons/fi";
 import {Button} from "../ui/button";
@@ -15,8 +15,13 @@ import {
 } from "../ui/alert-dialog";
 import {Input} from "../ui/input";
 import {Textarea} from "../ui/textarea";
-import {TCrud, TPermission} from "@/interface/auth.interface";
+import {EAppFeatures, TCrud, TPermission, TRole} from "@/interface/auth.interface";
 import {Switch} from "../ui/switch";
+import {createRoleValidationSchema} from "../utilities/validations/RoleValidation";
+import {ZodError} from "zod";
+import {toast} from "sonner";
+import {useCreateRoleMutation} from "@/redux/api/rolesApi";
+import {globalError} from "@/lib/utils";
 
 type TProps = {
   open: boolean;
@@ -24,9 +29,81 @@ type TProps = {
 };
 
 const CreateRoleModal = ({open, setOpen}: TProps) => {
-  const [description, setDescription] = useState<string | undefined>("");
-  const [roleName, setRoleName] = useState<string | undefined>("");
+  const [description, setDescription] = useState<string>("");
+  const [roleName, setRoleName] = useState<string>("");
   const [permissions, setPermissions] = useState<TPermission[] | []>([]);
+  const [createRole, {isLoading: isCreating}] = useCreateRoleMutation();
+
+  useEffect(() => {
+    setPermissions(
+      Object.values(EAppFeatures).map((feature) => ({
+        feature: feature,
+        access: {
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+        },
+      }))
+    );
+  }, []);
+
+  const handleAccessChange = (feature: string, accessName: keyof TCrud) => {
+    console.log(feature, accessName);
+
+    if (permissions.length > 0) {
+      setPermissions((prev) => {
+        return prev.map((permission: TPermission) => {
+          if (permission.feature === feature) {
+            const updatedAccess = {
+              ...permission.access,
+              [accessName]: !permission.access[accessName],
+            };
+
+            return {
+              ...permission,
+              access: updatedAccess,
+            };
+          } else {
+            return permission;
+          }
+        });
+      });
+    }
+  };
+
+  const handleCreateRole = async () => {
+    const payload: Pick<TRole, "role" | "description" | "permissions"> = {
+      role: roleName || "",
+      description,
+      permissions,
+    };
+
+    try {
+      createRoleValidationSchema.parse(payload);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        console.log(err.issues[0]?.message);
+        toast.error(err.issues[0]?.message);
+      } else {
+        toast.error("Update data validation failed");
+        console.log(err);
+      }
+
+      return;
+    }
+
+    try {
+      const res = await createRole(payload).unwrap();
+      toast.success(res.message);
+      setOpen(false);
+      setRoleName("");
+      setDescription("");
+      setPermissions([]);
+    } catch (err) {
+      globalError(err);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,11 +115,16 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
 
         <div className="flex flex-col gap-2">
           <label className="text-black font-semibold text-base">Role</label>
-          <Input autoFocus={true} defaultValue={roleName} type="text" onChange={(e) => setRoleName(e.target.value)} />
+          <Input placeholder="Enter Role Name" autoFocus={true} defaultValue={roleName} type="text" onChange={(e) => setRoleName(e.target.value)} />
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-black font-semibold text-base">Description</label>
-          <Textarea className="min-h-40" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Textarea
+            placeholder="Write a short description of the role"
+            className="min-h-32 text-sm"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
 
         <div>
@@ -58,7 +140,7 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
                       return (
                         <div key={acc[0]} className="flex items-center justify-between">
                           <span className="text-gray">{acc[0]}:</span>
-                          <Switch onCheckedChange={() => handleChange(permission.feature, acc[0])} checked={acc[1] === true} />
+                          <Switch onCheckedChange={() => handleAccessChange(permission.feature, acc[0])} checked={acc[1] === true} />
                         </div>
                       );
                     })}
@@ -74,8 +156,8 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
           </Button>
           <AlertDialog>
             <AlertDialogTrigger className="w-full">
-              <Button loading={isUpdating} className="w-full">
-                Update
+              <Button loading={isCreating} className="w-full">
+                Create
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -95,9 +177,9 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>
-                  <Button onClick={handleUpdate} loading={isUpdating}>
-                    Update
+                <AlertDialogAction asChild>
+                  <Button onClick={handleCreateRole} loading={isCreating}>
+                    Create
                   </Button>
                 </AlertDialogAction>
               </AlertDialogFooter>

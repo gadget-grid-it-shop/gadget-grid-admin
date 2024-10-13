@@ -41,7 +41,7 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
     }
   }, [editData]);
 
-  const handleChange = (feature: string, accessName: keyof TCrud) => {
+  const handleAccessChange = (feature: string, accessName: keyof TCrud) => {
     console.log(feature, accessName);
 
     if (permissions.length > 0) {
@@ -130,7 +130,7 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
                         return (
                           <div key={acc[0]} className="flex items-center justify-between">
                             <span className="text-gray">{acc[0]}:</span>
-                            <Switch onCheckedChange={() => handleChange(permission.feature, acc[0])} checked={acc[1] === true} />
+                            <Switch onCheckedChange={() => handleAccessChange(permission.feature, acc[0])} checked={acc[1] === true} />
                           </div>
                         );
                       })}

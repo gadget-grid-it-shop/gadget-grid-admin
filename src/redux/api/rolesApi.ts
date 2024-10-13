@@ -14,6 +14,17 @@ const rolesApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.roles],
     }),
 
+    createRole: build.mutation({
+      query: (payload: Pick<TRole, "description" | "role" | "permissions">) => {
+        return {
+          url: "/roles/create-role",
+          method: "POST",
+          data: payload,
+        };
+      },
+      invalidatesTags: [tagTypes.roles],
+    }),
+
     updateRole: build.mutation({
       query: ({id, payload}: {id: string; payload: Partial<TRole>}) => {
         return {
@@ -27,4 +38,4 @@ const rolesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useGetRolesQuery, useUpdateRoleMutation} = rolesApi;
+export const {useGetRolesQuery, useUpdateRoleMutation, useCreateRoleMutation} = rolesApi;
