@@ -35,7 +35,17 @@ const rolesApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.roles],
     }),
+
+    deleteRole: build.mutation({
+      query: (id: string) => {
+        return {
+          url: `/roles/delete-role/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: [tagTypes.roles],
+    }),
   }),
 });
 
-export const {useGetRolesQuery, useUpdateRoleMutation, useCreateRoleMutation} = rolesApi;
+export const {useGetRolesQuery, useUpdateRoleMutation, useCreateRoleMutation, useDeleteRoleMutation} = rolesApi;

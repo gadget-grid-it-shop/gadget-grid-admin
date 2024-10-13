@@ -3,7 +3,7 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {globalError} from "@/lib/utils";
 import {TPermission, TRole} from "@/interface/auth.interface";
-import {useGetRolesQuery} from "@/redux/api/rolesApi";
+import {useDeleteRoleMutation, useGetRolesQuery} from "@/redux/api/rolesApi";
 import React, {useState} from "react";
 import {Button} from "@/components/ui/button";
 import TableSkeleton from "@/components/shared/TableSkeleton";
@@ -12,6 +12,7 @@ import {useAppSelector} from "@/redux/hooks";
 import EditRoleModal from "@/components/roles/EditRoleModal";
 import CreateRoleModal from "@/components/roles/CreateRoleModal";
 import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {toast} from "sonner";
 
 const Roles = () => {
   const {data: rolesData, isLoading, error} = useGetRolesQuery(undefined);
@@ -19,12 +20,24 @@ const Roles = () => {
   const [editData, setEditData] = useState<TRole | null>(null);
   const {permissions, user} = useAppSelector((s) => s.auth);
   const [createOpen, setCreateOpen] = useState(false);
+  const [deleteRole, {isLoading: isDeleting}] = useDeleteRoleMutation();
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const rolePermission: TPermission | undefined = permissions.find((p) => p.feature === "role");
 
   if (!isLoading && error) {
     globalError(error);
   }
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteRole(id).unwrap();
+      toast.success(res.message);
+      setDeleteOpen(false);
+    } catch (err) {
+      globalError(err);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -61,7 +74,7 @@ const Roles = () => {
                     <Button onClick={() => setEditData(role)} variant={"edit_button"} size={"base"}></Button>
                   )}
                   {rolePermission?.access.delete && user?.role._id !== role._id && (
-                    <Dialog>
+                    <Dialog open={deleteOpen} onOpenChange={() => setDeleteOpen(!deleteOpen)}>
                       <DialogTrigger asChild>
                         <Button variant={"delete_button"} size={"base"}></Button>
                       </DialogTrigger>
@@ -79,10 +92,12 @@ const Roles = () => {
                         </ul>
 
                         <div className="flex w-full gap-3 pt-4">
-                          <Button className="w-full" variant={"delete_solid"}>
+                          <Button onClick={() => setDeleteOpen(false)} className="w-full" variant={"delete_solid"}>
                             Cancel
                           </Button>
-                          <Button className="w-full">Delete</Button>
+                          <Button loading={isDeleting} className="w-full" onClick={() => handleDelete(role._id)}>
+                            Delete
+                          </Button>
                         </div>
                       </DialogContent>
                     </Dialog>
