@@ -11,6 +11,7 @@ import ViewRoleModal from "@/components/roles/ViewRoleModal";
 import {useAppSelector} from "@/redux/hooks";
 import EditRoleModal from "@/components/roles/EditRoleModal";
 import CreateRoleModal from "@/components/roles/CreateRoleModal";
+import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 
 const Roles = () => {
   const {data: rolesData, isLoading, error} = useGetRolesQuery(undefined);
@@ -59,7 +60,33 @@ const Roles = () => {
                   {rolePermission?.access.update && user?.role._id !== role._id && (
                     <Button onClick={() => setEditData(role)} variant={"edit_button"} size={"base"}></Button>
                   )}
-                  {rolePermission?.access.delete && user?.role._id !== role._id && <Button variant={"delete_button"} size={"base"}></Button>}
+                  {rolePermission?.access.delete && user?.role._id !== role._id && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant={"delete_button"} size={"base"}></Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogTitle>Delete this role?</DialogTitle>
+                        <h2 className="text-red-orange pb-4">Warning: You are about to the role ({role.role}).</h2>
+                        <h3 className="text-sm pb-2">
+                          #Deleting a role will permanently remove its associated permissions and may impact all users currently assigned to this
+                          role. Please ensure the following:
+                        </h3>
+                        <ul className="list-decimal ps-5 text-gray text-sm">
+                          <li>Review which users are assigned to this role, as they will lose access associated with this role.</li>
+                          <li>Consider whether there is a suitable replacement role to assign these users to</li>
+                          <li>This action is irreversible and could disrupt workflows and access for affected users.</li>
+                        </ul>
+
+                        <div className="flex w-full gap-3 pt-4">
+                          <Button className="w-full" variant={"delete_solid"}>
+                            Cancel
+                          </Button>
+                          <Button className="w-full">Delete</Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

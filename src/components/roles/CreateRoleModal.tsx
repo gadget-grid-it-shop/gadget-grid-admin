@@ -34,7 +34,7 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
   const [permissions, setPermissions] = useState<TPermission[] | []>([]);
   const [createRole, {isLoading: isCreating}] = useCreateRoleMutation();
 
-  useEffect(() => {
+  const resetPermissions = () => {
     setPermissions(
       Object.values(EAppFeatures).map((feature) => ({
         feature: feature,
@@ -46,6 +46,10 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
         },
       }))
     );
+  };
+
+  useEffect(() => {
+    resetPermissions();
   }, []);
 
   const handleAccessChange = (feature: string, accessName: keyof TCrud) => {
@@ -99,7 +103,7 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
       setOpen(false);
       setRoleName("");
       setDescription("");
-      setPermissions([]);
+      resetPermissions();
     } catch (err) {
       globalError(err);
     }
@@ -164,14 +168,15 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  <h2 className="text-red-orange pb-4">Warning: You are about to update the role and permissions.</h2>
+                  <h2 className="text-red-orange pb-4">Warning: You are about to create a new role.</h2>
                   <h3 className="text-sm pb-2">
-                    #Role updates can significantly impact user access and capabilities across the system. Please verify the following before
-                    proceeding:
+                    #Creating a new role will define a set of permissions that can affect user access across the entire system. Please consider the
+                    following:
                   </h3>
                   <ul className="list-decimal ps-5 text-gray text-sm">
-                    <li>Double-check the permissions and access levels you are assigning.</li>
-                    <li>This action may restrict or expand the user`&apos;`s ability to perform critical operations.</li>
+                    <li>Ensure the role name is appropriate and aligned with organizational structure.</li>
+                    <li>Review the permissions carefully to avoid giving unintended access.</li>
+                    <li>This new role can be assigned to multiple users, which could impact their system capabilities.</li>
                   </ul>
                 </AlertDialogDescription>
               </AlertDialogHeader>
