@@ -1,4 +1,4 @@
-import {TCrud, TPermission, TRole} from "@/interface/auth.interface";
+import {EAppFeatures, TCrud, TPermission, TRole} from "@/interface/auth.interface";
 import React, {useEffect, useState} from "react";
 import {Dialog, DialogContent, DialogTitle} from "../ui/dialog";
 import {Switch} from "../ui/switch";
@@ -16,6 +16,28 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import {z, ZodError} from "zod";
+import {toast} from "sonner";
+import {useUpdateRoleMutation} from "@/redux/api/rolesApi";
+import {globalError} from "@/lib/utils";
+
+const TCrudSchema = z.object({
+  read: z.boolean().default(false),
+  create: z.boolean().default(false),
+  update: z.boolean().default(false),
+  delete: z.boolean().default(false),
+});
+
+const TPermissionSchema = z.object({
+  feature: z.nativeEnum(EAppFeatures),
+  access: TCrudSchema,
+});
+
+const updateRoleValidationSchema = z.object({
+  role: z.string({required_error: "Role title is required"}).min(1, "Role is required").optional(),
+  description: z.string({invalid_type_error: "Descriptio should be string"}).max(400, "Description can't be more than 400 characters").optional(),
+  permissions: z.array(TPermissionSchema).optional(),
+});
 
 type TProps = {
   editData: TRole | null;
@@ -26,6 +48,7 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
   const [description, setDescription] = useState<string | undefined>("");
   const [roleName, setRoleName] = useState<string | undefined>("");
   const [permissions, setPermissions] = useState<TPermission[] | []>([]);
+  const [updateRole, {isLoading: isUpdating}] = useUpdateRoleMutation();
 
   useEffect(() => {
     if (editData) {
@@ -59,6 +82,44 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
     }
   };
 
+  const handleUpdate = async () => {
+    if (!editData?._id) {
+      return;
+    }
+
+    const payload: Partial<TRole> = {
+      role: roleName || "",
+      description,
+      permissions,
+    };
+
+    try {
+      updateRoleValidationSchema.parse(payload);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        console.log(err.issues[0]?.message);
+        toast.error(err.issues[0]?.message);
+      } else {
+        toast.error("Update data validation failed");
+        console.log(err);
+      }
+
+      return;
+    }
+
+    console.log(payload);
+
+    try {
+      const result = await updateRole({id: editData?._id, payload}).unwrap();
+      toast.success(result.message);
+      setOpen(null);
+    } catch (err) {
+      globalError(err);
+    }
+  };
+
+  console.log(roleName);
+
   return (
     <div>
       <Dialog open={editData !== null} onOpenChange={() => setOpen(null)}>
@@ -66,16 +127,11 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
           <DialogTitle>Edit Role</DialogTitle>
           <div className="flex flex-col gap-2">
             <label className="text-black font-semibold text-base">Role</label>
-            <Input defaultValue={roleName} type="text" />
+            <Input autoFocus={true} defaultValue={roleName} type="text" onChange={(e) => setRoleName(e.target.value)} />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-black font-semibold text-base">Description</label>
-            <Textarea
-              className="min-h-40"
-              value={description}
-              defaultValue={editData?.description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <Textarea className="min-h-40" value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
 
           <div>
@@ -107,18 +163,32 @@ const EditRoleModal = ({editData, setOpen}: TProps) => {
             </Button>
             <AlertDialog>
               <AlertDialogTrigger className="w-full">
-                <Button className="w-full">Update</Button>
+                <Button loading={isUpdating} className="w-full">
+                  Update
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                    <h2 className="text-red-orange pb-4">Warning: You are about to update the role and permissions.</h2>
+                    <h3 className="text-sm pb-2">
+                      #Role updates can significantly impact user access and capabilities across the system. Please verify the following before
+                      proceeding:
+                    </h3>
+                    <ul className="list-decimal ps-5 text-gray text-sm">
+                      <li>Double-check the permissions and access levels you are assigning.</li>
+                      <li>This action may restrict or expand the user`&apos;`s ability to perform critical operations.</li>
+                    </ul>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Update</AlertDialogAction>
+                  <AlertDialogAction>
+                    <Button onClick={handleUpdate} loading={isUpdating}>
+                      Update
+                    </Button>
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
