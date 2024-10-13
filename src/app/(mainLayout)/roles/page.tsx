@@ -10,12 +10,14 @@ import TableSkeleton from "@/components/shared/TableSkeleton";
 import ViewRoleModal from "@/components/roles/ViewRoleModal";
 import {useAppSelector} from "@/redux/hooks";
 import EditRoleModal from "@/components/roles/EditRoleModal";
+import CreateRoleModal from "@/components/roles/CreateRoleModal";
 
 const Roles = () => {
   const {data: rolesData, isLoading, error} = useGetRolesQuery(undefined);
   const [veiwData, setViewData] = useState<TRole | null>(null);
   const [editData, setEditData] = useState<TRole | null>(null);
   const {permissions, user} = useAppSelector((s) => s.auth);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const rolePermission: TPermission | undefined = permissions.find((p) => p.feature === "role");
 
@@ -27,7 +29,7 @@ const Roles = () => {
     <div className="w-full">
       <div className="flex justify-between items-center pb-4">
         <h4 className="page-title">User Roles</h4>
-        {/* <CreateCategory open={open} setOpen={setOpen} parent={parent} setParent={setParent} /> */}
+        <CreateRoleModal open={createOpen} setOpen={setCreateOpen} />
       </div>
 
       {!isLoading && error !== undefined && <div className="h-48 flex justify-center items-center text-gray">Could not get roles</div>}

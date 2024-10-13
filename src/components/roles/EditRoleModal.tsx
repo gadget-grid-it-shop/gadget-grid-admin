@@ -1,4 +1,4 @@
-import {EAppFeatures, TCrud, TPermission, TRole} from "@/interface/auth.interface";
+import {TCrud, TPermission, TRole} from "@/interface/auth.interface";
 import React, {useEffect, useState} from "react";
 import {Dialog, DialogContent, DialogTitle} from "../ui/dialog";
 import {Switch} from "../ui/switch";
@@ -16,28 +16,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import {z, ZodError} from "zod";
+import {ZodError} from "zod";
 import {toast} from "sonner";
 import {useUpdateRoleMutation} from "@/redux/api/rolesApi";
 import {globalError} from "@/lib/utils";
-
-const TCrudSchema = z.object({
-  read: z.boolean().default(false),
-  create: z.boolean().default(false),
-  update: z.boolean().default(false),
-  delete: z.boolean().default(false),
-});
-
-const TPermissionSchema = z.object({
-  feature: z.nativeEnum(EAppFeatures),
-  access: TCrudSchema,
-});
-
-const updateRoleValidationSchema = z.object({
-  role: z.string({required_error: "Role title is required"}).min(1, "Role is required").optional(),
-  description: z.string({invalid_type_error: "Descriptio should be string"}).max(400, "Description can't be more than 400 characters").optional(),
-  permissions: z.array(TPermissionSchema).optional(),
-});
+import {updateRoleValidationSchema} from "../utilities/validations/RoleValidation";
 
 type TProps = {
   editData: TRole | null;
