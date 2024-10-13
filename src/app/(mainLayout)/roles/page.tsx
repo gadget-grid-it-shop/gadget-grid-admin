@@ -55,7 +55,7 @@ const Roles = () => {
                 <TableCell>
                   <p className="line-clamp-2 overflow-hidden text-ellipsis whitespace-normal max-w-[400px]">{role.description}</p>
                 </TableCell>
-                <TableCell className="flex gap-3">
+                <TableCell className="flex gap-3 items-center h-full">
                   <Button onClick={() => setViewData(role)} variant={"view_button"} size={"base"}></Button>
                   {rolePermission?.access.update && user?.role._id !== role._id && (
                     <Button onClick={() => setEditData(role)} variant={"edit_button"} size={"base"}></Button>

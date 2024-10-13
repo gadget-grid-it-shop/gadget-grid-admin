@@ -114,7 +114,7 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
       <DialogTrigger className="primary-btn">
         <FiPlus size={18} /> Create Role
       </DialogTrigger>
-      <DialogContent className="max-w-[50vw]">
+      <DialogContent className="2xl:max-w-[50vw] xl:max-w-[60vw] md:max-w-[70vw] sm:max-w-[80vw] w-[90vw]">
         <DialogTitle>Create new Role</DialogTitle>
 
         <div className="flex flex-col gap-2">
@@ -133,7 +133,7 @@ const CreateRoleModal = ({open, setOpen}: TProps) => {
 
         <div>
           <h3 className="text-black font-semibold text-base">Permissions:</h3>
-          <div className="pt-2 grid lg:grid-cols-3 gap-2">
+          <div className="pt-2 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
             {permissions?.length > 0 &&
               permissions?.map((permission: TPermission) => (
                 <div className="p-3 rounded-md bg-background" key={permission.feature}>
