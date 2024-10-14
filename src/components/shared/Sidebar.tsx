@@ -9,7 +9,7 @@ import {TbListDetails} from "react-icons/tb";
 
 import {useMediaQuery} from "react-responsive";
 
-import {FaChevronDown} from "react-icons/fa6";
+import {FaChevronDown, FaUsers} from "react-icons/fa6";
 import {Button} from "../ui/button";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import {setMenuOpen} from "@/redux/reducers/general/generalReducer";
@@ -60,7 +60,13 @@ const menus: TMenu[] = [
     id: 4,
     title: "Roles",
     link: "/roles",
-    icon: <FaUsersCog size={20} />,
+    icon: <FaUsersCog size={18} />,
+  },
+  {
+    id: 5,
+    title: "Users",
+    link: "/users",
+    icon: <FaUsers size={18} />,
   },
 ];
 
