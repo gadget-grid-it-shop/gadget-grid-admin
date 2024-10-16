@@ -3,7 +3,8 @@ export enum tagTypes {
   categories = "categories",
   upload = "upload",
   galleryFolder = 'galleryFolder',
-  roles = 'roles'
+  roles = 'roles',
+  admins = 'admins'
 }
 
-export const tagTypesList = [tagTypes.detailsCategory, tagTypes.categories, tagTypes.upload, tagTypes.galleryFolder, tagTypes.roles];
+export const tagTypesList = [tagTypes.detailsCategory, tagTypes.categories, tagTypes.upload, tagTypes.galleryFolder, tagTypes.roles, tagTypes.admins];

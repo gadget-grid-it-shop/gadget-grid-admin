@@ -1,19 +1,20 @@
 "use client";
-import React, {ReactNode, useEffect, useState} from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
-import {MdOutlineLaptopChromebook, MdListAlt, MdOutlineClose} from "react-icons/md";
-import {BiCategory, BiAddToQueue} from "react-icons/bi";
-import {TbListDetails} from "react-icons/tb";
+import { usePathname } from "next/navigation";
+import { MdOutlineLaptopChromebook, MdListAlt, MdOutlineClose } from "react-icons/md";
+import { BiCategory, BiAddToQueue } from "react-icons/bi";
+import { TbListDetails, TbUsers, TbUserShield } from "react-icons/tb";
 
-import {useMediaQuery} from "react-responsive";
+import { useMediaQuery } from "react-responsive";
 
-import {FaChevronDown, FaUsers} from "react-icons/fa6";
-import {Button} from "../ui/button";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {setMenuOpen} from "@/redux/reducers/general/generalReducer";
-import {FaUsersCog} from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa6";
+import { Button } from "../ui/button";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setMenuOpen } from "@/redux/reducers/general/generalReducer";
+import { FaUsersCog } from "react-icons/fa";
+import { PiUsersThreeBold } from "react-icons/pi";
 
 interface TMenu {
   id: number;
@@ -66,7 +67,21 @@ const menus: TMenu[] = [
     id: 5,
     title: "Users",
     link: "/users",
-    icon: <FaUsers size={18} />,
+    icon: <PiUsersThreeBold size={18} />,
+    children: [
+      {
+        id: 1,
+        title: 'Admins',
+        link: '/users/admins',
+        icon: <TbUserShield />
+      },
+      {
+        id: 2,
+        title: 'Customers',
+        link: '/users/customers',
+        icon: <TbUsers />
+      }
+    ]
   },
 ];
 
@@ -74,7 +89,7 @@ const Sidebar = () => {
   const pathName = usePathname();
   const [openMenu, setOpenMenu] = useState<number | null>(null);
 
-  const {isMenuOpen} = useAppSelector((s) => s.general);
+  const { isMenuOpen } = useAppSelector((s) => s.general);
   const dispatch = useAppDispatch();
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -101,11 +116,9 @@ const Sidebar = () => {
     <div>
       {isMenuOpen && !isDesktopOrLaptop && <div className="w-screen h-screen fixed z-30 bg-overlay bg-opacity-45"></div>}
       <div
-        className={`${
-          !isDesktopOrLaptop && !isMenuOpen ? "hidden" : "visible"
-        } h-screen min-[1200px]:sticky top-0 2xl:w-[320px] lg:w-[280px] p-4 shadow-md overflow-y-auto flex flex-col fixed z-50 ${
-          !isDesktopOrLaptop ? "bg-background-foreground" : " bg-background"
-        }`}
+        className={`${!isDesktopOrLaptop && !isMenuOpen ? "hidden" : "visible"
+          } h-screen min-[1200px]:sticky top-0 2xl:w-[320px] lg:w-[280px] p-4 shadow-md overflow-y-auto flex flex-col fixed z-50 ${!isDesktopOrLaptop ? "bg-background-foreground" : " bg-background"
+          }`}
       >
         <div className="flex justify-between gap-5">
           <Image src={"/gadget-grid-logo.png"} height={100} width={200} alt="logo" />
@@ -147,9 +160,8 @@ const Sidebar = () => {
                     {openMenu === item.id &&
                       item.children.map((child) => (
                         <Link
-                          className={`rounded-xl py-2 px-4 flex items-center gap-2 ${
-                            isLinkActive(child.link) ? "bg-primary  text-pure-white" : "text-black"
-                          }`}
+                          className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? "bg-primary  text-pure-white" : "text-black"
+                            }`}
                           key={child.id}
                           href={child.link}
                         >

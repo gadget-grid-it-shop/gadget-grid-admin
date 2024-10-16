@@ -51,7 +51,7 @@ export interface TUser {
     isActive: boolean,
     role: TRole,
     isDeleted: boolean,
-    isVarified: boolean,
+    isVerified: boolean,
     isMasterAdmin?: boolean
     profilePicture: string
 }
