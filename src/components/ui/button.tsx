@@ -19,10 +19,10 @@ const buttonVariants = cva(
         edit: "text-pure-white text-md shadow bg-vivid-orange",
         default_outline: "border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
         icon: 'border-none p-0 m-0 text-xl',
-        create_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary",
-        edit_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-vivid-orange hover:text-pure-white hover:bg-vivid-orange",
-        delete_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-red hover:text-pure-white hover:bg-red",
-        view_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-bright-turquoise text-bright-turquoise hover:text-pure-white hover:bright-turquoise"
+        create_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary bg-background",
+        edit_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-vivid-orange hover:text-pure-white hover:bg-vivid-orange bg-background",
+        delete_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-red hover:text-pure-white hover:bg-red bg-background",
+        view_button: "border border-border-color h-10 w-10 text-lg p-0 hover:bg-bright-turquoise text-bright-turquoise hover:text-pure-white hover:bright-turquoise bg-background"
       },
       size: {
         default: "h-9 px-4 py-2",

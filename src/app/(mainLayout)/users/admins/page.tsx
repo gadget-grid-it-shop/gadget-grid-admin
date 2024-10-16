@@ -7,6 +7,7 @@ import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 const Admins = () => {
 
@@ -47,7 +48,16 @@ const Admins = () => {
                                     <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' />
                                     {admin?.email}
                                 </TableCell>
-                                <TableCell>{admin?.role?.role}</TableCell>
+                                <TableCell>
+                                    {
+                                        !admin?.role?.isDeleted ? <p>{admin?.role?.role}</p> : <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger><p className='text-red'>{admin?.role?.role}</p></TooltipTrigger>
+                                                <TooltipContent>The role was probably deleted</TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    }
+                                </TableCell>
                                 <TableCell className='font-semibold'>{admin?.user?.isActive ? <p className='text-green-600'>True</p> : <p className='text-red'>False</p>}</TableCell>
                                 <TableCell className='font-semibold'>{admin?.user?.isVerified ? <p className='text-green-600'>True</p> : <p className='text-red'>False</p>}</TableCell>
                                 <TableCell>

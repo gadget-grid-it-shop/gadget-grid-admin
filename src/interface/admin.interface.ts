@@ -6,7 +6,8 @@ export type TAdminData = {
     email: string,
     name: TUserName,
     role: {
-        role: string
+        role: string,
+        isDeleted: boolean
     },
     phoneNumber: string,
     user: TUser,
