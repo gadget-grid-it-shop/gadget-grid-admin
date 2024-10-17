@@ -3,16 +3,18 @@ import TableSkeleton from '@/components/shared/TableSkeleton'
 import { TAdminData } from '@/interface/admin.interface'
 import { globalError } from '@/lib/utils'
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi'
-import React from 'react'
+import React, { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { FaUser } from 'react-icons/fa'
+import CreateAdminModal from '@/components/users/admin/CreateAdminModal'
 
 const Admins = () => {
 
     const { data: adminData, isLoading, error } = useGetAllAdminsQuery(undefined)
+    const [createAdminOpen, setCreateAdminOpen] = useState(false)
 
     if (!isLoading && error) {
         globalError(error)
@@ -22,7 +24,7 @@ const Admins = () => {
         <div>
             <div className="flex justify-between items-center pb-4">
                 <h4 className="page-title">Admins</h4>
-                {/* <CreateCategory open={open} setOpen={setOpen} parent={parent} setParent={setParent} /> */}
+                <CreateAdminModal open={createAdminOpen} setOpen={setCreateAdminOpen} />
             </div>
 
 
@@ -83,6 +85,7 @@ const Admins = () => {
             }
 
             {!isLoading && error !== undefined && (<div className="h-48 flex justify-center items-center text-gray">Admin data unavailable</div>)}
+
         </div>
     )
 }

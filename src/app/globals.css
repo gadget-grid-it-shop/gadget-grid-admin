@@ -181,3 +181,10 @@ input {
 .mdxeditor-popup-container {
   position: fixed !important;
 }
+
+.large-modal {
+  @apply 2xl:max-w-[50vw] xl:max-w-[60vw] md:max-w-[70vw] sm:max-w-[80vw] w-[90vw];
+}
+.medium-modal {
+  @apply 2xl:max-w-[40vw] xl:max-w-[50vw] md:max-w-[60vw] sm:max-w-[70vw] w-[90vw];
+}
