@@ -1,5 +1,9 @@
 import axios from "axios";
-import {getAccessToken} from "./utils";
+import { getAccessToken } from "./utils";
+import { jwtDecode } from "jwt-decode";
+import dayjs from "dayjs";
+import { store } from "@/redux/store";
+import { updateAuthData } from "@/redux/reducers/auth/authSlice";
 
 const isClient = typeof window !== "undefined";
 
@@ -12,16 +16,33 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(async (config) => {
   if (isClient) {
     if (!config.headers["Authorization"]) {
       const token = getAccessToken();
       if (token) {
-        config.headers["Authorization"] = `${token}`;
+        const data = jwtDecode(token)
+        const isExpired = dayjs().isAfter(dayjs.unix(data?.exp as number))
+        if (isExpired) {
+          try {
+            // Wait for the token refresh response
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/auth/refresh-token`, {}, { withCredentials: true });
+            const newAccessToken = response.data.data.accessToken as string;
+            store.dispatch(updateAuthData({ token: newAccessToken }))
+            config.headers['Authorization'] = `${newAccessToken}`;
+          } catch (err) {
+            console.log('Error refreshing token:', err);
+            return Promise.reject(err); // Optional: reject if token refresh fails
+          }
+        }
+        else {
+          config.headers["Authorization"] = `${token}`;
+        }
       }
     }
   }
   return config;
 });
+
 
 export default axiosInstance;

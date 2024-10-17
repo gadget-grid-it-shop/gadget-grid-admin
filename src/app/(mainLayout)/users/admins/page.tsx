@@ -5,9 +5,10 @@ import { globalError } from '@/lib/utils'
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi'
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { FaUser } from 'react-icons/fa'
 
 const Admins = () => {
 
@@ -43,14 +44,22 @@ const Admins = () => {
                         {
                             adminData?.data?.map((admin: TAdminData, i: number) => <TableRow key={admin?._id}>
                                 <TableCell>{i + 1}</TableCell>
-                                <TableCell>{`${admin?.name?.firstName} ${admin?.name?.lastName} ${admin?.name?.lastName}`}</TableCell>
+                                <TableCell>{`${admin?.name?.firstName} ${admin?.name?.lastName}`}</TableCell>
                                 <TableCell className='flex items-center gap-3'>
-                                    <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' />
+                                    {/* <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' /> */}
+                                    <Avatar>
+                                        <AvatarImage className='object-cover size-10' src={admin?.profilePicture} />
+                                        <AvatarFallback className="capitalize">
+                                            <div className='size-10 flex justify-center items-center bg-background rounded-full'>
+                                                <FaUser />
+                                            </div>
+                                        </AvatarFallback>
+                                    </Avatar>
                                     {admin?.email}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className='font-semibold'>
                                     {
-                                        !admin?.role?.isDeleted ? <p>{admin?.role?.role}</p> : <TooltipProvider>
+                                        !admin?.role?.isDeleted ? <p className='text-gray'>{admin?.role?.role}</p> : <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger><p className='text-red'>{admin?.role?.role}</p></TooltipTrigger>
                                                 <TooltipContent>The role was probably deleted</TooltipContent>

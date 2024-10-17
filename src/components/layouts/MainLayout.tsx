@@ -1,21 +1,21 @@
 "use client";
 
-import React, {ReactNode, useEffect, useState} from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useTheme} from "next-themes";
+import { useTheme } from "next-themes";
 import Sidebar from "../shared/Sidebar";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {useRouter} from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 import axiosInstance from "@/lib/axiosInstance";
-import {setUserData} from "@/redux/reducers/auth/authSlice";
+import { setUserData } from "@/redux/reducers/auth/authSlice";
 
-const MainLayout = ({children}: {children: ReactNode}) => {
-  const {theme} = useTheme();
+const MainLayout = ({ children }: { children: ReactNode }) => {
+  const { theme } = useTheme();
   const [hydrated, setHydrated] = useState(false);
-  const {isAuthenticated} = useAppSelector((s) => s.auth);
+  const { isAuthenticated } = useAppSelector((s) => s.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
