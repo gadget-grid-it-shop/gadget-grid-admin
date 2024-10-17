@@ -3,7 +3,9 @@ import { getAccessToken } from "./utils";
 import { jwtDecode } from "jwt-decode";
 import dayjs from "dayjs";
 import { store } from "@/redux/store";
-import { updateAuthData } from "@/redux/reducers/auth/authSlice";
+import { resetAuthData, updateAuthData } from "@/redux/reducers/auth/authSlice";
+import { clearCookie } from "@/actions/logout";
+import { toast } from "sonner";
 
 const isClient = typeof window !== "undefined";
 
@@ -32,6 +34,9 @@ axiosInstance.interceptors.request.use(async (config) => {
             config.headers['Authorization'] = `${newAccessToken}`;
           } catch (err) {
             console.log('Error refreshing token:', err);
+            toast.error('Your session has expired. Please log in again.')
+            store.dispatch(resetAuthData())
+            clearCookie()
             return Promise.reject(err); // Optional: reject if token refresh fails
           }
         }
