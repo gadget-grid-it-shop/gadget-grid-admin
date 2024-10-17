@@ -46,6 +46,7 @@ const VerifyEmail = () => {
                     router.push('/login')
                 })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
 
     const verifyForm = useForm<z.infer<typeof formSchema>>({
