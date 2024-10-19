@@ -87,7 +87,7 @@ const menus: TMenu[] = [
 
 const Sidebar = () => {
   const pathName = usePathname();
-  const [openMenu, setOpenMenu] = useState<number | null>(null);
+  const [openRoute, setOpenRoute] = useState<number[]>([]);
 
   const { isMenuOpen } = useAppSelector((s) => s.general);
   const dispatch = useAppDispatch();
@@ -107,10 +107,21 @@ const Sidebar = () => {
   useEffect(() => {
     menus.forEach((menu) => {
       if (pathName.includes(menu.link)) {
-        setOpenMenu(menu.id);
+        setOpenRoute([menu.id]);
       }
     });
   }, [pathName]);
+
+  const handleMenuOpen = (id: number) => {
+    const exist = openRoute?.find(Id => Id === id)
+    if (exist) {
+      const filteredMenu = openRoute?.filter(Id => Id !== id) || []
+      setOpenRoute(filteredMenu)
+    }
+    else {
+      setOpenRoute([...openRoute, id])
+    }
+  }
 
   return (
     <div>
@@ -146,7 +157,7 @@ const Sidebar = () => {
               return (
                 <div key={item.id} className={`${pathName.includes(item.link) && "bg-lavender-mist rounded-md"}`}>
                   <button
-                    onClick={() => setOpenMenu(openMenu === item.id ? null : item.id)}
+                    onClick={() => handleMenuOpen(item.id)}
                     className={`text-black rounded-xl py-2 px-4 flex justify-between w-full items-center `}
                   >
                     <div className="flex gap-2 items-center">
@@ -154,10 +165,10 @@ const Sidebar = () => {
                       {item.title}
                     </div>
 
-                    <FaChevronDown className={`${openMenu === item.id ? "rotate-180" : "rotate-0"} transition-all`} />
+                    <FaChevronDown className={`${openRoute.find(id => id === item.id) ? "rotate-180" : "rotate-0"} transition-all`} />
                   </button>
-                  <div className={`px-3 flex flex-col gap-1 ${openMenu === item.id && "py-2"}`}>
-                    {openMenu === item.id &&
+                  <div className={`px-3 flex flex-col gap-1 ${openRoute.find(id => id === item.id) && "py-2"}`}>
+                    {openRoute.find(id => id === item.id) &&
                       item.children.map((child) => (
                         <Link
                           className={`rounded-xl py-2 px-4 flex items-center gap-2 ${isLinkActive(child.link) ? "bg-primary  text-pure-white" : "text-black"
