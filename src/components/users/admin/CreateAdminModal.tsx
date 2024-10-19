@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type TProps = {
@@ -33,22 +34,17 @@ const createAdminSchema = z.object({
       invalid_type_error: 'Password must be a string',
     })
     .min(6, 'Password must be at least 6 characters'),
-  role: z
-    .string({
-      required_error: 'User role is required',
-    })
-    .min(1, 'Role cannot be empty string'),
 });
 
 const CreateAdminModal = ({ open, setOpen }: TProps) => {
   const { data: roleData } = useGetRolesQuery(undefined);
   const [selectedRole, setSelectedRole] = useState<TSelectOptions | null>(null);
+  const [roleError, setRoleError] = useState(false);
   const form = useForm<z.infer<typeof createAdminSchema>>({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
       email: '',
       password: '',
-      role: '',
     },
   });
 
@@ -58,6 +54,15 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
       value: role._id,
     };
   });
+
+  function onSubmit(values: z.infer<typeof createAdminSchema>) {
+    setRoleError(false);
+    if (!selectedRole) {
+      setRoleError(true);
+      toast.error('Please select role');
+    }
+    console.log(values, selectedRole);
+  }
 
   return (
     <div>
@@ -71,7 +76,10 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
 
           {/* <Divider text={"credentials"} /> */}
           <Form {...form}>
-            <form className="flex flex-col gap-3">
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <FormField
                 control={form.control}
                 name="email"
@@ -191,13 +199,24 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                 <SingleSelector
                   options={selectOptions}
                   value={selectedRole || undefined}
-                  onChange={(value) => setSelectedRole(value)}
+                  onChange={(value) => {
+                    setSelectedRole(value);
+                    setRoleError(false);
+                  }}
                 />
+
+                {roleError && <p className="text-red">Select role</p>}
               </div>
 
-              <div>
-                <Button>Cancel</Button>
-                <Button>Create</Button>
+              <div className="flex w-full justify-between gap-3">
+                <Button
+                  type="button"
+                  className="w-full"
+                  variant={'delete_solid'}
+                >
+                  Cancel
+                </Button>
+                <Button className="w-full">Create</Button>
               </div>
             </form>
           </Form>
