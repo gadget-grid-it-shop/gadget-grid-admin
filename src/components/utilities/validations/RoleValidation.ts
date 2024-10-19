@@ -1,5 +1,5 @@
-import {EAppFeatures} from "@/interface/auth.interface";
-import {z} from "zod";
+import { EAppFeatures } from '@/interface/auth.interface';
+import { z } from 'zod';
 
 export const TCrudSchema = z.object({
   read: z.boolean().default(false),
@@ -14,13 +14,24 @@ export const TPermissionSchema = z.object({
 });
 
 export const updateRoleValidationSchema = z.object({
-  role: z.string({required_error: "Role name title is required"}).min(1, "Role name is required").optional(),
-  description: z.string({invalid_type_error: "Descriptio should be string"}).max(400, "Description can't be more than 400 characters").optional(),
+  role: z
+    .string({ required_error: 'Role name title is required' })
+    .min(1, 'Role name is required')
+    .optional(),
+  description: z
+    .string({ invalid_type_error: 'Descriptio should be string' })
+    .max(400, "Description can't be more than 400 characters")
+    .optional(),
   permissions: z.array(TPermissionSchema).optional(),
 });
 
 export const createRoleValidationSchema = z.object({
-  role: z.string({required_error: "Role name is required"}).min(1, "Role name is required"),
-  description: z.string({invalid_type_error: "Descriptio should be string"}).max(400, "Description can't be more than 400 characters").optional(),
+  role: z
+    .string({ required_error: 'Role name is required' })
+    .min(1, 'Role name is required'),
+  description: z
+    .string({ invalid_type_error: 'Descriptio should be string' })
+    .max(400, "Description can't be more than 400 characters")
+    .optional(),
   permissions: z.array(TPermissionSchema).optional(),
 });

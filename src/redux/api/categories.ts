@@ -1,6 +1,6 @@
-import { TCreateCategory, TUpdateCategory } from "@/interface/category";
-import { baseApi } from "./baseApi";
-import { tagTypes } from "./tagTypes";
+import { TCreateCategory, TUpdateCategory } from '@/interface/category';
+import { baseApi } from './baseApi';
+import { tagTypes } from './tagTypes';
 
 const categoriesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -8,7 +8,7 @@ const categoriesApi = baseApi.injectEndpoints({
       query: (isTree: boolean = true) => {
         return {
           url: `/category/get-all${!isTree ? '?isTree=false' : ''}`,
-          method: "GET",
+          method: 'GET',
         };
       },
       providesTags: [tagTypes.categories],
@@ -17,8 +17,8 @@ const categoriesApi = baseApi.injectEndpoints({
     createCategory: build.mutation({
       query: (payload: TCreateCategory) => {
         return {
-          url: "/category/create",
-          method: "POST",
+          url: '/category/create',
+          method: 'POST',
           data: payload,
         };
       },
@@ -30,24 +30,28 @@ const categoriesApi = baseApi.injectEndpoints({
       query: (id: string) => {
         return {
           url: `/category/${id}`,
-          method: 'DELETE'
-        }
+          method: 'DELETE',
+        };
       },
-      invalidatesTags: [tagTypes.categories]
+      invalidatesTags: [tagTypes.categories],
     }),
 
-
     updateCategory: build.mutation({
-      query: ({ id, payload }: { id: string, payload: TUpdateCategory }) => {
+      query: ({ id, payload }: { id: string; payload: TUpdateCategory }) => {
         return {
           url: `/category/${id}`,
           method: 'PATCH',
-          data: payload
-        }
+          data: payload,
+        };
       },
-      invalidatesTags: [tagTypes.categories]
-    })
+      invalidatesTags: [tagTypes.categories],
+    }),
   }),
 });
 
-export const { useGetAllCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } = categoriesApi;
+export const {
+  useGetAllCategoriesQuery,
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+} = categoriesApi;

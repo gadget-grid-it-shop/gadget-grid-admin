@@ -107,11 +107,11 @@ input {
 }
 
 .primary-btn {
-  @apply flex items-center gap-2 bg-primary px-4 py-2 rounded-md text-[#fff] font-medium text-sm sm:text-base;
+  @apply flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-[#fff] sm:text-base;
 }
 
 .page-title {
-  @apply text-black lg:text-[1.5rem] text-[1.2rem] font-semibold;
+  @apply text-[1.2rem] font-semibold text-black lg:text-[1.5rem];
 }
 
 .mdxeditor-root-contenteditable {
@@ -183,8 +183,8 @@ input {
 }
 
 .large-modal {
-  @apply 2xl:max-w-[50vw] xl:max-w-[60vw] md:max-w-[70vw] sm:max-w-[80vw] w-[90vw];
+  @apply w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] xl:max-w-[60vw] 2xl:max-w-[50vw];
 }
 .medium-modal {
-  @apply 2xl:max-w-[40vw] xl:max-w-[50vw] md:max-w-[60vw] sm:max-w-[70vw] w-[90vw];
+  @apply w-[90vw] sm:max-w-[70vw] md:max-w-[60vw] xl:max-w-[50vw] 2xl:max-w-[40vw];
 }

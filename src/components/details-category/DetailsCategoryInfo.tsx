@@ -1,17 +1,25 @@
-"use client";
-import { TProductCategory } from "@/interface/category";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Form, FormField, FormItem, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
-import { HiMiniXMark } from "react-icons/hi2";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
-import { globalError } from "@/lib/utils";
+'use client';
+import { TProductCategory } from '@/interface/category';
+import { Button } from '../ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '../ui/dialog';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Form, FormField, FormItem, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { HiMiniXMark } from 'react-icons/hi2';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  useDeleteDetailsCategoryMutation,
+  useUpdateDetailsCategoryMutation,
+} from '@/redux/api/detailsCategory';
+import { globalError } from '@/lib/utils';
 
 type TProps = {
   data: TProductCategory[];
@@ -25,9 +33,9 @@ interface Field {
 const nameSchema = z.object({
   name: z
     .string({
-      required_error: "Product category name is required",
+      required_error: 'Product category name is required',
     })
-    .min(1, { message: "Product category name is required" })
+    .min(1, { message: 'Product category name is required' })
     .max(50),
 });
 
@@ -35,15 +43,15 @@ const fieldSchema = z.array(
   z.object({
     field: z
       .string({
-        required_error: "Field cannot be empty",
+        required_error: 'Field cannot be empty',
       })
-      .min(1, "Field cannot be an empty string"), // Field must be at least 1 character
+      .min(1, 'Field cannot be an empty string'), // Field must be at least 1 character
     id: z.string(), // Assuming ID is a string
-  })
+  }),
 );
 
 const generateID = () => {
-  return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
+  return Math.random().toString(36).slice(2, 9) + '-' + Date.now();
 };
 
 const DetailsCategoryInfo = ({ data }: TProps) => {
@@ -52,13 +60,14 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
   const [selectedCat, setSelectedCat] = useState<null | TProductCategory>(null);
   const [fields, setFields] = useState<Field[]>([]);
   const [fieldError, setFieldError] = useState(false);
-  const [deleteDetailsCategory, { isLoading: isDeleting }] = useDeleteDetailsCategoryMutation();
+  const [deleteDetailsCategory, { isLoading: isDeleting }] =
+    useDeleteDetailsCategoryMutation();
   const [updateDetailsCategory] = useUpdateDetailsCategoryMutation();
 
   const form = useForm<z.infer<typeof nameSchema>>({
     resolver: zodResolver(nameSchema),
     defaultValues: {
-      name: "",
+      name: '',
     },
   });
 
@@ -77,10 +86,13 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
     };
 
     try {
-      const res = await updateDetailsCategory({ id: selectedCat?._id || "", payload }).unwrap();
+      const res = await updateDetailsCategory({
+        id: selectedCat?._id || '',
+        payload,
+      }).unwrap();
       if (res.success) {
         toast.success(res.message, {
-          position: "top-center",
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -90,17 +102,16 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
         handleCloseModal();
         setFields([
           {
-            field: "",
+            field: '',
             id: generateID(),
           },
         ]);
         form.reset({
-          name: "",
+          name: '',
         });
       }
-    }
-    catch (err) {
-      globalError(err)
+    } catch (err) {
+      globalError(err);
     }
   }
 
@@ -108,7 +119,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
     setFields((prev) => [
       ...prev,
       {
-        field: "",
+        field: '',
         id: generateID(),
       },
     ]);
@@ -144,20 +155,18 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
       const res = await deleteDetailsCategory(id).unwrap();
       if (res.success) {
         toast.success(res.message, {
-          position: "top-center",
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           draggable: true,
           progress: undefined,
         });
-
       }
       setOpenDeleteId(null);
-    }
-    catch (err) {
-      globalError(err)
-      setOpenDeleteId(null)
+    } catch (err) {
+      globalError(err);
+      setOpenDeleteId(null);
     }
   };
 
@@ -173,53 +182,54 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
         selectedCat.fields.map((f) => ({
           field: f,
           id: generateID(),
-        }))
+        })),
       );
       form.reset({
-        name: selectedCat.name || "",
+        name: selectedCat.name || '',
       });
     }
   }, [openEditId, selectedCat, form]);
 
-
   return (
-    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {data?.length !== 0 &&
         data?.map((cat: TProductCategory) => (
-          <div className="bg-light-gray border border-border-color p-4 rounded-md flex flex-col h-full hover:shadow-md hover:scale-[1.01] transition-all z-0" key={cat._id}>
-            <h3 className="text-black text-lg font-semibold">{cat.name}</h3>
-            <div className="flex flex-col gap-2 pt-3 flex-grow">
+          <div
+            className="z-0 flex h-full flex-col rounded-md border border-border-color bg-light-gray p-4 transition-all hover:scale-[1.01] hover:shadow-md"
+            key={cat._id}
+          >
+            <h3 className="text-lg font-semibold text-black">{cat.name}</h3>
+            <div className="flex flex-grow flex-col gap-2 pt-3">
               {cat.fields?.map((field) => (
-                <div className="text-gray bg-white px-3 py-[6px] rounded-[5px]" key={field}>
+                <div
+                  className="rounded-[5px] bg-white px-3 py-[6px] text-gray"
+                  key={field}
+                >
                   {field}
                 </div>
               ))}
             </div>
-            <div className="flex gap-3 w-full mt-3">
+            <div className="mt-3 flex w-full gap-3">
               <Button
                 onClick={() => {
                   setOpenEditId(cat?._id);
                   setSelectedCat(cat);
                 }}
-                variant={"edit_button"}
-                size={"base"}
-              >
-              </Button>
+                variant={'edit_button'}
+                size={'base'}
+              ></Button>
 
               <Button
-                variant={"delete_button"}
-                size={"base"}
+                variant={'delete_button'}
+                size={'base'}
                 onClick={() => {
                   setOpenDeleteId(cat?._id);
                   setSelectedCat(cat);
                 }}
-              >
-              </Button>
+              ></Button>
             </div>
           </div>
         ))}
-
-
 
       {/* ==============edit category modal============ */}
 
@@ -228,21 +238,34 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
           <DialogTitle>Edit details category</DialogTitle>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
+            >
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label className="text-gray">Name *</label>
-                    <Input autoFocus={false} {...field} className="bg-white border-gray text-gray" placeholder="Enter Product Category Name" type="text"></Input>
+                    <Input
+                      autoFocus={false}
+                      {...field}
+                      className="border-gray bg-white text-gray"
+                      placeholder="Enter Product Category Name"
+                      type="text"
+                    ></Input>
 
-                    {fieldState.error && <FormMessage className="text-red text-sm">{fieldState.error.message}</FormMessage>}
+                    {fieldState.error && (
+                      <FormMessage className="text-sm text-red">
+                        {fieldState.error.message}
+                      </FormMessage>
+                    )}
                   </FormItem>
                 )}
               />
               <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <label className="text-gray">Fields *</label>
                   <Button onClick={handleAddField} type="button">
                     Add Field
@@ -253,24 +276,35 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
                     <div className="flex items-center gap-2">
                       <Input
                         defaultValue={field.field}
-                        onChange={(e) => handleFieldChange(e.target.value, field.id)}
-                        className="bg-white border-gray text-gray"
+                        onChange={(e) =>
+                          handleFieldChange(e.target.value, field.id)
+                        }
+                        className="border-gray bg-white text-gray"
                         placeholder="Enter Field Name"
                         type="text"
                       ></Input>
                       <div
                         onClick={() => handleRemoveField(field.id)}
-                        className="h-10 w-10 rounded-md flex justify-center items-center text-lg border-red border text-red cursor-pointer hover:bg-red hover:text-white"
+                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white"
                       >
                         <HiMiniXMark />
                       </div>
                     </div>
-                    {fieldError && fields.find((f) => f.id === field.id)?.field === "" && (
-                      <p className="text-red text-sm pt-1">Please enter field name</p>
-                    )}
+                    {fieldError &&
+                      fields.find((f) => f.id === field.id)?.field === '' && (
+                        <p className="pt-1 text-sm text-red">
+                          Please enter field name
+                        </p>
+                      )}
                   </div>
                 ))}
-                <DialogDescription>{fields.length === 0 && <p className="text-red text-sm">Please add at least one field</p>}</DialogDescription>
+                <DialogDescription>
+                  {fields.length === 0 && (
+                    <p className="text-sm text-red">
+                      Please add at least one field
+                    </p>
+                  )}
+                </DialogDescription>
               </div>
               <Button type="submit">Submit</Button>
             </form>
@@ -285,14 +319,21 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
             <h1 className="text-red">Detete Category</h1>
           </DialogTitle>
           <div>
-            <h3 className="text-gray pb-3">Name: {selectedCat?.name}</h3>
-            <DialogDescription className="text-gray">Do you really want to delete this details category?</DialogDescription>
+            <h3 className="pb-3 text-gray">Name: {selectedCat?.name}</h3>
+            <DialogDescription className="text-gray">
+              Do you really want to delete this details category?
+            </DialogDescription>
 
             <div className="flex w-full gap-3 pt-4">
               <Button className="w-full" onClick={handleCloseModal}>
                 Cancel
               </Button>
-              <Button loading={isDeleting} onClick={() => handleDelete(openDeleteId)} className="w-full" variant={"delete_solid"}>
+              <Button
+                loading={isDeleting}
+                onClick={() => handleDelete(openDeleteId)}
+                className="w-full"
+                variant={'delete_solid'}
+              >
                 Yes, delete it
               </Button>
             </div>

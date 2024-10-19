@@ -1,8 +1,8 @@
-'use server'
+'use server';
 
-import { cookies } from "next/headers"
+import { cookies } from 'next/headers';
 
 export const clearCookie = () => {
-    const cookieStore = cookies()
-    cookieStore.delete('refreshToken')
-}
+  const cookieStore = cookies();
+  cookieStore.delete('refreshToken');
+};

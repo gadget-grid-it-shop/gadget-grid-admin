@@ -1,54 +1,43 @@
-'use client'
+'use client';
 
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setCreateProductStep } from '@/redux/reducers/products/productSlice'
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setCreateProductStep } from '@/redux/reducers/products/productSlice';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 import AddBasicData from '@/components/product/createProduct/AddBasicData';
-import AddSpecifications from '@/components/product/createProduct/AddSpecifications'
-
+import AddSpecifications from '@/components/product/createProduct/AddSpecifications';
 
 const CreateProduct = () => {
+  const dispatch = useAppDispatch();
+  const { step } = useAppSelector((state) => state.products);
+  const searchParams = useSearchParams();
 
+  useEffect(() => {
+    const step = searchParams.get('step') || '';
 
-    const dispatch = useAppDispatch()
-    const { step } = useAppSelector(state => state.products)
-    const searchParams = useSearchParams()
+    if (step) {
+      dispatch(setCreateProductStep(parseInt(step)));
+    } else {
+      dispatch(setCreateProductStep(1));
+    }
+  }, [searchParams, dispatch]);
 
-    useEffect(() => {
-        const step = searchParams.get('step') || ""
+  return (
+    <>
+      {searchParams && (
+        <div>
+          <div className="flex items-center justify-between pb-4">
+            <h4 className="page-title">Create Product</h4>
+          </div>
 
-        if (step) {
-            dispatch(setCreateProductStep(parseInt(step)))
-        }
-        else {
-            dispatch(setCreateProductStep(1))
-        }
-    }, [searchParams, dispatch])
+          {step === 1 && <AddBasicData />}
 
+          {/* ===============step 2 specification====================== */}
+          {step === 2 && <AddSpecifications />}
+        </div>
+      )}
+    </>
+  );
+};
 
-
-    return (
-        <>
-            {
-                searchParams && <div>
-                    <div className="flex justify-between items-center pb-4">
-                        <h4 className="page-title">Create Product</h4>
-                    </div>
-
-                    {
-                        step === 1 && <AddBasicData />
-                    }
-
-                    {/* ===============step 2 specification====================== */}
-                    {
-                        step === 2 && <AddSpecifications />
-                    }
-
-                </div>
-            }
-        </>
-    )
-}
-
-export default CreateProduct
+export default CreateProduct;

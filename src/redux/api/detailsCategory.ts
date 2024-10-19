@@ -1,23 +1,23 @@
-import { TProductCategory } from "@/interface/category";
-import { baseApi } from "./baseApi";
-import { tagTypes } from "./tagTypes";
+import { TProductCategory } from '@/interface/category';
+import { baseApi } from './baseApi';
+import { tagTypes } from './tagTypes';
 
 const detailsCategoryApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getDetailsCategories: build.query({
       query: () => {
         return {
-          url: "/product-details-category/get-all",
-          method: "GET",
+          url: '/product-details-category/get-all',
+          method: 'GET',
         };
       },
       providesTags: [tagTypes.detailsCategory],
     }),
     createDetailsCategory: build.mutation({
-      query: (payload: Pick<TProductCategory, "name" | "fields">) => {
+      query: (payload: Pick<TProductCategory, 'name' | 'fields'>) => {
         return {
-          url: "/product-details-category/create",
-          method: "POST",
+          url: '/product-details-category/create',
+          method: 'POST',
           data: payload,
         };
       },
@@ -28,17 +28,23 @@ const detailsCategoryApi = baseApi.injectEndpoints({
       query: (id) => {
         return {
           url: `/product-details-category/delete/${id}`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
       invalidatesTags: [tagTypes.detailsCategory],
     }),
 
     updateDetailsCategory: build.mutation({
-      query: ({ id, payload }: { id: string; payload: Pick<TProductCategory, "name" | "fields"> }) => {
+      query: ({
+        id,
+        payload,
+      }: {
+        id: string;
+        payload: Pick<TProductCategory, 'name' | 'fields'>;
+      }) => {
         return {
           url: `/product-details-category/update/${id}`,
-          method: "PATCH",
+          method: 'PATCH',
           data: payload,
         };
       },
@@ -47,5 +53,9 @@ const detailsCategoryApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetDetailsCategoriesQuery, useCreateDetailsCategoryMutation, useDeleteDetailsCategoryMutation, useUpdateDetailsCategoryMutation } =
-  detailsCategoryApi;
+export const {
+  useGetDetailsCategoriesQuery,
+  useCreateDetailsCategoryMutation,
+  useDeleteDetailsCategoryMutation,
+  useUpdateDetailsCategoryMutation,
+} = detailsCategoryApi;

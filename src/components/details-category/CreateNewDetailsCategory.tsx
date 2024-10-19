@@ -1,20 +1,24 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa6";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { HiMiniXMark } from "react-icons/hi2";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "../ui/form";
-import { toast } from "react-toastify";
-import { useCreateDetailsCategoryMutation } from "@/redux/api/detailsCategory";
-import { globalError } from "@/lib/utils";
-
-
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useEffect, useState } from 'react';
+import { FaPlus } from 'react-icons/fa6';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { HiMiniXMark } from 'react-icons/hi2';
+import { useForm } from 'react-hook-form';
+import { Form, FormField, FormItem, FormMessage } from '../ui/form';
+import { toast } from 'react-toastify';
+import { useCreateDetailsCategoryMutation } from '@/redux/api/detailsCategory';
+import { globalError } from '@/lib/utils';
 
 interface Field {
   field: string;
@@ -24,9 +28,9 @@ interface Field {
 const nameSchema = z.object({
   name: z
     .string({
-      required_error: "Product category name is required",
+      required_error: 'Product category name is required',
     })
-    .min(1, { message: "Product category name is required" })
+    .min(1, { message: 'Product category name is required' })
     .max(50),
 });
 
@@ -34,15 +38,15 @@ const fieldSchema = z.array(
   z.object({
     field: z
       .string({
-        required_error: "Field cannot be empty",
+        required_error: 'Field cannot be empty',
       })
-      .min(1, "Field cannot be an empty string"), // Field must be at least 1 character
+      .min(1, 'Field cannot be an empty string'), // Field must be at least 1 character
     id: z.string(), // Assuming ID is a string
-  })
+  }),
 );
 
 const generateID = () => {
-  return Math.random().toString(36).slice(2, 9) + "-" + Date.now();
+  return Math.random().toString(36).slice(2, 9) + '-' + Date.now();
 };
 
 const CreateNewDetailsCategory = () => {
@@ -50,13 +54,13 @@ const CreateNewDetailsCategory = () => {
   const [fieldError, setFieldError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [createDetailsCategory, { isLoading: isSubmitting }] = useCreateDetailsCategoryMutation()
-
+  const [createDetailsCategory, { isLoading: isSubmitting }] =
+    useCreateDetailsCategoryMutation();
 
   useEffect(() => {
     setFields([
       {
-        field: "",
+        field: '',
         id: generateID(),
       },
     ]);
@@ -65,7 +69,7 @@ const CreateNewDetailsCategory = () => {
   const form = useForm<z.infer<typeof nameSchema>>({
     resolver: zodResolver(nameSchema),
     defaultValues: {
-      name: "",
+      name: '',
     },
   });
 
@@ -86,33 +90,29 @@ const CreateNewDetailsCategory = () => {
     };
 
     try {
-      const result = await createDetailsCategory(payload).unwrap()
+      const result = await createDetailsCategory(payload).unwrap();
       if (result.success) {
         toast.success(result.message, {
-          position: "top-center",
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           draggable: true,
           progress: undefined,
-        })
-        form.reset(
-          {
-            name: "",
-          }
-        )
+        });
+        form.reset({
+          name: '',
+        });
         setFields([
           {
-            field: "",
+            field: '',
             id: generateID(),
           },
         ]);
         setIsOpen(false);
       }
-    }
-
-    catch (err) {
-      globalError(err)
+    } catch (err) {
+      globalError(err);
     }
 
     //   .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
@@ -153,7 +153,7 @@ const CreateNewDetailsCategory = () => {
     setFields((prev) => [
       ...prev,
       {
-        field: "",
+        field: '',
         id: generateID(),
       },
     ]);
@@ -195,23 +195,33 @@ const CreateNewDetailsCategory = () => {
         <DialogContent>
           <DialogTitle>Create details category</DialogTitle>
 
-
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
+            >
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex flex-col">
                     <label className="text-black">Name *</label>
-                    <Input {...field} placeholder="Enter Product Category Name" type="text"></Input>
+                    <Input
+                      {...field}
+                      placeholder="Enter Product Category Name"
+                      type="text"
+                    ></Input>
 
-                    {fieldState.error && <FormMessage className="text-red text-sm">{fieldState.error.message}</FormMessage>}
+                    {fieldState.error && (
+                      <FormMessage className="text-sm text-red">
+                        {fieldState.error.message}
+                      </FormMessage>
+                    )}
                   </FormItem>
                 )}
               />
               <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <label className="text-black">Fields *</label>
                   <Button onClick={handleAddField} type="button">
                     Add Field
@@ -221,25 +231,38 @@ const CreateNewDetailsCategory = () => {
                   <div key={field.id}>
                     <div className="flex items-center gap-2">
                       <Input
-                        onChange={(e) => handleFieldChange(e.target.value, field.id)}
+                        onChange={(e) =>
+                          handleFieldChange(e.target.value, field.id)
+                        }
                         placeholder="Enter Field Name"
                         type="text"
                       ></Input>
                       <div
                         onClick={() => handleRemoveField(field.id)}
-                        className="h-10 w-10 rounded-md flex justify-center items-center text-lg border-red border text-red cursor-pointer hover:bg-red hover:text-white"
+                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white"
                       >
                         <HiMiniXMark />
                       </div>
                     </div>
-                    {fieldError && fields.find((f) => f.id === field.id)?.field === "" && (
-                      <p className="text-red text-sm pt-1">Please enter field name</p>
-                    )}
+                    {fieldError &&
+                      fields.find((f) => f.id === field.id)?.field === '' && (
+                        <p className="pt-1 text-sm text-red">
+                          Please enter field name
+                        </p>
+                      )}
                   </div>
                 ))}
-                <DialogDescription>{fields.length === 0 && <p className="text-red text-sm">Please add at least one field</p>}</DialogDescription>
+                <DialogDescription>
+                  {fields.length === 0 && (
+                    <p className="text-sm text-red">
+                      Please add at least one field
+                    </p>
+                  )}
+                </DialogDescription>
               </div>
-              <Button loading={isSubmitting} type="submit">Submit</Button>
+              <Button loading={isSubmitting} type="submit">
+                Submit
+              </Button>
             </form>
           </Form>
         </DialogContent>
