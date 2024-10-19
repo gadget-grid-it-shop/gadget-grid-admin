@@ -40,6 +40,7 @@ module.exports = {
         ],
         '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unused-expressions': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
         'react/no-unknown-property': 'off',
         // React rules
         'react/jsx-fragments': ['warn', 'syntax'], // Shorthand syntax for React fragments

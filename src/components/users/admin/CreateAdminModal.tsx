@@ -1,23 +1,19 @@
 // import Divider from '@/components/custom/Divider'
+import { TSelectOptions } from '@/components/categories/interface';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import SingleSelector from '@/components/ui/singleSelect';
 import { TRole } from '@/interface/auth.interface';
 import { useGetRolesQuery } from '@/redux/api/rolesApi';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiPlus } from 'react-icons/fi';
 import { z } from 'zod';
@@ -46,6 +42,7 @@ const createAdminSchema = z.object({
 
 const CreateAdminModal = ({ open, setOpen }: TProps) => {
   const { data: roleData } = useGetRolesQuery(undefined);
+  const [selectedRole, setSelectedRole] = useState<TSelectOptions | null>(null);
   const form = useForm<z.infer<typeof createAdminSchema>>({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
@@ -53,6 +50,13 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
       password: '',
       role: '',
     },
+  });
+
+  const selectOptions = roleData?.data?.map((role: TRole) => {
+    return {
+      label: role.role,
+      value: role._id,
+    };
   });
 
   return (
@@ -98,7 +102,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="role"
                 render={({ field, fieldState }) => (
@@ -180,49 +184,25 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                     </div>
                   </FormItem>
                 )}
-              />
+              /> */}
+
+              <div className="flex flex-col gap-2">
+                <label>Role *</label>
+                <SingleSelector
+                  options={selectOptions}
+                  value={selectedRole || undefined}
+                  onChange={(value) => setSelectedRole(value)}
+                />
+              </div>
+
+              <div>
+                <Button>Cancel</Button>
+                <Button>Create</Button>
+              </div>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
-
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="Select a verified email to display" />
-        </SelectTrigger>
-
-        <SelectContent>
-          {roleData?.data?.map((role: TRole) => (
-            <SelectItem key={role._id} value={role._id}>
-              {role.role}
-            </SelectItem>
-          ))}
-
-          <SelectItem value="m@examdfdple.com">m@example.com</SelectItem>
-          <SelectItem value="m@googdfdle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supfdfdport.com">m@support.com</SelectItem>
-          <SelectItem value="m@exfdfdample.com">m@example.com</SelectItem>
-          <SelectItem value="m@gofdfdogle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supfdf dsfport.com">m@support.com</SelectItem>
-          <SelectItem value="m@exafdfdmple.com">m@example.com</SelectItem>
-          <SelectItem value="m@goo sdf sdf gle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supdfsd fsdport.com">m@support.com</SelectItem>
-          <SelectItem value="m@exaf sdfsd mple.com">m@example.com</SelectItem>
-          <SelectItem value="m@goosdfsdgle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supfsd fsdf port.com">m@support.com</SelectItem>
-          <SelectItem value="m@goo sdfd  sdf gle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supdfsdd fds ds fsdport.com">
-            m@support.com
-          </SelectItem>
-          <SelectItem value="m@exaf  dfs sdfsd mple.com">
-            m@example.com
-          </SelectItem>
-          <SelectItem value="m@goosdd sf sdfsdgle.com">m@google.com</SelectItem>
-          <SelectItem value="m@supff sdfdsd fsdf port.com">
-            m@support.com
-          </SelectItem>
-        </SelectContent>
-      </Select>
     </div>
   );
 };
