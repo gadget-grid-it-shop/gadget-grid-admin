@@ -87,11 +87,12 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
         name: values.name,
       };
 
-      console.log(payload);
-
       try {
         const res = await createAdmin(payload).unwrap();
         toast.success(res.message);
+        setOpen(false);
+        form.reset();
+        setSelectedRole(null);
       } catch (err) {
         console.log(err);
         globalError(err);
@@ -211,6 +212,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                   type="button"
                   className="w-full"
                   variant={'delete_solid'}
+                  onClick={() => setOpen(false)}
                 >
                   Cancel
                 </Button>
