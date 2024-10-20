@@ -11,7 +11,9 @@ import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import SingleSelector from '@/components/ui/singleSelect';
 import { TRole } from '@/interface/auth.interface';
+import { globalError } from '@/lib/utils';
 import { useGetRolesQuery } from '@/redux/api/rolesApi';
+import { TCreateAdmin, useCreateAdminMutation } from '@/redux/api/usersApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -28,6 +30,15 @@ const createAdminSchema = z.object({
   email: z
     .string({ required_error: 'User name is required' })
     .email('Not a valid email'),
+  name: z.object({
+    firstName: z
+      .string({ required_error: 'FirstName is required' })
+      .min(1, 'FirstName is required'),
+    middleName: z.string().optional(),
+    lastName: z
+      .string({ required_error: 'LastName is required' })
+      .min(1, 'LastName is required'),
+  }),
   password: z
     .string({
       required_error: 'Password is required',
@@ -40,11 +51,19 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
   const { data: roleData } = useGetRolesQuery(undefined);
   const [selectedRole, setSelectedRole] = useState<TSelectOptions | null>(null);
   const [roleError, setRoleError] = useState(false);
+  const [createAdmin, { isLoading: isCreatingAdmin }] =
+    useCreateAdminMutation();
+
   const form = useForm<z.infer<typeof createAdminSchema>>({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
       email: '',
       password: '',
+      name: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+      },
     },
   });
 
@@ -55,13 +74,29 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
     };
   });
 
-  function onSubmit(values: z.infer<typeof createAdminSchema>) {
+  async function onSubmit(values: z.infer<typeof createAdminSchema>) {
     setRoleError(false);
     if (!selectedRole) {
       setRoleError(true);
       toast.error('Please select role');
+    } else {
+      const payload: TCreateAdmin = {
+        email: values.email,
+        password: values.password,
+        role: selectedRole.value,
+        name: values.name,
+      };
+
+      console.log(payload);
+
+      try {
+        const res = await createAdmin(payload).unwrap();
+        toast.success(res.message);
+      } catch (err) {
+        console.log(err);
+        globalError(err);
+      }
     }
-    console.log(values, selectedRole);
   }
 
   return (
@@ -71,7 +106,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
           <FiPlus size={18} />
           Create Admin
         </DialogTrigger>
-        <DialogContent className="medium-modal">
+        <DialogContent className="">
           <DialogTitle>Create new admin</DialogTitle>
 
           {/* <Divider text={"credentials"} /> */}
@@ -80,6 +115,51 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
               className="flex flex-col gap-3"
               onSubmit={form.handleSubmit(onSubmit)}
             >
+              <FormField
+                control={form.control}
+                name="name.firstName"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <div className="flex flex-col gap-2">
+                      <label>First Name *</label>
+                      <Input {...field} placeholder="Enter first name" />
+                    </div>
+                    {fieldState.error && (
+                      <p className="text-red">{fieldState.error.message}</p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name.middleName"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <div className="flex flex-col gap-2">
+                      <label>Middle Name</label>
+                      <Input {...field} placeholder="Enter middle name" />
+                    </div>
+                    {fieldState.error && (
+                      <p className="text-red">{fieldState.error.message}</p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name.lastName"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <div className="flex flex-col gap-2">
+                      <label>last Name *</label>
+                      <Input {...field} placeholder="Enter last name" />
+                    </div>
+                    {fieldState.error && (
+                      <p className="text-red">{fieldState.error.message}</p>
+                    )}
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -110,95 +190,13 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                   </FormItem>
                 )}
               />
-              {/* <FormField
-                control={form.control}
-                name="role"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>Role *</label>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {roleData?.data?.map((role: TRole) => (
-                            <SelectItem key={role._id} value={role._id}>
-                              {role.role}
-                            </SelectItem>
-                          ))}
-
-                          <SelectItem value="m@examdfdple.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@googdfdle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supfdfdport.com">
-                            m@support.com
-                          </SelectItem>
-                          <SelectItem value="m@exfdfdample.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@gofdfdogle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supfdf dsfport.com">
-                            m@support.com
-                          </SelectItem>
-                          <SelectItem value="m@exafdfdmple.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@goo sdf sdf gle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supdfsd fsdport.com">
-                            m@support.com
-                          </SelectItem>
-                          <SelectItem value="m@exaf sdfsd mple.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@goosdfsdgle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supfsd fsdf port.com">
-                            m@support.com
-                          </SelectItem>
-                          <SelectItem value="m@goo sdfd  sdf gle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supdfsdd fds ds fsdport.com">
-                            m@support.com
-                          </SelectItem>
-                          <SelectItem value="m@exaf  dfs sdfsd mple.com">
-                            m@example.com
-                          </SelectItem>
-                          <SelectItem value="m@goosdd sf sdfsdgle.com">
-                            m@google.com
-                          </SelectItem>
-                          <SelectItem value="m@supff sdfdsd fsdf port.com">
-                            m@support.com
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {fieldState.error && (
-                        <p className="text-red">{fieldState.error.message}</p>
-                      )}
-                    </div>
-                  </FormItem>
-                )}
-              /> */}
 
               <div className="flex flex-col gap-2">
                 <label>Role *</label>
                 <SingleSelector
                   options={selectOptions}
                   value={selectedRole || undefined}
+                  placeholder="Select role for the user"
                   onChange={(value) => {
                     setSelectedRole(value);
                     setRoleError(false);
@@ -216,7 +214,9 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                 >
                   Cancel
                 </Button>
-                <Button className="w-full">Create</Button>
+                <Button loading={isCreatingAdmin} className="w-full">
+                  Create
+                </Button>
               </div>
             </form>
           </Form>

@@ -1,6 +1,17 @@
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
 
+export type TCreateAdmin = {
+  email: string;
+  password: string;
+  role: string;
+  name: {
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+  };
+};
+
 const usersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllAdmins: build.query({
@@ -12,7 +23,18 @@ const usersApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.admins],
     }),
+
+    createAdmin: build.mutation({
+      query: (payload: TCreateAdmin) => {
+        return {
+          url: '/user/create-admin',
+          method: 'POST',
+          data: payload,
+        };
+      },
+      invalidatesTags: [tagTypes.admins],
+    }),
   }),
 });
 
-export const { useGetAllAdminsQuery } = usersApi;
+export const { useGetAllAdminsQuery, useCreateAdminMutation } = usersApi;
