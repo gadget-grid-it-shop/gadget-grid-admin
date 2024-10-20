@@ -43,6 +43,7 @@ export interface TAddress {
 }
 
 export interface TUser {
+  _id: string;
   address: TAddress;
   email: string;
   name: TUserName;

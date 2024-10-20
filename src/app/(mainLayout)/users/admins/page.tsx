@@ -2,7 +2,10 @@
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { TAdminData } from '@/interface/admin.interface';
 import { globalError } from '@/lib/utils';
-import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
+import {
+  useDeleteUserMutation,
+  useGetAllAdminsQuery,
+} from '@/redux/api/usersApi';
 import React, { useState } from 'react';
 import {
   Table,
@@ -22,14 +25,33 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { FaUser } from 'react-icons/fa';
 import CreateAdminModal from '@/components/users/admin/CreateAdminModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
 
 const Admins = () => {
   const { data: adminData, isLoading, error } = useGetAllAdminsQuery(undefined);
+  const [deleteAdmin, { isLoading: isDeleting }] = useDeleteUserMutation();
   const [createAdminOpen, setCreateAdminOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   if (!isLoading && error) {
     globalError(error);
   }
+
+  const handleDeleteAdmin = async (id: string) => {
+    try {
+      const res = await deleteAdmin({ id, role: 'admin' }).unwrap();
+      toast.success(res.message);
+      setDeleteOpen(false);
+    } catch (err) {
+      globalError(err);
+    }
+  };
 
   return (
     <div>
@@ -107,7 +129,58 @@ const Admins = () => {
                   <div className="flex items-center gap-3">
                     <Button variant={'view_button'} size={'base'}></Button>
                     <Button variant={'edit_button'} size={'base'}></Button>
-                    <Button variant={'delete_button'} size={'base'}></Button>
+                    <Dialog
+                      open={deleteOpen}
+                      onOpenChange={() => setDeleteOpen(!deleteOpen)}
+                    >
+                      <DialogTrigger>
+                        <Button
+                          variant={'delete_button'}
+                          size={'base'}
+                        ></Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogTitle>Delete User</DialogTitle>
+                        <div>
+                          <h2 className="pb-4 text-red-orange">
+                            Warning: You are about to delete an admin.
+                          </h2>
+                          <h3 className="pb-2 text-sm">
+                            #Deleting an admin can have significant consequences
+                            for system management and control. Please ensure the
+                            following before proceeding:
+                          </h3>
+                          <ul className="list-decimal ps-5 text-sm text-gray">
+                            <li>
+                              Verify that there are other admins with sufficient
+                              permissions to manage the system.
+                            </li>
+                            <li>
+                              This action will permanently remove the admin’s
+                              access and may affect critical administrative
+                              operations.
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="flex w-full gap-3 pt-4">
+                          <Button
+                            className="w-full"
+                            variant={'delete_solid'}
+                            onClick={() => setDeleteOpen(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            loading={isDeleting}
+                            onClick={() => handleDeleteAdmin(admin.user._id)}
+                            className="w-full"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </TableCell>
               </TableRow>
