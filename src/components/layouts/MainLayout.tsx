@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
+import { globalError, handleLogout } from '@/lib/utils';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const { theme } = useTheme();
@@ -28,7 +29,10 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       axiosInstance
         .get('/auth/getMyData')
         .then((res) => {
-          console.log(res.data);
+          console.log(res?.data?.data?.isDeleted);
+          if (res?.data?.data?.isDeleted) {
+            handleLogout();
+          }
           dispatch(
             setUserData({
               user: res?.data?.data,
@@ -37,7 +41,11 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           );
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response);
+          if (err.response?.statusCode === 401) {
+            handleLogout();
+          }
+          globalError(err);
         });
     } else {
       router.push('/login');

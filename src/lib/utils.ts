@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { TGenericErrorResponse } from '@/interface/error.interface';
 import { toast } from 'sonner';
 import { store } from '@/redux/store';
+import { resetAuthData } from '@/redux/reducers/auth/authSlice';
+import { clearCookie } from '@/actions/logout';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -31,4 +33,9 @@ export const getAccessToken = () => {
   } else {
     return null;
   }
+};
+
+export const handleLogout = () => {
+  store.dispatch(resetAuthData());
+  clearCookie();
 };

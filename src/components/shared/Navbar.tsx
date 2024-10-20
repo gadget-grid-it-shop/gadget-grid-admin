@@ -2,11 +2,9 @@
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '../ui/button';
-import { resetAuthData } from '@/redux/reducers/auth/authSlice';
 import { useMediaQuery } from 'react-responsive';
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
-import { clearCookie } from '@/actions/logout';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +22,7 @@ import { TbSunFilled } from 'react-icons/tb';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IoSettingsOutline } from 'react-icons/io5';
 import Link from 'next/link';
+import { handleLogout } from '@/lib/utils';
 
 const Navbar = () => {
   const [loaded, setLoaded] = useState(false);
@@ -39,11 +38,6 @@ const Navbar = () => {
   useEffect(() => {
     setLoaded(true);
   }, []);
-
-  const handleLogout = () => {
-    dispatch(resetAuthData());
-    clearCookie();
-  };
 
   return (
     <nav className="">
