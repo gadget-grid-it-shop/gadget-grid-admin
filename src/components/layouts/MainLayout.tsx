@@ -30,7 +30,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         .get('/auth/getMyData')
         .then((res) => {
           console.log(res?.data?.data?.isDeleted);
-          if (res?.data?.data?.isDeleted) {
+          if (res?.data?.data?.isDeleted === true) {
             handleLogout();
           }
           dispatch(
@@ -41,10 +41,6 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           );
         })
         .catch((err) => {
-          console.log(err.response);
-          if (err.response?.statusCode === 401) {
-            handleLogout();
-          }
           globalError(err);
         });
     } else {
