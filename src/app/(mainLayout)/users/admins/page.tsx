@@ -32,12 +32,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const Admins = () => {
   const { data: adminData, isLoading, error } = useGetAllAdminsQuery(undefined);
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteUserMutation();
   const [createAdminOpen, setCreateAdminOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const router = useRouter();
 
   if (!isLoading && error) {
     globalError(error);
@@ -127,7 +130,11 @@ const Admins = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-3">
-                    <Button variant={'view_button'} size={'base'}></Button>
+                    <Button
+                      variant={'view_button'}
+                      size={'base'}
+                      onClick={() => router.push(`/users/admins/${admin._id}`)}
+                    ></Button>
                     <Button variant={'edit_button'} size={'base'}></Button>
                     <Dialog
                       open={deleteOpen}

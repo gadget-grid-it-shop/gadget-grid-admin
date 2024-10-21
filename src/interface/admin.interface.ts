@@ -12,4 +12,5 @@ export type TAdminData = {
   phoneNumber: string;
   user: TUser;
   profilePicture: string;
+  fullName?: string;
 };

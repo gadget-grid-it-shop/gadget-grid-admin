@@ -45,6 +45,21 @@ const usersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.admins],
     }),
+
+    getSingleUser: build.query({
+      query: ({
+        id,
+        userType,
+      }: {
+        id: string;
+        userType: 'admin' | 'customer';
+      }) => {
+        return {
+          url: `/user/${id}?userType=${userType}`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
 });
 
@@ -52,4 +67,5 @@ export const {
   useGetAllAdminsQuery,
   useCreateAdminMutation,
   useDeleteUserMutation,
+  useGetSingleUserQuery,
 } = usersApi;
