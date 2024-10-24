@@ -52,7 +52,8 @@ const ViewRoleModal = ({ viewData, setOpen }: TProps) => {
                             key={acc[0]}
                             className="flex items-center justify-between"
                           >
-                            <span className="text-gray">{acc[0]}</span> :{' '}
+                            <span className="flex-1 text-gray">{acc[0]}</span>
+                            <span className="flex-1">:</span>
                             <Switch checked={acc[1] === true} />
                           </div>
                         );
