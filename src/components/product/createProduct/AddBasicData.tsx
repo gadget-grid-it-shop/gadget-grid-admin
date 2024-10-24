@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { TProduct } from '@/interface/product.interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
@@ -19,7 +19,8 @@ const AddBasicData = () => {
   const dispatch = useAppDispatch();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const { product } = useAppSelector((state) => state.products);
-  const { data: categoryData } = useGetAllCategoriesQuery(undefined);
+  const { data: categoryData } = useGetAllCategoriesQuery(false);
+  // const [subCategorySelectData, setSubCategorySelectData] = useState<TSelectOptions[] | []>([])
   const {
     gallery,
     description,
@@ -46,12 +47,16 @@ const AddBasicData = () => {
     dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
   };
 
-  const categorySelectData: TSelectOptions[] = categoryData?.data?.map(
-    (item: TCategory) => ({
+  const categorySelectData: TSelectOptions[] = categoryData?.data
+    ?.filter((item: TCategory) => !item.parent_id)
+    ?.map((item: TCategory) => ({
       label: item.name,
       value: item._id,
-    }),
-  );
+    }));
+
+  console.log(categoryData, categorySelectData);
+
+  useEffect(() => {}, []);
 
   return (
     <div>

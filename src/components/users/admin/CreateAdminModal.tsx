@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import SingleSelector from '@/components/ui/singleSelect';
+import Select from '@/components/ui/select';
 import { TRole } from '@/interface/auth.interface';
 import { globalError } from '@/lib/utils';
 import { useGetRolesQuery } from '@/redux/api/rolesApi';
@@ -49,7 +49,7 @@ const createAdminSchema = z.object({
 
 const CreateAdminModal = ({ open, setOpen }: TProps) => {
   const { data: roleData } = useGetRolesQuery(undefined);
-  const [selectedRole, setSelectedRole] = useState<TSelectOptions | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [roleError, setRoleError] = useState(false);
   const [createAdmin, { isLoading: isCreatingAdmin }] =
     useCreateAdminMutation();
@@ -67,7 +67,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
     },
   });
 
-  const selectOptions = roleData?.data?.map((role: TRole) => {
+  const selectOptions: TSelectOptions[] = roleData?.data?.map((role: TRole) => {
     return {
       label: role.role,
       value: role._id,
@@ -83,7 +83,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
       const payload: TCreateAdmin = {
         email: values.email,
         password: values.password,
-        role: selectedRole.value,
+        role: selectedRole,
         name: values.name,
       };
 
@@ -99,6 +99,8 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
       }
     }
   }
+
+  console.log(selectedRole);
 
   return (
     <div>
@@ -194,12 +196,21 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
 
               <div className="flex flex-col gap-2">
                 <label>Role *</label>
-                <SingleSelector
+                {/* <SingleSelector
                   options={selectOptions}
                   value={selectedRole || undefined}
                   placeholder="Select role for the user"
                   onChange={(value) => {
                     setSelectedRole(value);
+                    setRoleError(false);
+                  }}
+                /> */}
+                <Select
+                  placeholder="Select role"
+                  className="bg-background"
+                  data={selectOptions}
+                  onChange={(val) => {
+                    setSelectedRole(val as string);
                     setRoleError(false);
                   }}
                 />
