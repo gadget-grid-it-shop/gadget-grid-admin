@@ -10,11 +10,16 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
+import { useGetAllCategoriesQuery } from '@/redux/api/categories';
+import Select from '@/components/ui/select';
+import { TCategory } from '@/interface/category';
+import { TSelectOptions } from '@/components/categories/interface';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const { product } = useAppSelector((state) => state.products);
+  const { data: categoryData } = useGetAllCategoriesQuery(undefined);
   const {
     gallery,
     description,
@@ -24,6 +29,8 @@ const AddBasicData = () => {
     warranty,
     price,
     quantity,
+    category,
+    // subCategory
   } = product;
 
   const handleChange = <K extends keyof TProduct>(
@@ -39,6 +46,13 @@ const AddBasicData = () => {
     dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
   };
 
+  const categorySelectData: TSelectOptions[] = categoryData?.data?.map(
+    (item: TCategory) => ({
+      label: item.name,
+      value: item._id,
+    }),
+  );
+
   return (
     <div>
       <h2 className="pb-5 text-lg font-semibold text-black">
@@ -52,6 +66,22 @@ const AddBasicData = () => {
             onChange={(e) => handleChange('name', e.target.value)}
             className="bg-background-foreground"
             placeholder="Enter Product Name"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Category *</label>
+          {/* <Input
+            value={brand}
+            onChange={(e) => handleChange('brand', e.target.value)}
+            className="bg-background-foreground"
+            placeholder="Enter Brand Name"
+          /> */}
+          <Select
+            data={categorySelectData}
+            onChange={(value) => handleChange('category', value as string)}
+            placeholder="Select category"
+            value={category}
           />
         </div>
 

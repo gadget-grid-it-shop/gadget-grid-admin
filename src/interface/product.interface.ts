@@ -1,8 +1,3 @@
-export interface TProductCategory {
-  main: boolean;
-  id: string;
-}
-
 export interface TReview {
   rating: number;
   review: string;
@@ -34,7 +29,8 @@ export interface TProduct {
   reviews?: TReview[];
   key_features: string;
   quantity: number;
-  category: TProductCategory[]; // Linked to Category
+  category: string;
+  subCategory: string;
   description: string;
   videos?: string[];
   gallery?: string[];
