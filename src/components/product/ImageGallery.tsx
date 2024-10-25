@@ -178,6 +178,8 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
       formData.append('type', 'product');
       formData.append('folder', parentFolder);
 
+      console.log(formData);
+
       try {
         const res = await uploadImage(formData).unwrap();
         console.log(res);
