@@ -14,12 +14,13 @@ import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import Select from '@/components/ui/select';
 import { TCategory } from '@/interface/category';
 import { TSelectOptions } from '@/components/categories/interface';
+import TreeDropdown from '@/components/custom/TreeDropdown';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const { product } = useAppSelector((state) => state.products);
-  const { data: categoryData } = useGetAllCategoriesQuery(false);
+  const { data: categoryData } = useGetAllCategoriesQuery(true);
   // const [subCategorySelectData, setSubCategorySelectData] = useState<TSelectOptions[] | []>([])
   const {
     gallery,
@@ -31,7 +32,6 @@ const AddBasicData = () => {
     price,
     quantity,
     category,
-    // subCategory
   } = product;
 
   const handleChange = <K extends keyof TProduct>(
@@ -53,9 +53,6 @@ const AddBasicData = () => {
       label: item.name,
       value: item._id,
     }));
-
-  console.log(categoryData, categorySelectData);
-
   useEffect(() => {}, []);
 
   return (
@@ -76,18 +73,17 @@ const AddBasicData = () => {
 
         <div className="flex flex-col gap-2">
           <label className="text-sm">Category *</label>
-          {/* <Input
-            value={brand}
-            onChange={(e) => handleChange('brand', e.target.value)}
-            className="bg-background-foreground"
-            placeholder="Enter Brand Name"
-          /> */}
           <Select
             data={categorySelectData}
             onChange={(value) => handleChange('category', value as string)}
             placeholder="Select category"
             value={category}
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Sub Category *</label>
+          <TreeDropdown categories={categoryData.data} />
         </div>
 
         <div className="flex flex-col gap-2">
