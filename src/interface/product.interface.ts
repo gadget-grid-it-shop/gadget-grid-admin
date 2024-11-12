@@ -3,6 +3,11 @@ export interface TReview {
   review: string;
 }
 
+export interface TProductCategory {
+  main: boolean;
+  id: string;
+}
+
 export interface TProductAttribute {
   name: string;
   fields: Record<string, string>[];
@@ -29,8 +34,7 @@ export interface TProduct {
   reviews?: TReview[];
   key_features: string;
   quantity: number;
-  category: string;
-  subCategory: string;
+  category: TProductCategory[];
   description: string;
   videos?: string[];
   gallery?: string[];

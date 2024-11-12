@@ -6,14 +6,11 @@ import { Input } from '@/components/ui/input';
 import { TProduct } from '@/interface/product.interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
-import Select from '@/components/ui/select';
-import { TCategory } from '@/interface/category';
-import { TSelectOptions } from '@/components/categories/interface';
 import TreeDropdown from '@/components/custom/TreeDropdown';
 
 const AddBasicData = () => {
@@ -47,14 +44,6 @@ const AddBasicData = () => {
     dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
   };
 
-  const categorySelectData: TSelectOptions[] = categoryData?.data
-    ?.filter((item: TCategory) => !item.parent_id)
-    ?.map((item: TCategory) => ({
-      label: item.name,
-      value: item._id,
-    }));
-  useEffect(() => {}, []);
-
   return (
     <div>
       <h2 className="pb-5 text-lg font-semibold text-black">
@@ -71,7 +60,7 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="text-sm">Category *</label>
           <Select
             data={categorySelectData}
@@ -79,11 +68,15 @@ const AddBasicData = () => {
             placeholder="Select category"
             value={category}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm">Sub Category *</label>
-          <TreeDropdown categories={categoryData?.data} />
+          <label className="text-sm">Category *</label>
+          <TreeDropdown
+            value={category}
+            categories={categoryData?.data}
+            onSelect={(val) => handleChange('category', val)}
+          />
         </div>
 
         <div className="flex flex-col gap-2">
