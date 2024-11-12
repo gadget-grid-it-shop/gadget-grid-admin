@@ -1,12 +1,15 @@
 import { TCategory } from '@/interface/category';
 import React, { useState } from 'react';
-import { Input } from '../ui/input';
 
 type TProps = {
   categories: TCategory[];
+  placeholder?: string;
 };
 
-const TreeDropdown = ({ categories }: TProps) => {
+const TreeDropdown = ({
+  categories,
+  placeholder = 'Select Category',
+}: TProps) => {
   const [selectedCat, setSelectedCat] = useState<TCategory | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -17,7 +20,7 @@ const TreeDropdown = ({ categories }: TProps) => {
 
   const renderCategory = (categories: TCategory[]) => {
     return (
-      <div className="flex flex-col items-start gap-2">
+      <div className="flex flex-col items-start gap-2 text-gray">
         {categories?.map((cat) => (
           <button onClick={() => handleCatSelect(cat)} key={cat._id}>
             {cat.name}
@@ -29,14 +32,15 @@ const TreeDropdown = ({ categories }: TProps) => {
 
   return (
     <div className="relative">
-      <Input
-        onFocus={() => setOpen(true)}
-        className="bg-background-foreground"
-        defaultValue={selectedCat?.name}
-      ></Input>
+      <button
+        onClick={() => setOpen(!open)}
+        className="h-10 w-full rounded-md bg-background-foreground px-3 text-start text-sm text-gray"
+      >
+        {selectedCat?.name || placeholder}
+      </button>
 
       {open && (
-        <div className="absolute w-full rounded-md border border-border-color bg-background p-3 shadow-sm">
+        <div className="absolute top-11 w-full rounded-md border border-border-color bg-background p-3 shadow-sm">
           {renderCategory(categories)}
         </div>
       )}

@@ -139,14 +139,6 @@ const Category = () => {
               key={category._id}
               className={`my-2 rounded-md px-3 py-3 ${level === 0 ? 'px-3' : 'pt-2'} ${level === 1 ? 'mx-3 bg-background p-3' : 'bg-background-foreground'}`}
             >
-              {level === 1 && (
-                <h2 className="pb-3 ps-6 text-center text-base">
-                  Subcategories
-                </h2>
-              )}
-              {level === 2 && (
-                <h2 className="pb-3 ps-12 text-center text-base">Brands</h2>
-              )}
               <div className="grid grid-cols-2">
                 <button
                   onClick={(e) =>

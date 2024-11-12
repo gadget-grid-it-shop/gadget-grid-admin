@@ -83,7 +83,7 @@ const AddBasicData = () => {
 
         <div className="flex flex-col gap-2">
           <label className="text-sm">Sub Category *</label>
-          <TreeDropdown categories={categoryData.data} />
+          <TreeDropdown categories={categoryData?.data} />
         </div>
 
         <div className="flex flex-col gap-2">
