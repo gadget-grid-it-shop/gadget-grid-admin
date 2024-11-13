@@ -35,7 +35,7 @@ const Roles = () => {
   const [deleteRole, { isLoading: isDeleting }] = useDeleteRoleMutation();
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const rolePermission: TPermission | undefined = permissions.find(
+  const rolePermission: TPermission | undefined = permissions?.find(
     (p) => p.feature === 'role',
   );
 

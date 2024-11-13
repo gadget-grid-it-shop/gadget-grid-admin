@@ -1,40 +1,33 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { TCategory, TProductCategory } from '@/interface/category';
 import { TProductAttribute } from '@/interface/product.interface';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import {
-  setSelectedCategoryName,
-  updateProduct,
-} from '@/redux/reducers/products/productSlice';
+import { updateProduct } from '@/redux/reducers/products/productSlice';
 import React, { useEffect } from 'react';
 
 const AddSpecifications = () => {
   const {
     data: categoryData,
-    error: cateoryError,
-    isLoading: categoryLoading,
+    // error: cateoryError,
+    // isLoading: categoryLoading,
   } = useGetAllCategoriesQuery(false);
-  const { product, selectedCategoryName } = useAppSelector(
-    (state) => state.products,
-  );
+  const { product } = useAppSelector((state) => state.products);
   const { attributes } = product;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (selectedCategoryName) {
+    if (product.category.length !== 0) {
       const category: TCategory = categoryData?.data.find(
-        (cat: TCategory) => cat.name === selectedCategoryName,
+        (cat: TCategory) =>
+          cat._id === product.category.find((c) => c.main)?.id,
       );
+
+      console.log(category);
+
       if (category) {
         const attributes = category.product_details_categories.map(
           (item: TProductCategory) => {
@@ -55,39 +48,10 @@ const AddSpecifications = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategoryName]);
+  }, [product.category]);
 
   return (
     <div className="flex w-1/2 flex-col gap-6">
-      {!categoryLoading && !cateoryError && (
-        <div className="flex flex-col gap-2 text-gray">
-          <label className="text-lg font-semibold text-black">
-            Select Category *
-          </label>
-          <Select
-            value={selectedCategoryName}
-            onValueChange={(val: string) =>
-              dispatch(setSelectedCategoryName(val))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categoryData?.data?.map((cat: TCategory) => (
-                <SelectItem
-                  className="text-gray"
-                  value={cat.name}
-                  key={cat._id}
-                >
-                  {cat.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       {attributes && attributes.length !== 0 && (
         <div>
           <label className="text-lg font-semibold text-black">

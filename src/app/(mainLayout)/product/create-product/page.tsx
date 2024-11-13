@@ -33,7 +33,7 @@ const CreateProduct = () => {
           {step === 1 && <AddBasicData />}
 
           {/* ===============step 2 specification====================== */}
-          {step === 2 && <AddSpecifications />}
+          {step === 1 && <AddSpecifications />}
         </div>
       )}
     </>
