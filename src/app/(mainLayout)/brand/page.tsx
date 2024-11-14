@@ -12,19 +12,18 @@ import TableSkeleton from '@/components/shared/TableSkeleton';
 import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { TBrand } from '@/interface/brand.interface';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import Image from 'next/image';
-import { isValidUrl } from '@/lib/utils';
+import { globalError, isValidUrl } from '@/lib/utils';
 import CreateBrand from '@/components/brand/CreateBrand';
+import Modal from '@/components/custom/Modal';
 
 const BrandPage = () => {
-  const { data: brandData, isLoading } = useGetAllBrandsQuery(undefined);
+  const { data: brandData, isLoading, error } = useGetAllBrandsQuery(undefined);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  if (!isLoading && error) {
+    globalError(error);
+  }
 
   return (
     <div>
@@ -85,18 +84,18 @@ const BrandPage = () => {
                   <div className="flex items-center gap-3">
                     <Button variant={'view_button'} size={'base'}></Button>
                     <Button variant={'edit_button'} size={'base'}></Button>
-                    <Dialog
+                    <Modal
                       open={deleteOpen}
-                      onOpenChange={() => setDeleteOpen(!deleteOpen)}
-                    >
-                      <DialogTrigger>
+                      setOpen={setDeleteOpen}
+                      triggerText={
                         <Button
                           variant={'delete_button'}
                           size={'base'}
                         ></Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogTitle>Delete Brand</DialogTitle>
+                      }
+                      title="Delete Brand"
+                    >
+                      <>
                         <div>
                           <h2 className="pb-4 text-red-orange">
                             Warning: You are about to delete a brand.
@@ -137,14 +136,20 @@ const BrandPage = () => {
                             Delete
                           </Button>
                         </div>
-                      </DialogContent>
-                    </Dialog>
+                      </>
+                    </Modal>
                   </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+      )}
+
+      {!isLoading && error !== undefined && (
+        <div className="flex h-48 items-center justify-center text-gray">
+          Admin data unavailable
+        </div>
       )}
     </div>
   );

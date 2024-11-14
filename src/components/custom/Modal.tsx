@@ -2,6 +2,7 @@ import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
@@ -38,6 +39,7 @@ const Modal = ({
       </DialogTrigger>
       <DialogContent className="">
         <DialogTitle>{title}</DialogTitle>
+        <DialogDescription></DialogDescription>
         {children}
       </DialogContent>
     </Dialog>
