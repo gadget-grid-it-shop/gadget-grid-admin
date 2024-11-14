@@ -1,12 +1,7 @@
 // import Divider from '@/components/custom/Divider'
 import { TSelectOptions } from '@/components/categories/interface';
+import Modal from '@/components/custom/Modal';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Select from '@/components/ui/select';
@@ -17,7 +12,6 @@ import { TCreateAdmin, useCreateAdminMutation } from '@/redux/api/usersApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiPlus } from 'react-icons/fi';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -104,99 +98,96 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
 
   return (
     <div>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger className="primary-btn">
-          <FiPlus size={18} />
-          Create Admin
-        </DialogTrigger>
-        <DialogContent className="">
-          <DialogTitle>Create new admin</DialogTitle>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        triggerText="Create Admin"
+        title="Create new admin"
+      >
+        <Form {...form}>
+          <form
+            className="flex flex-col gap-3"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FormField
+              control={form.control}
+              name="name.firstName"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-2">
+                    <label>First Name *</label>
+                    <Input {...field} placeholder="Enter first name" />
+                  </div>
+                  {fieldState.error && (
+                    <p className="text-red">{fieldState.error.message}</p>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name.middleName"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-2">
+                    <label>Middle Name</label>
+                    <Input {...field} placeholder="Enter middle name" />
+                  </div>
+                  {fieldState.error && (
+                    <p className="text-red">{fieldState.error.message}</p>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name.lastName"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-2">
+                    <label>last Name *</label>
+                    <Input {...field} placeholder="Enter last name" />
+                  </div>
+                  {fieldState.error && (
+                    <p className="text-red">{fieldState.error.message}</p>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-2">
+                    <label>Email *</label>
+                    <Input {...field} placeholder="Enter user email" />
+                  </div>
+                  {fieldState.error && (
+                    <p className="text-red">{fieldState.error.message}</p>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-2">
+                    <label>Password *</label>
+                    <Input {...field} placeholder="Enter a simple password" />
+                  </div>
+                  {fieldState.error && (
+                    <p className="text-red">{fieldState.error.message}</p>
+                  )}
+                </FormItem>
+              )}
+            />
 
-          {/* <Divider text={"credentials"} /> */}
-          <Form {...form}>
-            <form
-              className="flex flex-col gap-3"
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
-              <FormField
-                control={form.control}
-                name="name.firstName"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>First Name *</label>
-                      <Input {...field} placeholder="Enter first name" />
-                    </div>
-                    {fieldState.error && (
-                      <p className="text-red">{fieldState.error.message}</p>
-                    )}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="name.middleName"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>Middle Name</label>
-                      <Input {...field} placeholder="Enter middle name" />
-                    </div>
-                    {fieldState.error && (
-                      <p className="text-red">{fieldState.error.message}</p>
-                    )}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="name.lastName"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>last Name *</label>
-                      <Input {...field} placeholder="Enter last name" />
-                    </div>
-                    {fieldState.error && (
-                      <p className="text-red">{fieldState.error.message}</p>
-                    )}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>Email *</label>
-                      <Input {...field} placeholder="Enter user email" />
-                    </div>
-                    {fieldState.error && (
-                      <p className="text-red">{fieldState.error.message}</p>
-                    )}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-2">
-                      <label>Password *</label>
-                      <Input {...field} placeholder="Enter a simple password" />
-                    </div>
-                    {fieldState.error && (
-                      <p className="text-red">{fieldState.error.message}</p>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex flex-col gap-2">
-                <label>Role *</label>
-                {/* <SingleSelector
+            <div className="flex flex-col gap-2">
+              <label>Role *</label>
+              {/* <SingleSelector
                   options={selectOptions}
                   value={selectedRole || undefined}
                   placeholder="Select role for the user"
@@ -205,36 +196,35 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                     setRoleError(false);
                   }}
                 /> */}
-                <Select
-                  placeholder="Select role"
-                  className="bg-background"
-                  data={selectOptions}
-                  onChange={(val) => {
-                    setSelectedRole(val as string);
-                    setRoleError(false);
-                  }}
-                />
+              <Select
+                placeholder="Select role"
+                className="bg-background"
+                data={selectOptions}
+                onChange={(val) => {
+                  setSelectedRole(val as string);
+                  setRoleError(false);
+                }}
+              />
 
-                {roleError && <p className="text-red">Select role</p>}
-              </div>
+              {roleError && <p className="text-red">Select role</p>}
+            </div>
 
-              <div className="flex w-full justify-between gap-3">
-                <Button
-                  type="button"
-                  className="w-full"
-                  variant={'delete_solid'}
-                  onClick={() => setOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button loading={isCreatingAdmin} className="w-full">
-                  Create
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+            <div className="flex w-full justify-between gap-3">
+              <Button
+                type="button"
+                className="w-full"
+                variant={'delete_solid'}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button loading={isCreatingAdmin} className="w-full">
+                Create
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </Modal>
     </div>
   );
 };

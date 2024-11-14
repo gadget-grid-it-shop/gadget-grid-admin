@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import { isValidUrl } from '@/lib/utils';
+import CreateBrand from '@/components/brand/CreateBrand';
 
 const BrandPage = () => {
   const { data: brandData, isLoading } = useGetAllBrandsQuery(undefined);
@@ -27,6 +28,11 @@ const BrandPage = () => {
 
   return (
     <div>
+      <div className="flex items-center justify-between pb-4">
+        <h4 className="page-title">Brands</h4>
+        <CreateBrand />
+      </div>
+
       {isLoading ? (
         <TableSkeleton />
       ) : (
