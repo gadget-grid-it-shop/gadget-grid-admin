@@ -39,3 +39,13 @@ export const handleLogout = () => {
   store.dispatch(resetAuthData());
   clearCookie();
 };
+
+export function isValidUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_) {
+    return false;
+  }
+}

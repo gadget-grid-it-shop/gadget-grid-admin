@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 import { FaUsersCog } from 'react-icons/fa';
 import { PiUsersThreeBold } from 'react-icons/pi';
+import { LuTags } from 'react-icons/lu';
 
 interface TMenu {
   id: number;
@@ -34,6 +35,12 @@ const menus: TMenu[] = [
     title: 'Details Category',
     link: '/details-category',
     icon: <TbListDetails />,
+  },
+  {
+    id: 8,
+    title: 'Brand',
+    link: '/brand',
+    icon: <LuTags size={16} />,
   },
   {
     id: 2,
@@ -134,7 +141,7 @@ const Sidebar = () => {
       <div
         className={`${
           !isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'
-        } fixed top-0 z-50 flex h-screen flex-col overflow-y-auto p-4 shadow-md lg:w-[280px] min-[1200px]:sticky 2xl:w-[320px] ${
+        } fixed top-0 z-50 flex h-screen flex-col overflow-y-auto p-4 shadow-md lg:w-[260px] min-[1200px]:sticky 2xl:w-[280px] ${
           !isDesktopOrLaptop ? 'bg-background-foreground' : 'bg-background'
         }`}
       >
@@ -161,7 +168,7 @@ const Sidebar = () => {
             if (!item?.children) {
               return (
                 <Link
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-black ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : ''}`}
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : 'text-gray'}`}
                   key={item.id}
                   href={item.link}
                 >
@@ -179,13 +186,13 @@ const Sidebar = () => {
                     onClick={() => handleMenuOpen(item.id)}
                     className={`flex w-full items-center justify-between rounded-xl px-4 py-2 text-black`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 text-sm text-gray">
                       {item.icon}
                       {item.title}
                     </div>
 
                     <FaChevronDown
-                      className={`${openRoute.find((id) => id === item.id) ? 'rotate-180' : 'rotate-0'} transition-all`}
+                      className={`${openRoute.find((id) => id === item.id) ? 'rotate-180' : 'rotate-0'} text-sm text-gray transition-all`}
                     />
                   </button>
                   <div
@@ -194,10 +201,10 @@ const Sidebar = () => {
                     {openRoute.find((id) => id === item.id) &&
                       item.children.map((child) => (
                         <Link
-                          className={`flex items-center gap-2 rounded-xl px-4 py-2 ${
+                          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm ${
                             isLinkActive(child.link)
                               ? 'bg-primary text-pure-white'
-                              : 'text-black'
+                              : 'text-gray'
                           }`}
                           key={child.id}
                           href={child.link}

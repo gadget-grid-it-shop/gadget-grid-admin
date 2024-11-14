@@ -6,6 +6,7 @@ export enum tagTypes {
   galleryFolder = 'galleryFolder',
   roles = 'roles',
   admins = 'admins',
+  brands = 'brands',
 }
 
 export const tagTypesList = [
@@ -15,4 +16,5 @@ export const tagTypesList = [
   tagTypes.galleryFolder,
   tagTypes.roles,
   tagTypes.admins,
+  tagTypes.brands,
 ];
