@@ -55,6 +55,8 @@ import { globalError } from '@/lib/utils';
 type TProp = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  onChange?: (ids: string[] | string) => void;
+  multiselect?: boolean;
 };
 
 type TSelectedImages = {
@@ -74,7 +76,12 @@ type TFolderCrumb = {
   name: string;
 };
 
-const ImageGallery = ({ open, setOpen }: TProp) => {
+const ImageGallery = ({
+  open,
+  setOpen,
+  onChange,
+  multiselect = true,
+}: TProp) => {
   const [selected, setSelected] = useState<TSelectedImages[]>([]);
   const [deleteImages] = useDeleteImagesMutation();
   const [uploadImage, { isLoading: isUploadLoading }] =
@@ -111,13 +118,23 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
   ]);
 
   const handleImageSelect = (img: TImage) => {
-    if (isSelected(img._id)) {
-      setSelected((prev) =>
-        prev.filter((image: TSelectedImages) => image.id !== img._id),
-      );
+    if (multiselect) {
+      if (isSelected(img._id)) {
+        setSelected((prev) =>
+          prev.filter((image: TSelectedImages) => image.id !== img._id),
+        );
+      } else {
+        setSelected((prev) => [
+          ...prev,
+          {
+            public_id: img.public_id,
+            id: img._id,
+            image: img.image,
+          },
+        ]);
+      }
     } else {
-      setSelected((prev) => [
-        ...prev,
+      setSelected([
         {
           public_id: img.public_id,
           id: img._id,
@@ -196,8 +213,12 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
       (item: TSelectedImages) => item.image,
     );
 
-    dispatch(updateProduct({ key: 'gallery', value: gallery }));
-    setOpen(false);
+    if (onChange) {
+      onChange(multiselect ? gallery : gallery[0]);
+    } else {
+      dispatch(updateProduct({ key: 'gallery', value: gallery }));
+      setOpen(false);
+    }
   };
 
   const handleFolderClick = (id: string, name: string) => {
@@ -490,6 +511,7 @@ const ImageGallery = ({ open, setOpen }: TProp) => {
                           isSelected(imgData._id) ? 'visible' : 'invisible'
                         } checkbox absolute left-4 top-4 size-6 bg-lavender-mist transition-all group-hover:visible`}
                       />
+
                       <Image
                         className="h-auto w-full cursor-pointer rounded-md border border-border-color"
                         src={imgData.image}
