@@ -26,7 +26,9 @@ export const axiosBaseQuery =
         params,
         headers: {
           ...headers,
-          'Content-Type': contentType || 'application/json',
+          ...(data instanceof FormData
+            ? {}
+            : { 'Content-Type': contentType || 'application/json' }),
         },
       });
       return { data: result.data };

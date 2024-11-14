@@ -5,6 +5,14 @@ import { useForm } from 'react-hook-form';
 import { Input } from '../ui/input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ImageGallery from '../product/ImageGallery';
+import { Button } from '../ui/button';
+import { TBrand } from '@/interface/brand.interface';
+import { useCreateBrandMutation } from '@/redux/api/brandApi';
+import { globalError } from '@/lib/utils';
+import { toast } from 'sonner';
+import Image from 'next/image';
+import { FaXmark } from 'react-icons/fa6';
 
 const addBrandSchema = z.object({
   name: z.string({
@@ -16,6 +24,9 @@ const addBrandSchema = z.object({
 
 const CreateBrand = () => {
   const [open, setOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [createBrand, { isLoading: isCreatingBrand }] =
+    useCreateBrandMutation();
   const form = useForm<z.infer<typeof addBrandSchema>>({
     resolver: zodResolver(addBrandSchema),
     defaultValues: {
@@ -25,7 +36,21 @@ const CreateBrand = () => {
   });
 
   const handleAddAdmin = async (values: z.infer<typeof addBrandSchema>) => {
-    console.log(values);
+    const payload: Pick<TBrand, 'name' | 'image'> = {
+      name: values.name || '',
+      image: values.image || '',
+    };
+
+    try {
+      const res = await createBrand(payload).unwrap();
+      if (res) {
+        toast.success(res.message);
+        form.reset();
+        setOpen(false);
+      }
+    } catch (err) {
+      globalError(err);
+    }
   };
 
   return (
@@ -36,7 +61,10 @@ const CreateBrand = () => {
       triggerText="Add Brand"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleAddAdmin)}>
+        <form
+          onSubmit={form.handleSubmit(handleAddAdmin)}
+          className="flex flex-col gap-3"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -54,12 +82,41 @@ const CreateBrand = () => {
           />
           <FormField
             control={form.control}
-            name="name"
+            name="image"
             render={({ field, fieldState }) => (
               <FormItem>
                 <div className="flex flex-col gap-2">
-                  <label>Name *</label>
-                  <Input {...field} placeholder="Enter first name" />
+                  <label>Image</label>
+                  {form.getValues('image') ? (
+                    <div className="relative w-fit border border-border-color bg-lavender-mist p-1">
+                      <button
+                        type="button"
+                        onClick={() => form.resetField('image')}
+                        className="absolute -right-5 -top-1"
+                      >
+                        <FaXmark />
+                      </button>
+                      <Image
+                        src={form.getValues('image') as string}
+                        height={100}
+                        width={100}
+                        alt="selected brand image"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => setGalleryOpen(true)}
+                      className="flex h-28 items-center justify-center rounded-md border-2 border-dotted border-gray bg-lavender-mist"
+                    >
+                      Select From Gallery
+                    </div>
+                  )}
+                  <ImageGallery
+                    setOpen={setGalleryOpen}
+                    multiselect={false}
+                    open={galleryOpen}
+                    onChange={field.onChange}
+                  />
                 </div>
                 {fieldState.error && (
                   <p className="text-red">{fieldState.error.message}</p>
@@ -67,6 +124,8 @@ const CreateBrand = () => {
               </FormItem>
             )}
           />
+
+          <Button loading={isCreatingBrand}>Add Brand</Button>
         </form>
       </Form>
     </Modal>

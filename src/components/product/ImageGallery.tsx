@@ -215,6 +215,7 @@ const ImageGallery = ({
 
     if (onChange) {
       onChange(multiselect ? gallery : gallery[0]);
+      setOpen(false);
     } else {
       dispatch(updateProduct({ key: 'gallery', value: gallery }));
       setOpen(false);

@@ -15,7 +15,7 @@ const brandApi = baseApi.injectEndpoints({
     }),
 
     createBrand: build.mutation({
-      query: (payload: Omit<TBrand, '_id'>) => {
+      query: (payload: Pick<TBrand, 'name' | 'image'>) => {
         return {
           url: '/brand/create',
           method: 'POST',
@@ -27,4 +27,4 @@ const brandApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllBrandsQuery } = brandApi;
+export const { useGetAllBrandsQuery, useCreateBrandMutation } = brandApi;
