@@ -1,3 +1,4 @@
+import { TBrand } from '@/interface/brand.interface';
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
 
@@ -11,6 +12,17 @@ const brandApi = baseApi.injectEndpoints({
         };
       },
       providesTags: [tagTypes.brands],
+    }),
+
+    createBrand: build.mutation({
+      query: (payload: Omit<TBrand, '_id'>) => {
+        return {
+          url: '/brand/create',
+          method: 'POST',
+          data: payload,
+        };
+      },
+      invalidatesTags: [tagTypes.brands],
     }),
   }),
 });

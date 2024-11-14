@@ -93,22 +93,24 @@ const BrandPage = () => {
                         <DialogTitle>Delete Brand</DialogTitle>
                         <div>
                           <h2 className="pb-4 text-red-orange">
-                            Warning: You are about to delete an admin.
+                            Warning: You are about to delete a brand.
                           </h2>
                           <h3 className="pb-2 text-sm">
-                            #Deleting an admin can have significant consequences
-                            for system management and control. Please ensure the
-                            following before proceeding:
+                            Deleting a brand can have significant consequences
+                            for your product catalog and customer experience.
+                            Please ensure the following before proceeding:
                           </h3>
                           <ul className="list-decimal ps-5 text-sm text-gray">
                             <li>
-                              Verify that there are other admins with sufficient
-                              permissions to manage the system.
+                              Verify that the brand is no longer associated with
+                              any active products or campaigns.
                             </li>
                             <li>
-                              This action will permanently remove the admin’s
-                              access and may affect critical administrative
-                              operations.
+                              Ensure that there are no ongoing dependencies
+                              related to this brand. This action will
+                              permanently remove the brand from your system and
+                              may affect product visibility and inventory
+                              management.
                             </li>
                           </ul>
                         </div>
