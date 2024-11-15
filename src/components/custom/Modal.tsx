@@ -14,6 +14,7 @@ type TProps = {
   children?: ReactNode;
   triggerText?: string | ReactNode;
   title?: string;
+  withTrigger?: boolean;
 };
 
 const Modal = ({
@@ -22,21 +23,24 @@ const Modal = ({
   children,
   triggerText = 'Open',
   title = 'New Modal',
+  withTrigger = false,
 }: TProps) => {
   return (
-    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      <DialogTrigger
-        className={`${typeof triggerText === 'string' ? 'primary-btn' : ''}`}
-      >
-        {typeof triggerText === 'string' ? (
-          <>
-            <FiPlus size={18} />
-            {triggerText}
-          </>
-        ) : (
-          triggerText
-        )}
-      </DialogTrigger>
+    <Dialog modal open={open} onOpenChange={setOpen}>
+      {withTrigger && (
+        <DialogTrigger
+          className={`${typeof triggerText === 'string' ? 'primary-btn' : ''}`}
+        >
+          {typeof triggerText === 'string' ? (
+            <>
+              <FiPlus size={18} />
+              {triggerText}
+            </>
+          ) : (
+            triggerText
+          )}
+        </DialogTrigger>
+      )}
       <DialogContent className="">
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription></DialogDescription>

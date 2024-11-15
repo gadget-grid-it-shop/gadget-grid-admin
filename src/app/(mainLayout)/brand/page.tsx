@@ -19,14 +19,14 @@ import Modal from '@/components/custom/Modal';
 
 const BrandPage = () => {
   const { data: brandData, isLoading, error } = useGetAllBrandsQuery(undefined);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState<string | null>(null);
 
   if (!isLoading && error) {
     globalError(error);
   }
 
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between pb-4">
         <h4 className="page-title">Brands</h4>
         <CreateBrand />
@@ -84,60 +84,11 @@ const BrandPage = () => {
                   <div className="flex items-center gap-3">
                     <Button variant={'view_button'} size={'base'}></Button>
                     <Button variant={'edit_button'} size={'base'}></Button>
-                    <Modal
-                      open={deleteOpen}
-                      setOpen={setDeleteOpen}
-                      triggerText={
-                        <Button
-                          variant={'delete_button'}
-                          size={'base'}
-                        ></Button>
-                      }
-                      title="Delete Brand"
-                    >
-                      <>
-                        <div>
-                          <h2 className="pb-4 text-red-orange">
-                            Warning: You are about to delete a brand.
-                          </h2>
-                          <h3 className="pb-2 text-sm">
-                            Deleting a brand can have significant consequences
-                            for your product catalog and customer experience.
-                            Please ensure the following before proceeding:
-                          </h3>
-                          <ul className="list-decimal ps-5 text-sm text-gray">
-                            <li>
-                              Verify that the brand is no longer associated with
-                              any active products or campaigns.
-                            </li>
-                            <li>
-                              Ensure that there are no ongoing dependencies
-                              related to this brand. This action will
-                              permanently remove the brand from your system and
-                              may affect product visibility and inventory
-                              management.
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="flex w-full gap-3 pt-4">
-                          <Button
-                            className="w-full"
-                            variant={'delete_solid'}
-                            onClick={() => setDeleteOpen(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            // loading={isDeleting}
-                            // onClick={() => handleDeleteAdmin(admin.user._id)}
-                            className="w-full"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </>
-                    </Modal>
+                    <Button
+                      onClick={() => setDeleteOpen(brand._id)}
+                      variant={'delete_button'}
+                      size={'base'}
+                    ></Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -151,7 +102,55 @@ const BrandPage = () => {
           Admin data unavailable
         </div>
       )}
-    </div>
+
+      <Modal
+        open={deleteOpen !== null}
+        setOpen={() => setDeleteOpen(null)}
+        title="Delete Brand"
+      >
+        <>
+          <div>
+            <h2 className="pb-4 text-red-orange">
+              Warning: You are about to delete a brand.
+            </h2>
+            <h3 className="pb-2 text-sm">
+              Deleting a brand can have significant consequences for your
+              product catalog and customer experience. Please ensure the
+              following before proceeding:
+            </h3>
+            <ul className="list-decimal ps-5 text-sm text-gray">
+              <li>
+                Verify that the brand is no longer associated with any active
+                products or campaigns.
+              </li>
+              <li>
+                Ensure that there are no ongoing dependencies related to this
+                brand. This action will permanently remove the brand from your
+                system and may affect product visibility and inventory
+                management.
+              </li>
+            </ul>
+          </div>
+
+          <div className="flex w-full gap-3 pt-4">
+            <Button
+              className="w-full"
+              variant={'delete_solid'}
+              onClick={() => setDeleteOpen(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              // loading={isDeleting}
+              // onClick={() => handleDeleteAdmin(admin.user._id)}
+              className="w-full"
+            >
+              Delete
+            </Button>
+          </div>
+        </>
+      </Modal>
+    </>
   );
 };
 
