@@ -28,12 +28,15 @@ import CreateAdminModal from '@/components/users/admin/CreateAdminModal';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/custom/Modal';
+import { useAppSelector } from '@/redux/hooks';
+import NoData from '@/components/shared/NoData';
 
 const Admins = () => {
   const { data: adminData, isLoading, error } = useGetAllAdminsQuery(undefined);
   const [deleteAdmin, { isLoading: isDeleting }] = useDeleteUserMutation();
   const [createAdminOpen, setCreateAdminOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState<string | null>(null);
+  const { user } = useAppSelector(s => s.auth)
 
   const router = useRouter();
 
@@ -45,7 +48,7 @@ const Admins = () => {
     try {
       const res = await deleteAdmin({ id, role: 'admin' }).unwrap();
       toast.success(res.message);
-      setDeleteOpen(false);
+      setDeleteOpen(null);
     } catch (err) {
       globalError(err);
     }
@@ -77,7 +80,7 @@ const Admins = () => {
             {adminData?.data?.map((admin: TAdminData, i: number) => (
               <TableRow key={admin?._id}>
                 <TableCell>{i + 1}</TableCell>
-                <TableCell>{`${admin?.name?.firstName} ${admin?.name?.lastName}`}</TableCell>
+                <TableCell>{`${admin?.name?.firstName} ${admin?.name?.lastName}`} {user?._id === admin._id && `(me)`}</TableCell>
                 <TableCell className="flex items-center gap-3">
                   {/* <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' /> */}
                   <Avatar>
@@ -131,108 +134,11 @@ const Admins = () => {
                       onClick={() => router.push(`/users/admins/${admin._id}`)}
                     ></Button>
                     <Button variant={'edit_button'} size={'base'}></Button>
-                    <Modal
-                      open={deleteOpen}
-                      setOpen={setDeleteOpen}
-                      triggerText={
-                        <Button
-                          variant={'delete_button'}
-                          size={'base'}
-                        ></Button>
-                      }
-                      title="Delete Admin"
-                    >
-                      <div>
-                        <h2 className="pb-4 text-red-orange">
-                          Warning: You are about to delete an admin.
-                        </h2>
-                        <h3 className="pb-2 text-sm">
-                          #Deleting an admin can have significant consequences
-                          for system management and control. Please ensure the
-                          following before proceeding:
-                        </h3>
-                        <ul className="list-decimal ps-5 text-sm text-gray">
-                          <li>
-                            Verify that there are other admins with sufficient
-                            permissions to manage the system.
-                          </li>
-                          <li>
-                            This action will permanently remove the admin’s
-                            access and may affect critical administrative
-                            operations.
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="flex w-full gap-3 pt-4">
-                        <Button
-                          className="w-full"
-                          variant={'delete_solid'}
-                          onClick={() => setDeleteOpen(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          loading={isDeleting}
-                          onClick={() => handleDeleteAdmin(admin.user._id)}
-                          className="w-full"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </Modal>
-                    {/* <Dialog
-                      open={deleteOpen}
-                      onOpenChange={() => setDeleteOpen(!deleteOpen)}
-                    >
-                      <DialogTrigger>
-                        <Button
-                          variant={'delete_button'}
-                          size={'base'}
-                        ></Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogTitle>Delete User</DialogTitle>
-                        <div>
-                          <h2 className="pb-4 text-red-orange">
-                            Warning: You are about to delete an admin.
-                          </h2>
-                          <h3 className="pb-2 text-sm">
-                            #Deleting an admin can have significant consequences
-                            for system management and control. Please ensure the
-                            following before proceeding:
-                          </h3>
-                          <ul className="list-decimal ps-5 text-sm text-gray">
-                            <li>
-                              Verify that there are other admins with sufficient
-                              permissions to manage the system.
-                            </li>
-                            <li>
-                              This action will permanently remove the admin’s
-                              access and may affect critical administrative
-                              operations.
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="flex w-full gap-3 pt-4">
-                          <Button
-                            className="w-full"
-                            variant={'delete_solid'}
-                            onClick={() => setDeleteOpen(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            loading={isDeleting}
-                            onClick={() => handleDeleteAdmin(admin.user._id)}
-                            className="w-full"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog> */}
+                    {user?._id !== admin._id && <Button
+                      onClick={() => setDeleteOpen(admin.user._id)}
+                      variant={'delete_button'}
+                      size={'base'}
+                    ></Button>}
                   </div>
                 </TableCell>
               </TableRow>
@@ -242,10 +148,53 @@ const Admins = () => {
       )}
 
       {!isLoading && error !== undefined && (
-        <div className="flex h-48 items-center justify-center text-gray">
-          Admin data unavailable
-        </div>
+        <NoData text="Admin data unavailable" />
       )}
+
+      <Modal
+        open={deleteOpen !== null}
+        setOpen={() => setDeleteOpen(null)}
+        title="Delete Admin"
+      >
+        <div>
+          <h2 className="pb-4 text-red-orange">
+            Warning: You are about to delete an admin.
+          </h2>
+          <h3 className="pb-2 text-sm">
+            #Deleting an admin can have significant consequences
+            for system management and control. Please ensure the
+            following before proceeding:
+          </h3>
+          <ul className="list-decimal ps-5 text-sm text-gray">
+            <li>
+              Verify that there are other admins with sufficient
+              permissions to manage the system.
+            </li>
+            <li>
+              This action will permanently remove the admin’s
+              access and may affect critical administrative
+              operations.
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex w-full gap-3 pt-4">
+          <Button
+            className="w-full"
+            variant={'delete_solid'}
+            onClick={() => setDeleteOpen(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            loading={isDeleting}
+            onClick={() => deleteOpen && handleDeleteAdmin(deleteOpen)}
+            className="w-full"
+          >
+            Delete
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

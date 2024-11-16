@@ -25,6 +25,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import NoData from '@/components/shared/NoData';
 
 const Roles = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
@@ -61,14 +62,12 @@ const Roles = () => {
       </div>
 
       {!isLoading && error !== undefined && (
-        <div className="flex h-48 items-center justify-center text-gray">
-          Could not get roles
-        </div>
+        <NoData text="Could not get roles" />
       )}
 
       {isLoading ? (
         <TableSkeleton />
-      ) : (
+      ) : rolesData?.data ? (
         <Table className="">
           <TableHeader>
             <TableRow>
@@ -166,6 +165,8 @@ const Roles = () => {
             ))}
           </TableBody>
         </Table>
+      ) : (
+        <></>
       )}
 
       <ViewRoleModal viewData={veiwData} setOpen={setViewData} />
