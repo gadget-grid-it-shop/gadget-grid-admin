@@ -24,7 +24,21 @@ const brandApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.brands],
     }),
+
+    deleteBrand: build.mutation({
+      query: (id: string) => {
+        return {
+          url: `/brand/delete/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: [tagTypes.brands],
+    }),
   }),
 });
 
-export const { useGetAllBrandsQuery, useCreateBrandMutation } = brandApi;
+export const {
+  useGetAllBrandsQuery,
+  useCreateBrandMutation,
+  useDeleteBrandMutation,
+} = brandApi;

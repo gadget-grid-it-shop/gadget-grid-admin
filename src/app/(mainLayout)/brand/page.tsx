@@ -9,21 +9,40 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import TableSkeleton from '@/components/shared/TableSkeleton';
-import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
+import {
+  useDeleteBrandMutation,
+  useGetAllBrandsQuery,
+} from '@/redux/api/brandApi';
 import { TBrand } from '@/interface/brand.interface';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { globalError, isValidUrl } from '@/lib/utils';
 import CreateBrand from '@/components/brand/CreateBrand';
 import Modal from '@/components/custom/Modal';
+import { toast } from 'sonner';
 
 const BrandPage = () => {
   const { data: brandData, isLoading, error } = useGetAllBrandsQuery(undefined);
   const [deleteOpen, setDeleteOpen] = useState<string | null>(null);
+  const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
   if (!isLoading && error) {
     globalError(error);
   }
+
+  const handleDeleteBrand = async () => {
+    if (deleteOpen) {
+      try {
+        const res = await deleteBrand(deleteOpen).unwrap();
+        if (res) {
+          toast.success(res.message);
+        }
+        setDeleteOpen(null);
+      } catch (err) {
+        globalError(err);
+      }
+    }
+  };
 
   return (
     <>
@@ -141,8 +160,8 @@ const BrandPage = () => {
               Cancel
             </Button>
             <Button
-              // loading={isDeleting}
-              // onClick={() => handleDeleteAdmin(admin.user._id)}
+              loading={isDeleting}
+              onClick={handleDeleteBrand}
               className="w-full"
             >
               Delete
