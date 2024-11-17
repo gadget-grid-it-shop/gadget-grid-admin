@@ -83,7 +83,8 @@ const ImageGallery = ({
   multiselect = true,
 }: TProp) => {
   const [selected, setSelected] = useState<TSelectedImages[]>([]);
-  const [deleteImages] = useDeleteImagesMutation();
+  const [deleteImages, { isLoading: deletingImages }] =
+    useDeleteImagesMutation();
   const [uploadImage, { isLoading: isUploadLoading }] =
     useUploadImageMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -378,14 +379,14 @@ const ImageGallery = ({
   };
 
   const uploadPhotoElement = (
-    <div className="flex h-36 flex-col items-center justify-center gap-3">
+    <div className="flex h-36 flex-col items-center justify-center gap-3 pb-4">
       <div
         onClick={handleUploadClick}
-        className="border-2p flex h-full w-1/3 min-w-44 flex-1 cursor-pointer flex-col items-center justify-center rounded-md border-dashed border-lavender-mist bg-background px-3"
+        className="border-2p flex h-full w-1/4 min-w-36 flex-1 cursor-pointer flex-col items-center justify-center rounded-md border-dashed border-lavender-mist bg-background px-3"
       >
         {isUploadLoading ? (
           <div className="flex flex-col items-center justify-center gap-2">
-            <AiOutlineLoading3Quarters className="animate-spin text-3xl text-primary lg:text-6xl" />
+            <AiOutlineLoading3Quarters className="animate-spin text-3xl text-primary lg:text-3xl" />
             <p className="text-base">uploading, please wait</p>
           </div>
         ) : (
@@ -420,9 +421,11 @@ const ImageGallery = ({
               <h2 className="font-semibold">{selected.length} Selected</h2>
 
               <div className="flex gap-3">
-                <Button onClick={handleAdd} className="gap-2">
-                  <MdOutlineAdd size={18} /> Add
-                </Button>
+                {onChange && (
+                  <Button onClick={handleAdd} className="gap-2">
+                    <MdOutlineAdd size={18} /> Add
+                  </Button>
+                )}
                 <Button
                   variant={'edit'}
                   className="gap-2"
@@ -456,6 +459,7 @@ const ImageGallery = ({
                         onClick={handleDeleteImages}
                         className="w-full"
                         variant={'delete_solid'}
+                        loading={deletingImages}
                       >
                         Yes, delete it
                       </Button>
@@ -507,9 +511,9 @@ const ImageGallery = ({
                 </h2>
               </div>
             )}
+            {uploadPhotoElement}
             {!isLoading && !error ? (
               <div className="min-h-60 columns-1 gap-4 rounded-md sm:columns-2 md:columns-3 lg:columns-4 [&>div:not(:first-child)]:mt-4">
-                {photos?.data?.length > 0 && uploadPhotoElement}
                 {photos?.data?.map((imgData: TImage) => {
                   return (
                     <div
@@ -521,7 +525,7 @@ const ImageGallery = ({
                         onClick={() => handleImageSelect(imgData)}
                         className={`${
                           isSelected(imgData._id) ? 'visible' : 'invisible'
-                        } checkbox absolute left-4 top-4 size-6 bg-lavender-mist transition-all group-hover:visible`}
+                        } checkbox absolute left-4 top-4 z-50 size-6 bg-lavender-mist transition-all group-hover:visible`}
                       />
 
                       <Image
