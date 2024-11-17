@@ -117,6 +117,13 @@ const ImageGallery = ({
     },
   ]);
 
+  if (open && error) {
+    globalError(error);
+  }
+  if (open && folderFetchError) {
+    globalError(folderFetchError);
+  }
+
   const handleImageSelect = (img: TImage) => {
     if (multiselect) {
       if (isSelected(img._id)) {
@@ -134,13 +141,17 @@ const ImageGallery = ({
         ]);
       }
     } else {
-      setSelected([
-        {
-          public_id: img.public_id,
-          id: img._id,
-          image: img.image,
-        },
-      ]);
+      if (isSelected(img._id)) {
+        setSelected([]);
+      } else {
+        setSelected([
+          {
+            public_id: img.public_id,
+            id: img._id,
+            image: img.image,
+          },
+        ]);
+      }
     }
   };
 

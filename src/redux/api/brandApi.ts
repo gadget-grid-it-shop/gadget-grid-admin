@@ -1,4 +1,4 @@
-import { TBrand } from '@/interface/brand.interface';
+import { TBrand, TUpdateBrand } from '@/interface/brand.interface';
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
 
@@ -34,6 +34,17 @@ const brandApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.brands],
     }),
+
+    updateBrand: build.mutation({
+      query: ({ id, payload }: { id: string; payload: TUpdateBrand }) => {
+        return {
+          url: `/brand/update/${id}`,
+          method: 'PATCH',
+          data: payload,
+        };
+      },
+      invalidatesTags: [tagTypes.brands],
+    }),
   }),
 });
 
@@ -41,4 +52,5 @@ export const {
   useGetAllBrandsQuery,
   useCreateBrandMutation,
   useDeleteBrandMutation,
+  useUpdateBrandMutation,
 } = brandApi;

@@ -8,3 +8,9 @@ export type TBrand = {
   isActive: boolean;
   createdBy: Partial<TUser>;
 };
+
+export type TUpdateBrand = {
+  isActive?: boolean;
+  name?: string;
+  image?: string;
+};

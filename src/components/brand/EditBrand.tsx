@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Modal from '../custom/Modal';
 import { Form, FormField, FormItem } from '../ui/form';
 import { useForm } from 'react-hook-form';
@@ -7,12 +7,17 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ImageGallery from '../product/ImageGallery';
 import { Button } from '../ui/button';
-import { TBrand } from '@/interface/brand.interface';
-import { useCreateBrandMutation } from '@/redux/api/brandApi';
+import { TBrand, TUpdateBrand } from '@/interface/brand.interface';
+import { useUpdateBrandMutation } from '@/redux/api/brandApi';
 import { globalError } from '@/lib/utils';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { FaXmark } from 'react-icons/fa6';
+
+type TProps = {
+  openBrand: TBrand | null;
+  setOpen: Dispatch<SetStateAction<TBrand | null>>;
+};
 
 const addBrandSchema = z.object({
   name: z.string({
@@ -22,11 +27,10 @@ const addBrandSchema = z.object({
   image: z.string({ invalid_type_error: 'Name should be string' }).optional(),
 });
 
-const CreateBrand = () => {
-  const [open, setOpen] = useState(false);
+const EditBrand = ({ openBrand, setOpen }: TProps) => {
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const [createBrand, { isLoading: isCreatingBrand }] =
-    useCreateBrandMutation();
+  const [updateBrand, { isLoading: isUpdatingBrand }] =
+    useUpdateBrandMutation();
   const form = useForm<z.infer<typeof addBrandSchema>>({
     resolver: zodResolver(addBrandSchema),
     defaultValues: {
@@ -35,18 +39,28 @@ const CreateBrand = () => {
     },
   });
 
+  useEffect(() => {
+    form.reset({
+      name: openBrand?.name,
+      image: openBrand?.image,
+    });
+  }, [openBrand]);
+
   const handleAddAdmin = async (values: z.infer<typeof addBrandSchema>) => {
-    const payload: Pick<TBrand, 'name' | 'image'> = {
+    const payload: TUpdateBrand = {
       name: values.name || '',
       image: values.image || '',
     };
 
     try {
-      const res = await createBrand(payload).unwrap();
+      const res = await updateBrand({
+        id: openBrand?._id as string,
+        payload,
+      }).unwrap();
       if (res) {
         toast.success(res.message);
         form.reset();
-        setOpen(false);
+        setOpen(null);
       }
     } catch (err) {
       globalError(err);
@@ -55,11 +69,10 @@ const CreateBrand = () => {
 
   return (
     <Modal
-      open={open}
-      setOpen={setOpen}
-      title="Add new brand"
-      triggerText="Add Brand"
-      withTrigger={true}
+      open={openBrand !== null}
+      setOpen={() => setOpen(null)}
+      title="Edit brand"
+      withTrigger={false}
     >
       <Form {...form}>
         <form
@@ -89,10 +102,10 @@ const CreateBrand = () => {
                 <div className="flex flex-col gap-2">
                   <label>Image</label>
                   {form.getValues('image') ? (
-                    <div className="relative w-fit border border-border-color bg-background p-1">
+                    <div className="relative w-fit border border-border-color bg-lavender-mist p-1">
                       <button
                         type="button"
-                        onClick={() => form.resetField('image')}
+                        onClick={() => form.reset({ image: '' })}
                         className="absolute -right-5 -top-1"
                       >
                         <FaXmark />
@@ -107,7 +120,7 @@ const CreateBrand = () => {
                   ) : (
                     <div
                       onClick={() => setGalleryOpen(true)}
-                      className="flex h-28 items-center justify-center rounded-md border-2 border-dotted border-gray bg-background text-gray"
+                      className="flex h-28 items-center justify-center rounded-md border-2 border-dotted border-gray bg-lavender-mist"
                     >
                       Select From Gallery
                     </div>
@@ -126,11 +139,11 @@ const CreateBrand = () => {
             )}
           />
 
-          <Button loading={isCreatingBrand}>Add Brand</Button>
+          <Button loading={isUpdatingBrand}>Update Brand</Button>
         </form>
       </Form>
     </Modal>
   );
 };
 
-export default CreateBrand;
+export default EditBrand;

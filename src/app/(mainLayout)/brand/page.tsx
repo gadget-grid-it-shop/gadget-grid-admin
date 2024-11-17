@@ -20,10 +20,12 @@ import { globalError, isValidUrl } from '@/lib/utils';
 import CreateBrand from '@/components/brand/CreateBrand';
 import Modal from '@/components/custom/Modal';
 import { toast } from 'sonner';
+import EditBrand from '@/components/brand/EditBrand';
 
 const BrandPage = () => {
   const { data: brandData, isLoading, error } = useGetAllBrandsQuery(undefined);
   const [deleteOpen, setDeleteOpen] = useState<string | null>(null);
+  const [editOpen, setEditOpen] = useState<TBrand | null>(null);
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
   if (!isLoading && error) {
@@ -102,7 +104,11 @@ const BrandPage = () => {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Button variant={'view_button'} size={'base'}></Button>
-                    <Button variant={'edit_button'} size={'base'}></Button>
+                    <Button
+                      onClick={() => setEditOpen(brand)}
+                      variant={'edit_button'}
+                      size={'base'}
+                    ></Button>
                     <Button
                       onClick={() => setDeleteOpen(brand._id)}
                       variant={'delete_button'}
@@ -122,6 +128,9 @@ const BrandPage = () => {
         </div>
       )}
 
+      <EditBrand openBrand={editOpen} setOpen={setEditOpen} />
+
+      {/* ================= delete brand modal================ */}
       <Modal
         open={deleteOpen !== null}
         setOpen={() => setDeleteOpen(null)}
