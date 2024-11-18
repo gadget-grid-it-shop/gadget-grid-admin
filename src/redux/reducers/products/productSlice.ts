@@ -20,7 +20,10 @@ const initialState: TInitialState = {
     sku: '',
     brand: '',
     model: '',
-    warranty: '',
+    warranty: {
+      days: 0,
+      lifetime: false,
+    },
     key_features: '',
     quantity: 0,
     category: [],

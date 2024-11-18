@@ -12,13 +12,19 @@ import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import TreeDropdown from '@/components/custom/TreeDropdown';
+import Select from '@/components/ui/select';
+import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
+import { TSelectOptions } from '@/components/categories/interface';
+import { TBrand } from '@/interface/brand.interface';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const { product } = useAppSelector((state) => state.products);
   const { data: categoryData } = useGetAllCategoriesQuery(true);
-  // const [subCategorySelectData, setSubCategorySelectData] = useState<TSelectOptions[] | []>([])
+  const { data: brandData } = useGetAllBrandsQuery(undefined);
+
   const {
     gallery,
     description,
@@ -44,13 +50,22 @@ const AddBasicData = () => {
     dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
   };
 
+  const brandDropdownData: TSelectOptions[] = brandData?.data?.map(
+    (brand: TBrand) => {
+      return {
+        label: brand.name,
+        value: brand._id,
+      };
+    },
+  );
+
   return (
     <div>
       <h2 className="pb-5 text-lg font-semibold text-black">
         General Information
       </h2>
-      <div className="grid grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2">
-        <div className="flex flex-col gap-2">
+      <div className="md:columns-1 lg:columns-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Name *</label>
           <Input
             value={name}
@@ -70,7 +85,7 @@ const AddBasicData = () => {
           />
         </div> */}
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Category *</label>
           <TreeDropdown
             value={category}
@@ -79,16 +94,22 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Brand *</label>
-          <Input
+          <Select
+            value={brand}
+            onChange={(val) => handleChange('brand', val as string)}
+            data={brandDropdownData}
+            placeholder="Select brand"
+          />
+          {/* <Input
             value={brand}
             onChange={(e) => handleChange('brand', e.target.value)}
             className="bg-background-foreground"
             placeholder="Enter Brand Name"
-          />
+          /> */}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Model *</label>
           <Input
             value={model}
@@ -98,17 +119,38 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-sm">Warranty *</label>
+        <div className="mb-3 flex flex-col gap-2">
+          <label className="flex items-center justify-between text-sm">
+            Warranty (days) *
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={warranty.lifetime}
+                onClick={() =>
+                  handleChange('warranty', {
+                    days: 0,
+                    lifetime: !warranty.lifetime,
+                  })
+                }
+              />{' '}
+              lifetime
+            </div>
+          </label>
+
           <Input
-            value={warranty}
-            onChange={(e) => handleChange('warranty', e.target.value)}
+            value={warranty.days || ''}
+            type="number"
+            min={0}
+            onChange={(e) => {
+              const value = e.target.value;
+              const days = value === '' ? 0 : Math.ceil(Number(value)); // Prevent leading 0
+              handleChange('warranty', { days, lifetime: false });
+            }}
             className="bg-background-foreground"
-            placeholder="Enter product name"
+            placeholder="Enter warranty"
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Price *</label>
           <Input
             value={price}
@@ -119,7 +161,7 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Stock *</label>
           <Input
             value={quantity}
@@ -130,7 +172,7 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Key Features *</label>
           <MarkdownEditor
             className="h-56 overflow-y-auto overflow-x-hidden scrollbar-thin"
@@ -139,7 +181,7 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Gallery *</label>
           <div
             className={`flex h-full min-h-52 flex-col items-center gap-2 rounded-md bg-background-foreground p-3 ${gallery?.length === 0 && 'justify-center'}`}
@@ -174,7 +216,12 @@ const AddBasicData = () => {
         </div>
       </div>
 
-      <ImageGallery open={galleryOpen} setOpen={setGalleryOpen} />
+      <ImageGallery
+        open={galleryOpen}
+        multiselect={true}
+        setOpen={setGalleryOpen}
+        onChange={(val) => handleChange('gallery', val as string[])}
+      />
     </div>
   );
 };

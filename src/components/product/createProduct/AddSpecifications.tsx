@@ -51,7 +51,7 @@ const AddSpecifications = () => {
   }, [product.category]);
 
   return (
-    <div className="flex w-1/2 flex-col gap-6">
+    <div className="mt-10 flex flex-col gap-6">
       {attributes && attributes.length !== 0 && (
         <div>
           <label className="text-lg font-semibold text-black">
@@ -60,7 +60,7 @@ const AddSpecifications = () => {
           <p className="pb-5 text-sm text-gray">
             Please fill up all the attribute informations
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="grid gap-4 lg:grid-cols-2">
             {attributes.map((attr: TProductAttribute) => (
               <div key={attr.name}>
                 <h1 className="text-md font-semibold text-black">
@@ -69,7 +69,7 @@ const AddSpecifications = () => {
                 {attr.fields.map((field: Record<string, string>, i) => (
                   <div
                     key={i}
-                    className="my-2 grid grid-cols-8 items-center gap-3 border border-border-color ps-3"
+                    className="my-2 grid grid-cols-8 items-center gap-3 overflow-hidden rounded-md border border-border-color ps-3"
                   >
                     <label className="col-span-2 text-sm font-semibold text-gray">
                       {Object.entries(field)[0]}

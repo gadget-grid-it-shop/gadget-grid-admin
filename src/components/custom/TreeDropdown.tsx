@@ -124,7 +124,7 @@ const TreeDropdown = ({
       </button>
 
       {open && (
-        <div className="absolute top-11 w-full rounded-md border border-border-color bg-background p-3 shadow-sm">
+        <div className="absolute top-11 z-50 w-full rounded-md border border-border-color bg-background p-3 shadow-sm">
           {renderCategory(categories)}
         </div>
       )}

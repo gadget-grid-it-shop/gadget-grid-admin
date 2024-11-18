@@ -107,7 +107,7 @@ const Select: React.FC<CustomSelectProps> = ({
             <li
               key={option?.label}
               onClick={() => handleSelect(option)}
-              className={`hover:bg-gray-100 cursor-pointer list-none rounded-md p-2 text-gray ${option?.label === selectedLabel ? 'bg-lavender-mist' : ''}`}
+              className={`hover:bg-gray-100 cursor-pointer list-none rounded-md p-2 text-sm text-gray ${option?.label === selectedLabel ? 'bg-lavender-mist' : ''}`}
             >
               {option?.label}
             </li>
