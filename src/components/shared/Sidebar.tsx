@@ -9,7 +9,12 @@ import {
   MdOutlineClose,
 } from 'react-icons/md';
 import { BiCategory, BiAddToQueue } from 'react-icons/bi';
-import { TbListDetails, TbUsers, TbUserShield } from 'react-icons/tb';
+import {
+  TbLayoutDashboard,
+  TbListDetails,
+  TbUsers,
+  TbUserShield,
+} from 'react-icons/tb';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -32,24 +37,30 @@ interface TMenu {
 const menus: TMenu[] = [
   {
     id: 1,
+    title: 'Dashboard',
+    link: '/',
+    icon: <TbLayoutDashboard />,
+  },
+  {
+    id: 2,
     title: 'Details Category',
     link: '/details-category',
     icon: <TbListDetails />,
   },
   {
-    id: 8,
+    id: 3,
     title: 'Brand',
     link: '/brand',
     icon: <LuTags size={16} />,
   },
   {
-    id: 2,
+    id: 4,
     title: 'Category',
     icon: <BiCategory />,
     link: '/category',
   },
   {
-    id: 3,
+    id: 5,
     title: 'Product',
     icon: <MdOutlineLaptopChromebook />,
     link: '/product',
@@ -69,13 +80,13 @@ const menus: TMenu[] = [
     ],
   },
   {
-    id: 4,
+    id: 6,
     title: 'Roles',
     link: '/roles',
     icon: <FaUsersCog size={18} />,
   },
   {
-    id: 5,
+    id: 7,
     title: 'Users',
     link: '/users',
     icon: <PiUsersThreeBold size={18} />,
@@ -108,7 +119,11 @@ const Sidebar = () => {
   });
 
   const isLinkActive = (link: string) => {
-    return pathName === link || pathName.startsWith(link);
+    if (link === '/' && pathName === '/') {
+      console.log('yes');
+      return true;
+    }
+    return pathName.substring(1) === link.substring(1);
   };
 
   const handleClose = (value: boolean) => {
