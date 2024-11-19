@@ -1,6 +1,6 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 import { TCategory, TProductCategory } from '@/interface/category';
 import { TProductAttribute } from '@/interface/product.interface';
@@ -57,12 +57,12 @@ const AddSpecifications = () => {
           <label className="text-lg font-semibold text-black">
             Attributes *
           </label>
-          <p className="pb-5 text-sm text-gray">
+          <p className="pb-1 text-sm text-gray">
             Please fill up all the attribute informations
           </p>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="">
             {attributes.map((attr: TProductAttribute) => (
-              <div key={attr.name}>
+              <div key={attr.name} className="mt-4">
                 <h1 className="text-md font-semibold text-black">
                   {attr.name} *
                 </h1>
@@ -74,9 +74,9 @@ const AddSpecifications = () => {
                     <label className="col-span-2 text-sm font-semibold text-gray">
                       {Object.entries(field)[0]}
                     </label>
-                    <Input
+                    <Textarea
                       placeholder={`Enter ${Object.entries(field)[0]}`}
-                      className="col-span-6 rounded-none bg-background-foreground"
+                      className="col-span-6 h-10 max-h-28 min-h-10 rounded-none bg-background-foreground"
                     />
                   </div>
                 ))}
