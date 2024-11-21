@@ -37,6 +37,7 @@ const AddBasicData = () => {
     price,
     quantity,
     category,
+    sku,
   } = product;
 
   const handleChange = <K extends keyof TProduct>(
@@ -79,7 +80,7 @@ const AddBasicData = () => {
       <h2 className="pb-5 text-lg font-semibold text-black">
         General Information
       </h2>
-      <div className="md:columns-1 lg:columns-2">
+      <div className="grid gap-x-4 lg:grid-cols-2">
         <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Name *</label>
           <Input
@@ -129,7 +130,7 @@ const AddBasicData = () => {
           <Input
             value={model}
             onChange={(e) => handleChange('model', e.target.value)}
-            className="bg-background-foreground"
+            className={`bg-background-foreground`}
             placeholder="Enter Brand Name"
           />
         </div>
@@ -184,6 +185,17 @@ const AddBasicData = () => {
             onChange={(e) => handleChange('quantity', parseInt(e.target.value))}
             className="bg-background-foreground"
             placeholder="Enter stock"
+          />
+        </div>
+
+        <div className="mb-3 flex flex-col gap-2">
+          <label className="text-sm">SKU *</label>
+          <Input
+            value={sku}
+            type="text"
+            onChange={(e) => handleChange('sku', e.target.value)}
+            className="bg-background-foreground"
+            placeholder="Enter product SKU"
           />
         </div>
 

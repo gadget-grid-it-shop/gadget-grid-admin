@@ -11,11 +11,15 @@ import AddBasicData from '@/components/product/createProduct/AddBasicData';
 import AddSpecifications from '@/components/product/createProduct/AddSpecifications';
 import { Button } from '@/components/ui/button';
 import Modal from '@/components/custom/Modal';
+import { useAddNewProductMutation } from '@/redux/api/productApi';
+import { toast } from 'sonner';
+import { globalError } from '@/lib/utils';
 
 const CreateProduct = () => {
   const dispatch = useAppDispatch();
-  const { step } = useAppSelector((state) => state.products);
+  const { step, product } = useAppSelector((state) => state.products);
   const searchParams = useSearchParams();
+  const [addNewProduct] = useAddNewProductMutation();
 
   useEffect(() => {
     const step = searchParams.get('step') || '';
@@ -33,6 +37,17 @@ const CreateProduct = () => {
     setResetOpen(false);
   };
 
+  const hanldeAddProduct = async () => {
+    try {
+      const res = await addNewProduct(product).unwrap();
+      if (res) {
+        toast.success(res.message);
+      }
+    } catch (err) {
+      globalError(err);
+    }
+  };
+
   return (
     <>
       {searchParams && (
@@ -48,6 +63,10 @@ const CreateProduct = () => {
 
           {/* ===============step 2 specification====================== */}
           {step === 1 && <AddSpecifications />}
+
+          <div className="flex justify-center pt-3">
+            <Button onClick={hanldeAddProduct}>Add Product</Button>
+          </div>
 
           <Modal
             open={resetOpen}

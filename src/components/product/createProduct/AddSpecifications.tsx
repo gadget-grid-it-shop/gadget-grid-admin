@@ -68,8 +68,6 @@ const AddSpecifications = () => {
     });
 
     dispatch(updateProduct({ key: 'attributes', value: newAttributes }));
-
-    console.log(newAttributes);
   };
 
   return (
