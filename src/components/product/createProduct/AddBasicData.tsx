@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { TProduct } from '@/interface/product.interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
@@ -17,6 +17,7 @@ import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { TSelectOptions } from '@/components/categories/interface';
 import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
+import { MDXEditorMethods } from '@mdxeditor/editor';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
@@ -24,10 +25,11 @@ const AddBasicData = () => {
   const { product } = useAppSelector((state) => state.products);
   const { data: categoryData } = useGetAllCategoriesQuery(true);
   const { data: brandData } = useGetAllBrandsQuery(undefined);
+  const keyFeaturesRef = useRef<MDXEditorMethods>(null);
 
   const {
     gallery,
-    description,
+    key_features,
     name,
     brand,
     model,
@@ -58,6 +60,19 @@ const AddBasicData = () => {
       };
     },
   );
+
+  useEffect(() => {
+    if (keyFeaturesRef.current && key_features === '') {
+      keyFeaturesRef.current.setMarkdown('');
+    }
+  }, [key_features]);
+
+  const handleKeyFeatureChange = () => {
+    const val: string = keyFeaturesRef.current
+      ? keyFeaturesRef.current.getMarkdown()
+      : '';
+    handleChange('key_features', val);
+  };
 
   return (
     <div>
@@ -175,9 +190,10 @@ const AddBasicData = () => {
         <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Key Features *</label>
           <MarkdownEditor
+            ref={keyFeaturesRef}
             className="h-56 overflow-y-auto overflow-x-hidden scrollbar-thin"
-            markdown={description}
-            onChange={(val) => handleChange('key_features', val)}
+            markdown={key_features}
+            onChange={handleKeyFeatureChange}
           />
         </div>
 

@@ -80,10 +80,15 @@ const productSlice = createSlice({
         state.step = action.payload;
       }
     },
+    resetProductData: () => initialState,
   },
 });
 
-export const { updateProduct, setSelectedCategoryName, setCreateProductStep } =
-  productSlice.actions;
+export const {
+  updateProduct,
+  setSelectedCategoryName,
+  setCreateProductStep,
+  resetProductData,
+} = productSlice.actions;
 
 export default productSlice.reducer;

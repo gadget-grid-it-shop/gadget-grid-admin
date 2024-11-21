@@ -29,7 +29,6 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       axiosInstance
         .get('/auth/getMyData')
         .then((res) => {
-          // console.log(res?.data?.data?.isDeleted);
           if (res?.data?.data?.isDeleted === true) {
             handleLogout();
           }

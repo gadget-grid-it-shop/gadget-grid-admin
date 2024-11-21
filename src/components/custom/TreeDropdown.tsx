@@ -60,8 +60,14 @@ const TreeDropdown = ({
     );
     if (cat) {
       setActiveCat(cat.name);
+    } else {
+      setActiveCat('');
     }
   }, [selectedCat]);
+
+  useEffect(() => {
+    setSelectedCat(value);
+  }, [value]);
 
   const handleCatSelect = (cat: TCategory) => {
     setOpen(false);
@@ -70,8 +76,6 @@ const TreeDropdown = ({
 
     onSelect(productCat || []);
     setSelectedCat(productCat || []);
-
-    console.log(productCat);
   };
 
   useEffect(() => {
@@ -83,8 +87,6 @@ const TreeDropdown = ({
 
     return () => window.removeEventListener('click', handleClick);
   }, []);
-
-  console.log(activeCat);
 
   const renderCategory = (categories: TCategory[]) => {
     return (

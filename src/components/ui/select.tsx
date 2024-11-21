@@ -45,7 +45,11 @@ const Select: React.FC<CustomSelectProps> = ({
       const defaultOption = data?.find((option) => option?.value === value);
       if (defaultOption) {
         setSelectedLabel(defaultOption.label);
+      } else {
+        setSelectedLabel(null);
       }
+    } else {
+      setSelectedLabel(null);
     }
   }, [value, data]);
 

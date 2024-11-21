@@ -1,11 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { baseApi } from './api/baseApi';
-import productReducer from './reducers/products/productSlice';
-import authSlice from './reducers/auth/authSlice';
-import storage from 'redux-persist/lib/storage';
 import {
   persistStore,
-  persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -13,22 +9,10 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import generalSlice from './reducers/general/generalReducer';
-
-const persistConfig = {
-  key: 'auth',
-  storage,
-};
-
-const persistedAuthReducer = persistReducer(persistConfig, authSlice);
+import rootReducer from './reducers/combinedReducer';
 
 export const store = configureStore({
-  reducer: {
-    [baseApi.reducerPath]: baseApi.reducer,
-    products: productReducer,
-    auth: persistedAuthReducer,
-    general: generalSlice,
-  },
+  reducer: rootReducer,
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
