@@ -15,7 +15,7 @@ export type TProductWarrenty = {
 
 export interface TProductAttribute {
   name: string;
-  fields: Record<string, string>[];
+  fields: Record<string, string>;
 }
 
 export interface TMeta {

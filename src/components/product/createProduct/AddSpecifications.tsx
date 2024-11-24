@@ -29,14 +29,14 @@ const AddSpecifications = () => {
       if (category) {
         const attributes = category.product_details_categories.map(
           (item: TProductCategory) => {
-            return {
+            const newAttr: TProductAttribute = {
               name: item.name,
-              fields: item.fields.map((field: string) => {
-                return {
-                  [field]: '',
-                };
-              }),
+              fields: {},
             };
+            item.fields.forEach((field: string) => {
+              newAttr.fields[field] = '';
+            });
+            return newAttr;
           },
         );
         dispatch(updateProduct({ key: 'attributes', value: attributes }));
@@ -54,14 +54,7 @@ const AddSpecifications = () => {
         console.log(attrName);
         return {
           ...attr,
-          fields: attr.fields.map((f) => {
-            const Fkey = f ? Object.keys(f)[0] : '';
-            if (Fkey === key) {
-              return { [key]: value };
-            } else {
-              return f;
-            }
-          }),
+          fields: { ...attr.fields, [key]: value },
         };
       }
       return attr;
@@ -86,28 +79,30 @@ const AddSpecifications = () => {
                 <h1 className="text-md font-semibold text-black">
                   {attr?.name} *
                 </h1>
-                {attr?.fields.map((field: Record<string, string>, i) => {
-                  const key = field ? Object.keys(field)[0] : '';
-                  console.log(field[key]);
-                  return (
-                    <div
-                      key={i}
-                      className="my-2 grid grid-cols-8 items-center gap-3 overflow-hidden rounded-md border border-border-color ps-3"
-                    >
-                      <label className="col-span-2 text-sm font-semibold text-gray">
-                        {key}
-                      </label>
-                      <Textarea
-                        defaultValue={field[key]}
-                        onChange={(e) =>
-                          handleChange(attr.name, key, e.target.value)
-                        }
-                        placeholder={`Enter ${key}`}
-                        className="col-span-6 h-10 max-h-28 min-h-10 rounded-none bg-background-foreground text-sm"
-                      />
-                    </div>
-                  );
-                })}
+                {Object.entries(attr?.fields).map(
+                  (field: [string, string], i) => {
+                    const key = field ? field[0] : '';
+                    console.log(field);
+                    return (
+                      <div
+                        key={i}
+                        className="my-2 grid grid-cols-8 items-center gap-3 overflow-hidden rounded-md border border-border-color ps-3"
+                      >
+                        <label className="col-span-2 text-sm font-semibold text-gray">
+                          {key}
+                        </label>
+                        <Textarea
+                          defaultValue={field[1]}
+                          onChange={(e) =>
+                            handleChange(attr.name, key, e.target.value)
+                          }
+                          placeholder={`Enter ${key}`}
+                          className="col-span-6 h-10 max-h-28 min-h-10 rounded-none bg-background-foreground text-sm"
+                        />
+                      </div>
+                    );
+                  },
+                )}
               </div>
             ))}
           </div>
