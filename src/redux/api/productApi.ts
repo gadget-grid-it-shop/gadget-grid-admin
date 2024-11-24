@@ -1,5 +1,6 @@
 import { TProduct } from '@/interface/product.interface';
 import { baseApi } from './baseApi';
+import { tagTypes } from './tagTypes';
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,8 +12,19 @@ const productApi = baseApi.injectEndpoints({
           data: product,
         };
       },
+      invalidatesTags: [tagTypes.product],
+    }),
+
+    getAllProducts: build.query({
+      query: () => {
+        return {
+          url: '/product/get-all',
+          method: 'GET',
+        };
+      },
+      providesTags: [tagTypes.product],
     }),
   }),
 });
 
-export const { useAddNewProductMutation } = productApi;
+export const { useAddNewProductMutation, useGetAllProductsQuery } = productApi;

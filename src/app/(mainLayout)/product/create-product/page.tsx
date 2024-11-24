@@ -42,6 +42,7 @@ const CreateProduct = () => {
       const res = await addNewProduct(product).unwrap();
       if (res) {
         toast.success(res.message);
+        dispatch(resetProductData());
       }
     } catch (err) {
       globalError(err);
