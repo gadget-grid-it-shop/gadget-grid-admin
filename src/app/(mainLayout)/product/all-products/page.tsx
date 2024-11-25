@@ -1,14 +1,23 @@
 'use client';
 import CustomAvatar from '@/components/custom/CustomAvatar';
 import { DataTable } from '@/components/custom/DataTable';
+import EllipsisText from '@/components/custom/EllipsisText';
+import TableSkeleton from '@/components/shared/TableSkeleton';
+import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
-import { TProduct, TProductWarrenty } from '@/interface/product.interface';
+import {
+  TProduct,
+  TProductCategory,
+  TProductWarrenty,
+} from '@/interface/product.interface';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 
+type TPopulatedProductCategory = TProductCategory & { id: { name: string } };
+
 const AllProducts = () => {
-  const { data: productData } = useGetAllProductsQuery(undefined);
+  const { data: productData, error } = useGetAllProductsQuery(undefined);
   console.log(productData);
 
   const columns: ColumnDef<TProduct>[] = [
@@ -23,7 +32,22 @@ const AllProducts = () => {
       accessorKey: 'name',
       header: 'Name',
       cell: ({ row }) => {
-        return <div className="">{row.getValue('name')}</div>;
+        return (
+          <div className="">
+            <EllipsisText text={row.getValue('name')} />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'category',
+      header: 'Category',
+      cell: ({ row }) => {
+        const categories: TPopulatedProductCategory[] =
+          row.getValue('category') || [];
+        const category: TPopulatedProductCategory | undefined =
+          categories?.find((cat: TPopulatedProductCategory) => cat.main);
+        return <div className="">{category?.id?.name}</div>;
       },
     },
     {
@@ -39,6 +63,7 @@ const AllProducts = () => {
         );
       },
     },
+
     {
       accessorKey: 'model',
       header: 'Model',
@@ -54,25 +79,47 @@ const AllProducts = () => {
       },
     },
     {
+      accessorKey: 'price',
+      header: 'Price',
+      cell: ({ row }) => {
+        return <div className="">${row.getValue('price')}</div>;
+      },
+    },
+    {
+      accessorKey: 'quantity',
+      header: 'Stock',
+      cell: ({ row }) => {
+        return <div className="">{row.getValue('quantity')}</div>;
+      },
+    },
+    {
       accessorKey: 'warranty',
       header: 'Warranty',
       cell: ({ row }) => {
         const warranty: TProductWarrenty = row.getValue('warranty');
         return (
           <div className="">
-            <p>{warranty?.lifetime ? 'Lifetime' : warranty?.days}</p>
+            <p>{warranty?.lifetime ? 'Lifetime' : `${warranty?.days} days`}</p>
           </div>
         );
       },
     },
+    {
+      accessorKey: 'createdBy',
+      header: 'createdBy',
+      cell: ({ row }) => {
+        const createdBy: TUser = row.getValue('createdBy');
+        return <div className="">{createdBy.email}</div>;
+      },
+    },
   ];
-
-  console.log(columns);
 
   return (
     <div>
-      {productData?.data?.length !== 0 && (
+      {!error && productData?.data ? (
         <DataTable columns={columns} data={productData?.data || []} />
+      ) : (
+        <TableSkeleton />
       )}
     </div>
   );
