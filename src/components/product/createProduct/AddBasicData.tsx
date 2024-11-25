@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { TProduct } from '@/interface/product.interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
@@ -18,6 +18,7 @@ import { TSelectOptions } from '@/components/categories/interface';
 import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
+// import debounce from 'lodash.debounce';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
@@ -40,12 +41,22 @@ const AddBasicData = () => {
     sku,
   } = product;
 
-  const handleChange = <K extends keyof TProduct>(
-    key: K,
-    value: TProduct[K],
-  ) => {
-    dispatch(updateProduct({ key, value }));
-  };
+  // const handleMarkdownChange = useCallback(
+  //   debounce(<K extends keyof TProduct>(
+  //     key: K,
+  //     value: TProduct[K],
+  //   ) => {
+  //     dispatch(updateProduct({ key, value }));
+  //   },
+  //     300),
+  //   [])
+
+  const handleChange = useCallback(
+    <K extends keyof TProduct>(key: K, value: TProduct[K]) => {
+      dispatch(updateProduct({ key, value }));
+    },
+    [],
+  );
 
   const handleRemoveFromGallery = (img: string) => {
     const filteredGallery = gallery?.filter((image) => image !== img) || [];
@@ -254,4 +265,4 @@ const AddBasicData = () => {
   );
 };
 
-export default AddBasicData;
+export default React.memo(AddBasicData);
