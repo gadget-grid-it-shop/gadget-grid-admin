@@ -55,6 +55,7 @@ import { globalError } from '@/lib/utils';
 type TProp = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (ids: string[] | string) => void;
   multiselect?: boolean;
 };

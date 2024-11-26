@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { TCategory, TProductCategory } from '@/interface/category';
 import { TProductAttribute } from '@/interface/product.interface';
+import { globalError } from '@/lib/utils';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
@@ -12,12 +13,16 @@ import React, { useEffect } from 'react';
 const AddSpecifications = () => {
   const {
     data: categoryData,
-    // error: cateoryError,
+    error: cateoryError,
     // isLoading: categoryLoading,
   } = useGetAllCategoriesQuery(false);
   const { product } = useAppSelector((state) => state.products);
   const { attributes } = product;
   const dispatch = useAppDispatch();
+
+  if (cateoryError) {
+    globalError(cateoryError);
+  }
 
   useEffect(() => {
     if (product.category.length !== 0) {

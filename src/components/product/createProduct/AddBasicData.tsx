@@ -55,7 +55,7 @@ const AddBasicData = () => {
     <K extends keyof TProduct>(key: K, value: TProduct[K]) => {
       dispatch(updateProduct({ key, value }));
     },
-    [],
+    [dispatch],
   );
 
   const handleRemoveFromGallery = (img: string) => {

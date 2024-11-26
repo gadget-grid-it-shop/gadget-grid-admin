@@ -11,6 +11,7 @@ export interface TProductCategory {
 type TProps = {
   categories: TCategory[];
   placeholder?: string;
+  // eslint-disable-next-line no-unused-vars
   onSelect: (ids: TProductCategory[] | []) => void;
   value: TProductCategory[];
 };
@@ -63,7 +64,7 @@ const TreeDropdown = ({
     } else {
       setActiveCat('');
     }
-  }, [selectedCat]);
+  }, [selectedCat, categoryArray?.data]);
 
   useEffect(() => {
     setSelectedCat(value);
@@ -72,7 +73,7 @@ const TreeDropdown = ({
   const handleCatSelect = (cat: TCategory) => {
     setOpen(false);
 
-    const productCat = createCategoryArray(categoryArray.data, cat);
+    const productCat = createCategoryArray(categoryArray?.data, cat);
 
     onSelect(productCat || []);
     setSelectedCat(productCat || []);

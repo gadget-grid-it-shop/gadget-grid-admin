@@ -44,6 +44,7 @@ const EditBrand = ({ openBrand, setOpen }: TProps) => {
       name: openBrand?.name,
       image: openBrand?.image,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openBrand]);
 
   const handleAddAdmin = async (values: z.infer<typeof addBrandSchema>) => {

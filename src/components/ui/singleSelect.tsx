@@ -4,12 +4,7 @@ import { X } from 'lucide-react';
 import { useEffect, useCallback, useRef, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
+import { Command, CommandItem, CommandList } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
 
 export interface Option {
@@ -26,8 +21,8 @@ interface SingleSelectorProps {
   loadingIndicator?: React.ReactNode;
   emptyIndicator?: React.ReactNode;
   delay?: number;
-  onSearch?: (value: string) => Promise<Option[]>;
-  onChange?: (option: Option | null) => void;
+  onSearch?: (_value: string) => Promise<Option[]>;
+  onChange?: (_option: Option | null) => void;
   disabled?: boolean;
   className?: string;
   badgeClassName?: string;
@@ -67,7 +62,7 @@ const SingleSelector = React.forwardRef<HTMLDivElement, SingleSelectorProps>(
     disabled,
     className,
     badgeClassName,
-    creatable = false,
+    // creatable = false,
     commandProps,
     inputProps,
   }: SingleSelectorProps) {
