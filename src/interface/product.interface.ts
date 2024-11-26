@@ -34,7 +34,7 @@ export interface TProduct {
   };
   sku: string;
   brand: string;
-  model?: string;
+  model: string;
   warranty: TProductWarrenty;
   reviews?: TReview[];
   key_features: string;

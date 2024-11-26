@@ -51,7 +51,6 @@ const AddSpecifications = () => {
   const handleChange = (attrName: string, key: string, value: string) => {
     const newAttributes = attributes?.map((attr) => {
       if (attr.name === attrName) {
-        console.log(attrName);
         return {
           ...attr,
           fields: { ...attr.fields, [key]: value },

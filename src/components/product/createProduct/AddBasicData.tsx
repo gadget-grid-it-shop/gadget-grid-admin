@@ -182,7 +182,11 @@ const AddBasicData = () => {
           <Input
             value={price}
             type="number"
-            onChange={(e) => handleChange('price', parseInt(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value;
+              const price = value === '' ? 0 : Math.ceil(Number(value));
+              handleChange('price', Number(price));
+            }}
             className="bg-background-foreground"
             placeholder="Enter Price"
           />

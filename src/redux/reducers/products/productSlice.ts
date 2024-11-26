@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface TInitialState {
   product: TProduct;
   selectedCategoryName: string;
-  step: number;
+  step: 1 | 2 | 3 | 4;
 }
 
 interface CustomPayloadAction<K extends keyof TProduct> {
@@ -27,9 +27,9 @@ const initialState: TInitialState = {
     key_features: '',
     quantity: 0,
     category: [],
-    description: 'hello',
-    thumbnail: 'fgdfjkj jkj j',
-    slug: 'fdgdggfdg dfg df',
+    description: '',
+    thumbnail: '',
+    slug: '',
     createdBy: '',
     discount: undefined,
     reviews: [],
@@ -74,7 +74,7 @@ const productSlice = createSlice({
     },
     setCreateProductStep: (
       state: TInitialState,
-      action: PayloadAction<number>,
+      action: PayloadAction<1 | 2 | 3 | 4>,
     ) => {
       if (action.payload) {
         state.step = action.payload;
