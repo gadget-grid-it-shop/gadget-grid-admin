@@ -87,11 +87,11 @@ const AddBasicData = () => {
   };
 
   return (
-    <div>
+    <>
       <h2 className="pb-5 text-lg font-semibold text-black">
         General Information
       </h2>
-      <div className="grid gap-x-4 lg:grid-cols-2">
+      <div className="grid w-full gap-x-4 lg:grid-cols-2">
         <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Name *</label>
           <Input
@@ -214,7 +214,7 @@ const AddBasicData = () => {
           />
         </div>
 
-        <div className="mb-3 flex flex-col gap-2">
+        <div className="mb-3 flex w-full flex-col gap-2">
           <label className="text-sm">Key Features *</label>
           <MarkdownEditor
             ref={keyFeaturesRef}
@@ -265,7 +265,7 @@ const AddBasicData = () => {
         setOpen={setGalleryOpen}
         onChange={(val) => handleChange('gallery', val as string[])}
       />
-    </div>
+    </>
   );
 };
 

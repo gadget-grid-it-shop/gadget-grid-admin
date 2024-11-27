@@ -210,3 +210,5 @@ body::-webkit-scrollbar-thumb:hover {
 .medium-modal {
   @apply w-[90vw] sm:max-w-[70vw] md:max-w-[60vw] xl:max-w-[50vw] 2xl:max-w-[40vw];
 }
+
+/* ======= multistep timeline======== */

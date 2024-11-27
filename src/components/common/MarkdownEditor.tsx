@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import { useTheme } from 'next-themes';
 import dynamic from 'next/dynamic';
@@ -16,7 +17,11 @@ export const MarkdownEditor = forwardRef<
 
   return (
     <Editor
-      className={`${theme} markdown-editor rounded-md bg-background-foreground ${className}`}
+      className={cn(
+        theme,
+        `markdown-editor rounded-md bg-background-foreground`,
+        className,
+      )}
       {...props}
       editorRef={ref}
     />

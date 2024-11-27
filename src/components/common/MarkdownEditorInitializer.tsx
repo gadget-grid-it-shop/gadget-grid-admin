@@ -47,7 +47,6 @@ export default function MarkdownEditorInitializer({
         toolbarPlugin({
           toolbarContents: () => (
             <div className="flex w-full gap-3 bg-lavender-mist py-1">
-              {' '}
               <UndoRedo />
               <BoldItalicUnderlineToggles />
               {/* <ChangeAdmonitionType /> */}
