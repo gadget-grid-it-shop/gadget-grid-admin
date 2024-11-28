@@ -3,10 +3,9 @@
 import { MarkdownEditor } from '@/components/common/MarkdownEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { TProduct } from '@/interface/product.interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
@@ -18,11 +17,14 @@ import { TSelectOptions } from '@/components/categories/interface';
 import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
+import { isValidUrl } from '@/lib/utils';
+import { handleChange } from '@/app/(mainLayout)/product/create-product/page';
 // import debounce from 'lodash.debounce';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const [thumbOpen, setThumbOpen] = useState(false);
   const { product } = useAppSelector((state) => state.products);
   const { data: categoryData } = useGetAllCategoriesQuery(true);
   const { data: brandData } = useGetAllBrandsQuery(undefined);
@@ -38,6 +40,7 @@ const AddBasicData = () => {
     price,
     quantity,
     category,
+    thumbnail,
     sku,
   } = product;
 
@@ -50,13 +53,6 @@ const AddBasicData = () => {
   //   },
   //     300),
   //   [])
-
-  const handleChange = useCallback(
-    <K extends keyof TProduct>(key: K, value: TProduct[K]) => {
-      dispatch(updateProduct({ key, value }));
-    },
-    [dispatch],
-  );
 
   const handleRemoveFromGallery = (img: string) => {
     const filteredGallery = gallery?.filter((image) => image !== img) || [];
@@ -91,7 +87,7 @@ const AddBasicData = () => {
       <h2 className="pb-5 text-lg font-semibold text-black">
         General Information
       </h2>
-      <div className="grid w-full gap-x-4 lg:grid-cols-2">
+      <div className="grid w-full grid-rows-1 gap-x-4 lg:grid-cols-2">
         <div className="mb-3 flex flex-col gap-2">
           <label className="text-sm">Name *</label>
           <Input
@@ -214,6 +210,40 @@ const AddBasicData = () => {
           />
         </div>
 
+        <div className="mb-3 flex flex-col gap-2">
+          <label className="text-sm">Thumbnail *</label>
+          <div
+            className={`flex h-full min-h-52 flex-col items-center justify-center gap-2 rounded-md bg-background-foreground p-3`}
+          >
+            <div className="grid w-full gap-2 p-3">
+              <div className="relative flex h-full max-h-32 items-center justify-center">
+                {!isValidUrl(thumbnail) && (
+                  <Button className="w-fit" onClick={() => setThumbOpen(true)}>
+                    Select thumbnail
+                  </Button>
+                )}
+                {isValidUrl(thumbnail) && (
+                  <div className="relative">
+                    <div
+                      onClick={() => handleChange('thumbnail', '')}
+                      className="absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red"
+                    >
+                      <IoMdClose />
+                    </div>
+                    <Image
+                      src={thumbnail}
+                      height={200}
+                      width={200}
+                      alt="gallery img"
+                      className="h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-3 flex w-full flex-col gap-2">
           <label className="text-sm">Key Features *</label>
           <MarkdownEditor
@@ -259,6 +289,12 @@ const AddBasicData = () => {
         </div>
       </div>
 
+      <ImageGallery
+        open={thumbOpen}
+        multiselect={false}
+        setOpen={setThumbOpen}
+        onChange={(val) => handleChange('thumbnail', val as string)}
+      />
       <ImageGallery
         open={galleryOpen}
         multiselect={true}

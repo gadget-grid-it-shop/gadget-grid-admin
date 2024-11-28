@@ -34,6 +34,10 @@ const AddDescription = () => {
 
   return (
     <div>
+      <h2 className="text-lg font-semibold text-black">Product Description</h2>
+      <p className="pb-5 text-sm text-gray">
+        Write a detailed description of the product
+      </p>
       <MarkdownEditor
         ref={descriptionRef}
         className="h-[60vh] overflow-y-auto overflow-x-hidden scrollbar-thin"

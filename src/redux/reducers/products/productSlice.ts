@@ -44,6 +44,10 @@ const initialState: TInitialState = {
     tags: [],
     isFeatured: false,
     sales: 0,
+    shipping: {
+      free: false,
+      cost: 0,
+    },
   },
   selectedCategoryName: '',
   step: 1,

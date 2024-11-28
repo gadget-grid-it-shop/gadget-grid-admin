@@ -24,6 +24,11 @@ export interface TMeta {
   image: string;
 }
 
+export type TShipping = {
+  free: boolean;
+  cost: number;
+};
+
 export interface TProduct {
   id: string;
   name: string;
@@ -51,4 +56,5 @@ export interface TProduct {
   isFeatured?: boolean;
   sales?: number;
   createdBy: string;
+  shipping: TShipping;
 }
