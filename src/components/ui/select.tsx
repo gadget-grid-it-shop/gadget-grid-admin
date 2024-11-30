@@ -76,7 +76,8 @@ const Select: React.FC<CustomSelectProps> = ({
     <div className="relative w-full" ref={dropdownRef}>
       <div
         className={cn(
-          'flex h-10 cursor-pointer items-center rounded-md bg-background-foreground px-3 text-sm text-gray',
+          'flex h-10 cursor-pointer items-center rounded-md px-3 text-sm text-gray',
+          `${value ? 'bg-lavender-mist' : 'bg-background-foreground'}`,
           className,
         )}
         onClick={(e) => {

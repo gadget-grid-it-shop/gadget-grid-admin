@@ -33,8 +33,8 @@ const AllProducts = () => {
       header: 'Name',
       cell: ({ row }) => {
         return (
-          <div className="">
-            <EllipsisText text={row.getValue('name')} />
+          <div>
+            <EllipsisText className="text-gray" text={row.getValue('name')} />
           </div>
         );
       },
@@ -58,7 +58,7 @@ const AllProducts = () => {
         return (
           <div className="flex items-center gap-1">
             <CustomAvatar src={brand.image} />
-            <p>{brand.name}</p>
+            <p className="text-gray">{brand.name}</p>
           </div>
         );
       },
@@ -98,8 +98,10 @@ const AllProducts = () => {
       cell: ({ row }) => {
         const warranty: TProductWarrenty = row.getValue('warranty');
         return (
-          <div className="">
-            <p>{warranty?.lifetime ? 'Lifetime' : `${warranty?.days} days`}</p>
+          <div>
+            <p className="text-gray">
+              {warranty?.lifetime ? 'Lifetime' : `${warranty?.days} days`}
+            </p>
           </div>
         );
       },

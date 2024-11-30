@@ -1,4 +1,5 @@
 import { TCategory } from '@/interface/category';
+import { cn } from '@/lib/utils';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import React, { useEffect, useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa6';
@@ -121,7 +122,10 @@ const TreeDropdown = ({
           setOpen(!open);
           e.stopPropagation();
         }}
-        className="h-10 w-full rounded-md bg-background-foreground px-3 text-start text-sm text-gray"
+        className={cn(
+          'h-10 w-full rounded-md px-3 text-start text-sm text-gray',
+          `${activeCat ? 'bg-lavender-mist' : 'bg-background-foreground'}`,
+        )}
       >
         {activeCat || placeholder}
       </button>

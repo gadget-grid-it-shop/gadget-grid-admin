@@ -29,7 +29,7 @@ const AddDescription = () => {
     const val: string = descriptionRef.current
       ? descriptionRef.current.getMarkdown()
       : '';
-    handleChange('key_features', val);
+    handleChange('description', val);
   };
 
   return (

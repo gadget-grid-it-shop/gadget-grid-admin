@@ -171,11 +171,17 @@ const CreateProduct = () => {
         {renderSteps()}
 
         <div className="flex justify-between pt-3">
-          <Button variant={'edit'} onClick={handleBack}>
-            Back
+          {step !== 1 && (
+            <Button variant={'edit'} onClick={handleBack}>
+              Back
+            </Button>
+          )}
+          <Button onClick={hanldeAddProduct} className="mx-auto">
+            Add Product
           </Button>
-          <Button onClick={hanldeAddProduct}>Add Product</Button>
-          <Button onClick={handleNext}>Next</Button>
+          {step !== compByStep.length && (
+            <Button onClick={handleNext}>Next</Button>
+          )}
         </div>
 
         <Modal
