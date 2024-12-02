@@ -50,9 +50,13 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       {hydrated ? (
-        <div className="flex bg-background-foreground">
-          <Sidebar />
-          <div className="min-h-screen w-full px-4">
+        <div className="flex overflow-hidden bg-background-foreground">
+          <div>
+            <Sidebar />
+          </div>
+          <div
+            className={`min-h-screen w-screen px-4 min-[1200px]:w-[calc(100vw-260px)] 2xl:w-[calc(100vw-280px)]`}
+          >
             <Navbar />
             <div className="mt-4 rounded-md bg-background p-5">{children}</div>
           </div>

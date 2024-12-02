@@ -3,6 +3,7 @@ import CustomAvatar from '@/components/custom/CustomAvatar';
 import { DataTable } from '@/components/custom/DataTable';
 import EllipsisText from '@/components/custom/EllipsisText';
 import TableSkeleton from '@/components/shared/TableSkeleton';
+import { Button } from '@/components/ui/button';
 import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
 import {
@@ -18,7 +19,6 @@ type TPopulatedProductCategory = TProductCategory & { id: { name: string } };
 
 const AllProducts = () => {
   const { data: productData, error } = useGetAllProductsQuery(undefined);
-  console.log(productData);
 
   const columns: ColumnDef<TProduct>[] = [
     {
@@ -108,10 +108,31 @@ const AllProducts = () => {
     },
     {
       accessorKey: 'createdBy',
-      header: 'createdBy',
+      header: 'CreatedBy',
       cell: ({ row }) => {
         const createdBy: TUser = row.getValue('createdBy');
-        return <div className="">{createdBy.email}</div>;
+        return (
+          <div className="">
+            <EllipsisText
+              text={createdBy.email}
+              className="text-gray"
+              width={150}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'actions',
+      header: 'Actions',
+      cell: () => {
+        return (
+          <div className="flex gap-2">
+            <Button variant={'view_button'} size={'base'} />
+            <Button variant={'edit_button'} size={'base'} />
+            <Button variant={'delete_button'} size={'base'} />
+          </div>
+        );
       },
     },
   ];
