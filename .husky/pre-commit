@@ -1,1 +1,5 @@
-npx lint-staged
+echo "🔍 Running pre-commit checks..."
+
+npx lint-staged || (echo "❌ Linting failed!" && exit 1)
+
+npm run build || (echo "build failed!" && exit 1)

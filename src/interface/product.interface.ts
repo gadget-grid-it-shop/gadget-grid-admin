@@ -29,7 +29,7 @@ export type TShipping = {
   cost: number;
 };
 
-export interface TProduct {
+export type TProduct = {
   id: string;
   name: string;
   price: number;
@@ -57,4 +57,4 @@ export interface TProduct {
   sales?: number;
   createdBy: string;
   shipping: TShipping;
-}
+};

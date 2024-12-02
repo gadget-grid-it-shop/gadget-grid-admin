@@ -6,6 +6,8 @@ import { toast } from 'sonner';
 import { store } from '@/redux/store';
 import { resetAuthData } from '@/redux/reducers/auth/authSlice';
 import { clearCookie } from '@/actions/logout';
+import { TProduct } from '@/interface/product.interface';
+import { updateProduct } from '@/redux/reducers/products/productSlice';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -49,3 +51,10 @@ export function isValidUrl(url: string): boolean {
     return false;
   }
 }
+
+export const handleProductChange = <K extends keyof TProduct>(
+  key: K,
+  value: TProduct[K],
+) => {
+  store.dispatch(updateProduct({ key, value }));
+};

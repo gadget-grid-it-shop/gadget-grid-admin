@@ -17,9 +17,7 @@ import { TSelectOptions } from '@/components/categories/interface';
 import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
-import { cn, isValidUrl } from '@/lib/utils';
-import { handleChange } from '@/app/(mainLayout)/product/create-product/page';
-// import debounce from 'lodash.debounce';
+import { cn, handleProductChange, isValidUrl } from '@/lib/utils';
 
 const AddBasicData = () => {
   const dispatch = useAppDispatch();
@@ -80,7 +78,7 @@ const AddBasicData = () => {
     const val: string = keyFeaturesRef.current
       ? keyFeaturesRef.current.getMarkdown()
       : '';
-    handleChange('key_features', val);
+    handleProductChange('key_features', val);
   };
 
   return (
@@ -94,7 +92,7 @@ const AddBasicData = () => {
           <label className="text-sm">Name *</label>
           <Input
             value={name}
-            onChange={(e) => handleChange('name', e.target.value)}
+            onChange={(e) => handleProductChange('name', e.target.value)}
             className="bg-background-foreground"
             placeholder="Enter Product Name"
           />
@@ -104,7 +102,7 @@ const AddBasicData = () => {
           <label className="text-sm">Category *</label>
           <Select
             data={categorySelectData}
-            onChange={(value) => handleChange('category', value as string)}
+            onChange={(value) => handleProductChange('category', value as string)}
             placeholder="Select category"
             value={category}
           />
@@ -115,7 +113,7 @@ const AddBasicData = () => {
           <TreeDropdown
             value={category}
             categories={categoryData?.data}
-            onSelect={(val) => handleChange('category', val)}
+            onSelect={(val) => handleProductChange('category', val)}
           />
         </div>
 
@@ -123,13 +121,13 @@ const AddBasicData = () => {
           <label className="text-sm">Brand *</label>
           <Select
             value={brand}
-            onChange={(val) => handleChange('brand', val as string)}
+            onChange={(val) => handleProductChange('brand', val as string)}
             data={brandDropdownData}
             placeholder="Select brand"
           />
           {/* <Input
             value={brand}
-            onChange={(e) => handleChange('brand', e.target.value)}
+            onChange={(e) => handleProductChange('brand', e.target.value)}
             className="bg-background-foreground"
             placeholder="Enter Brand Name"
           /> */}
@@ -138,7 +136,7 @@ const AddBasicData = () => {
           <label className="text-sm">Model *</label>
           <Input
             value={model}
-            onChange={(e) => handleChange('model', e.target.value)}
+            onChange={(e) => handleProductChange('model', e.target.value)}
             className={`bg-background-foreground`}
             placeholder="Enter Brand Name"
           />
@@ -149,7 +147,7 @@ const AddBasicData = () => {
           <Input
             value={sku}
             type="text"
-            onChange={(e) => handleChange('sku', e.target.value)}
+            onChange={(e) => handleProductChange('sku', e.target.value)}
             className="bg-background-foreground"
             placeholder="Enter product SKU"
           />
@@ -177,7 +175,7 @@ const AddBasicData = () => {
                   {isValidUrl(thumbnail) && (
                     <div className="relative">
                       <div
-                        onClick={() => handleChange('thumbnail', '')}
+                        onClick={() => handleProductChange('thumbnail', '')}
                         className="absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red"
                       >
                         <IoMdClose />
@@ -257,7 +255,7 @@ const AddBasicData = () => {
             onChange={(e) => {
               const value = e.target.value;
               const price = value === '' ? 0 : Math.ceil(Number(value));
-              handleChange('price', Number(price));
+              handleProductChange('price', Number(price));
             }}
             className="bg-background-foreground"
             placeholder="Enter Price"
@@ -269,7 +267,9 @@ const AddBasicData = () => {
           <Input
             value={quantity}
             type="number"
-            onChange={(e) => handleChange('quantity', parseInt(e.target.value))}
+            onChange={(e) =>
+              handleProductChange('quantity', parseInt(e.target.value))
+            }
             className="bg-background-foreground"
             placeholder="Enter stock"
           />
@@ -283,7 +283,7 @@ const AddBasicData = () => {
                 checked={shipping?.free}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleChange('shipping', {
+                  handleProductChange('shipping', {
                     cost: 0,
                     free: !shipping.free,
                   });
@@ -300,7 +300,7 @@ const AddBasicData = () => {
             onChange={(e) => {
               const value = e.target.value;
               const cost = value === '' ? 0 : Math.ceil(Number(value)); // Prevent leading 0
-              handleChange('shipping', { cost, free: false });
+              handleProductChange('shipping', { cost, free: false });
             }}
             className="bg-background-foreground"
             placeholder="Enter warranty"
@@ -314,7 +314,7 @@ const AddBasicData = () => {
                 checked={warranty.lifetime}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleChange('warranty', {
+                  handleProductChange('warranty', {
                     days: 0,
                     lifetime: !warranty.lifetime,
                   });
@@ -331,7 +331,7 @@ const AddBasicData = () => {
             onChange={(e) => {
               const value = e.target.value;
               const days = value === '' ? 0 : Math.ceil(Number(value)); // Prevent leading 0
-              handleChange('warranty', { days, lifetime: false });
+              handleProductChange('warranty', { days, lifetime: false });
             }}
             className="bg-background-foreground"
             placeholder="Enter warranty"
@@ -343,13 +343,13 @@ const AddBasicData = () => {
         open={thumbOpen}
         multiselect={false}
         setOpen={setThumbOpen}
-        onChange={(val) => handleChange('thumbnail', val as string)}
+        onChange={(val) => handleProductChange('thumbnail', val as string)}
       />
       <ImageGallery
         open={galleryOpen}
         multiselect={true}
         setOpen={setGalleryOpen}
-        onChange={(val) => handleChange('gallery', val as string[])}
+        onChange={(val) => handleProductChange('gallery', val as string[])}
       />
     </>
   );

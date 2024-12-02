@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
   resetProductData,
   setCreateProductStep,
-  updateProduct,
 } from '@/redux/reducers/products/productSlice';
 import React, { ReactNode, useState } from 'react';
 import AddBasicData from '@/components/product/createProduct/AddBasicData';
@@ -18,20 +17,11 @@ import AddDescription from '@/components/product/createProduct/AddDescription';
 import { ProductValidations } from '@/validations/createProductValidations';
 import { ZodError } from 'zod';
 import AddMetaData from '@/components/product/createProduct/AddMetaData';
-import { TProduct } from '@/interface/product.interface';
-import { store } from '@/redux/store';
 
 type TCompByStep = {
   step: number;
   title: string;
   element: ReactNode;
-};
-
-export const handleChange = <K extends keyof TProduct>(
-  key: K,
-  value: TProduct[K],
-) => {
-  store.dispatch(updateProduct({ key, value }));
 };
 
 const CreateProduct = () => {

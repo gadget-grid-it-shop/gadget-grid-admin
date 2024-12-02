@@ -1,4 +1,3 @@
-import { handleChange } from '@/app/(mainLayout)/product/create-product/page';
 import { MarkdownEditor } from '@/components/common/MarkdownEditor';
 import { Input } from '@/components/ui/input';
 import { useAppSelector } from '@/redux/hooks';
@@ -6,7 +5,7 @@ import { MDXEditorMethods } from '@mdxeditor/editor';
 import React, { useRef, useState } from 'react';
 import ImageGallery from '../ImageGallery';
 import { Button } from '@/components/ui/button';
-import { isValidUrl } from '@/lib/utils';
+import { handleProductChange, isValidUrl } from '@/lib/utils';
 import Image from 'next/image';
 import { IoMdClose } from 'react-icons/io';
 
@@ -20,7 +19,7 @@ const AddMetaData = () => {
     const val: string = metaDescriptionRef.current
       ? metaDescriptionRef.current.getMarkdown()
       : '';
-    handleChange('meta', {
+    handleProductChange('meta', {
       title: meta?.title || '',
       description: val,
       image: meta?.image || '',
@@ -37,7 +36,7 @@ const AddMetaData = () => {
           <Input
             value={meta?.title}
             onChange={(e) =>
-              handleChange('meta', {
+              handleProductChange('meta', {
                 title: e.target.value,
                 description: meta?.description || '',
                 image: meta?.image || '',
@@ -66,7 +65,7 @@ const AddMetaData = () => {
                 {isValidUrl(meta?.image || '') && (
                   <div className="relative">
                     <div
-                      onClick={() => handleChange('thumbnail', '')}
+                      onClick={() => handleProductChange('thumbnail', '')}
                       className="absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red"
                     >
                       <IoMdClose />
@@ -100,7 +99,7 @@ const AddMetaData = () => {
         multiselect={false}
         setOpen={setGalleryOpen}
         onChange={(val) =>
-          handleChange('meta', {
+          handleProductChange('meta', {
             title: meta?.title || '',
             description: meta?.description || '',
             image: val as string,
