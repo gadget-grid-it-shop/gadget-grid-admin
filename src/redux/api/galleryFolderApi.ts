@@ -39,6 +39,16 @@ const GalleryFolderApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.galleryFolder],
     }),
+
+    deleteFolder: build.mutation({
+      query: (id: string) => {
+        return {
+          url: `/gallery/delete/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: [tagTypes.galleryFolder],
+    }),
   }),
 });
 
@@ -46,4 +56,5 @@ export const {
   useCreateFolderMutation,
   useGetFoldersQuery,
   useUpdateFolderMutation,
+  useDeleteFolderMutation,
 } = GalleryFolderApi;

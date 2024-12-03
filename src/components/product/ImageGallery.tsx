@@ -35,6 +35,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
 import {
   useCreateFolderMutation,
+  useDeleteFolderMutation,
   useGetFoldersQuery,
   useUpdateFolderMutation,
 } from '@/redux/api/galleryFolderApi';
@@ -106,6 +107,7 @@ const ImageGallery = ({
   } = useGetAllImagesQuery(parentFolder);
   const [updateFolder] = useUpdateFolderMutation();
   const [createFolder] = useCreateFolderMutation();
+  const [deleteFolder] = useDeleteFolderMutation();
   const [addFolderModal, setAddFolderModal] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [editOpen, setEditOpen] = useState(false);
@@ -169,6 +171,19 @@ const ImageGallery = ({
       return true;
     }
     return false;
+  };
+
+  const handleDeleteFolder = async (id: string) => {
+    try {
+      const res = await deleteFolder(id).unwrap();
+      if (res.success) {
+        toast.success(res.message);
+      }
+    } catch (err) {
+      globalError(err);
+    } finally {
+      setDeleteFolderOpen(false);
+    }
   };
 
   const handleDeleteImages = async () => {
@@ -361,7 +376,9 @@ const ImageGallery = ({
                         <p>This is a desctructive </p>
                       </DialogDescription>
                       <div className="flex flex-col gap-4">
-                        {/* <Button onClick={() => handleDeleteFolder(folder._id)}>Edit</Button> */}
+                        <Button onClick={() => handleDeleteFolder(folder._id)}>
+                          Delete
+                        </Button>
                       </div>
                     </DialogContent>
                   </Dialog>
