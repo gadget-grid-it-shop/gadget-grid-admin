@@ -55,7 +55,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
             <Sidebar />
           </div>
           <div
-            className={`min-h-screen w-screen px-4 min-[1200px]:w-[calc(100vw-260px)] 2xl:w-[calc(100vw-280px)]`}
+            className={`main-layout h-screen w-screen overflow-y-auto px-4 min-[1200px]:w-[calc(100vw-260px)] 2xl:w-[calc(100vw-280px)]`}
           >
             <Navbar />
             <div className="mt-4 rounded-md bg-background p-5">{children}</div>

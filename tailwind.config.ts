@@ -7,7 +7,7 @@ const config: Config = {
 		extend: {
 			colors: {
 				overlay: {
-					DEFAULT: 'hsla(var(--overlay-color) , var(--tw-bg-opacity, 1))'
+					DEFAULT: 'var(--overlay-color)'
 				},
 				primary: {
 					DEFAULT: 'var(--primary)'

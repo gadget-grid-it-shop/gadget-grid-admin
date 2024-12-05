@@ -150,7 +150,7 @@ const Sidebar = () => {
   return (
     <div>
       {isMenuOpen && !isDesktopOrLaptop && (
-        <div className="z-30 h-screen w-screen bg-overlay bg-opacity-45"></div>
+        <div className="fixed z-30 h-screen w-screen bg-overlay"></div>
       )}
       <div
         className={`fixed top-0 z-50 flex h-screen flex-col overflow-y-auto p-4 shadow-md ${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} lg:w-[260px] min-[1200px]:sticky 2xl:w-[280px] ${!isDesktopOrLaptop ? 'bg-background-foreground' : 'bg-background'}`}

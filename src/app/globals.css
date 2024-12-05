@@ -43,7 +43,7 @@ input {
 
 @layer base {
   :root {
-    --overlay-color: 0, 0%, 0%;
+    --overlay-color: #0707075d;
     --primary: #4a2cf2;
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
@@ -74,7 +74,7 @@ input {
     --white: #fff;
   }
   .dark {
-    --overlay-color: 0, 0%, 0%;
+    --overlay-color: #080808a8;
     --primary: hsl(249, 98%, 61%);
     --bright-turquoise: #19c2dd;
     --ultramarine-blue: #355bfb;
@@ -106,25 +106,25 @@ input {
   }
 }
 
-body::-webkit-scrollbar {
+.main-layout::-webkit-scrollbar {
   width: 10px;
 }
 
 /* Track */
-body::-webkit-scrollbar-track {
+.main-layout::-webkit-scrollbar-track {
   background: var(--white);
   border: 1px solid var(--white);
 }
 
 /* Handle */
-body::-webkit-scrollbar-thumb {
+.main-layout::-webkit-scrollbar-thumb {
   background: var(--lavender-mist);
   width: 8px;
   border-radius: 6px;
 }
 
 /* Handle on hover */
-body::-webkit-scrollbar-thumb:hover {
+.main-layout::-webkit-scrollbar-thumb:hover {
   background: var(--pastel-violet);
 }
 
