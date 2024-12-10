@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import UploadSvg from '@/components/product/bulk upload/UploadSvg';
 import MapFields from '@/components/product/bulk upload/MapFields';
+import { useBulkUploadMutation } from '@/redux/api/productApi';
 
 export type TMapedField = {
   key: string;
@@ -13,9 +14,27 @@ const BulkUploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [mapedFields, setMapedFields] = useState<TMapedField[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(1);
+  const [bulkUpload] = useBulkUploadMutation();
+
+  const handleBulkUpload = async () => {
+    const formData = new FormData();
+    formData.append('bulkFile', file as File);
+    formData.append('mapedFields', JSON.stringify(mapedFields));
+
+    try {
+      const result = await bulkUpload(formData);
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleNext = () => {
     setCurrentTab((prev) => prev + 1);
+
+    if (currentTab === 2) {
+      handleBulkUpload();
+    }
   };
 
   const handleBack = () => {
@@ -55,7 +74,7 @@ const BulkUploadPage = () => {
             className="w-full"
             disabled={file === null}
           >
-            Next
+            {currentTab === 2 ? 'Upload' : 'Next'}
           </Button>
         </div>
       </div>

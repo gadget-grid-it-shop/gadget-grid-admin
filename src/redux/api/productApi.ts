@@ -24,7 +24,22 @@ const productApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.product],
     }),
+
+    bulkUpload: build.mutation({
+      query: (formData: FormData) => {
+        return {
+          url: '/product/bulk-upload',
+          method: 'POST',
+          data: formData,
+        };
+      },
+      invalidatesTags: [tagTypes.upload],
+    }),
   }),
 });
 
-export const { useAddNewProductMutation, useGetAllProductsQuery } = productApi;
+export const {
+  useAddNewProductMutation,
+  useGetAllProductsQuery,
+  useBulkUploadMutation,
+} = productApi;
