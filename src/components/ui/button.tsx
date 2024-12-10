@@ -9,17 +9,18 @@ import { BiSolidEditAlt } from 'react-icons/bi';
 import { HiEye } from 'react-icons/hi2';
 
 const buttonVariants = cva(
-  'inline-flex items-center text-gray justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none',
+  'inline-flex items-center text-gray justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45',
   {
     variants: {
       variant: {
         default: 'bg-primary shadow hover:bg-primary/90 text-pure-white',
+        secondary: 'bg-bright-gray text-md shadow text-pure-white',
         delete:
           'border-red text-red border text-md shadow hover:bg-red hover:text-pure-white',
         delete_solid: 'text-md shadow bg-red text-pure-white',
         edit: 'text-pure-white text-md shadow bg-vivid-orange',
         default_outline:
-          'border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary',
+          'border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary bg-lavender-mist',
         icon: 'border-none p-0 m-0 text-xl',
         create_button:
           'border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary bg-background',
@@ -66,7 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        disabled={loading}
+        disabled={loading || props.disabled}
       >
         {loading ? (
           <FiLoader className="animate-spin" size={20} />

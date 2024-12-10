@@ -19,7 +19,7 @@ const config: Config = {
 				'lavender-blue': 'var(--lavender-blue)',
 				'peach-pink': 'var(--peach-pink)',
 				'red-orange': 'var(--red-orange)',
-				'dim-gray': 'var(--dim-gray)',
+				'bright-gray': 'var(--bright-gray)',
 				black: 'var(--black)',
 				red: 'var(--red)',
 				'sky-blue': 'var(--sky-blue)',

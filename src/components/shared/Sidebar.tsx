@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 import { FaUsersCog } from 'react-icons/fa';
 import { PiUsersThreeBold } from 'react-icons/pi';
-import { LuTags } from 'react-icons/lu';
+import { LuHardDriveUpload, LuTags } from 'react-icons/lu';
 
 interface TMenu {
   id: number;
@@ -76,6 +76,12 @@ const menus: TMenu[] = [
         title: 'All Products',
         link: '/product/all-products',
         icon: <MdListAlt />,
+      },
+      {
+        id: 3,
+        title: 'Bulk Upload',
+        link: '/product/bulk-upload',
+        icon: <LuHardDriveUpload />,
       },
     ],
   },

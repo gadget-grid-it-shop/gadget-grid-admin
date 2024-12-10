@@ -80,9 +80,8 @@ const Select: React.FC<CustomSelectProps> = ({
           `${value ? 'bg-lavender-mist' : 'bg-background-foreground'}`,
           className,
         )}
-        onClick={(e) => {
+        onClick={() => {
           setIsOpen(!isOpen);
-          e.stopPropagation();
         }}
       >
         {selectedLabel

@@ -8,46 +8,58 @@ import {
 } from '../ui/dialog';
 import { FiPlus } from 'react-icons/fi';
 
-type TProps = {
+type TProps = React.ComponentPropsWithRef<typeof Dialog> & {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   children?: ReactNode;
   triggerText?: string | ReactNode;
   title?: string;
   withTrigger?: boolean;
+  className?: string;
 };
 
-const Modal = ({
-  open,
-  setOpen,
-  children,
-  triggerText = 'Open',
-  title = 'New Modal',
-  withTrigger = false,
-}: TProps) => {
-  return (
-    <Dialog modal open={open} onOpenChange={setOpen}>
-      {withTrigger && (
-        <DialogTrigger
-          className={`${typeof triggerText === 'string' ? 'primary-btn' : ''}`}
-        >
-          {typeof triggerText === 'string' ? (
-            <>
-              <FiPlus size={18} />
-              {triggerText}
-            </>
-          ) : (
-            triggerText
-          )}
-        </DialogTrigger>
-      )}
-      <DialogContent className="">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription></DialogDescription>
-        {children}
-      </DialogContent>
-    </Dialog>
-  );
-};
+const Modal = React.forwardRef<HTMLDivElement, TProps>(
+  (
+    {
+      open,
+      setOpen,
+      children,
+      triggerText = 'Open',
+      title = 'New Modal',
+      withTrigger = false,
+      className,
+      ...rest
+    },
+    ref,
+  ) => {
+    return (
+      <Dialog ref={ref} modal open={open} onOpenChange={setOpen} {...rest}>
+        {withTrigger && (
+          <DialogTrigger
+            className={`${
+              typeof triggerText === 'string' ? 'primary-btn' : ''
+            }`}
+          >
+            {typeof triggerText === 'string' ? (
+              <>
+                <FiPlus size={18} />
+                {triggerText}
+              </>
+            ) : (
+              triggerText
+            )}
+          </DialogTrigger>
+        )}
+        <DialogContent className={className}>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription></DialogDescription>
+          {children}
+        </DialogContent>
+      </Dialog>
+    );
+  },
+);
+
+Modal.displayName = 'Modal';
 
 export default Modal;
