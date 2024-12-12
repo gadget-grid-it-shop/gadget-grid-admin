@@ -29,7 +29,7 @@ const headers: { label: string; key: string }[] = [
   { label: 'Lifetime Warrenty (true/false)', key: 'warranty.lifetime' },
   { label: 'Key Features *', key: 'key_features' },
   { label: 'Quantity *', key: 'quantity' },
-  { label: 'Categories (Main) *', key: 'category.main' },
+  { label: 'Categories (Main) *', key: 'category' },
   { label: 'Description', key: 'description' },
   { label: 'Thumbnail *', key: 'thumbnail' },
   { label: 'Meta Title', key: 'meta.title' },

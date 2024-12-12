@@ -54,10 +54,6 @@ const fieldOptions: TSelectOptions[] = [
     value: 'discount.value',
   },
   {
-    label: 'Discount Value',
-    value: 'discount.value',
-  },
-  {
     label: 'Thumbnail',
     value: 'thumbnail',
   },

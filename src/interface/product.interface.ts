@@ -1,3 +1,5 @@
+import { TErrorSourse } from './error.interface';
+
 export interface TReview {
   rating: number;
   review: string;
@@ -57,4 +59,12 @@ export type TProduct = {
   sales?: number;
   createdBy: string;
   shipping: TShipping;
+};
+
+type TWithError = { name: string; errors: TErrorSourse };
+type TSuccessData = { name: string; slug: string; sku: string; _id: string };
+
+export type TBulkUploadResults = {
+  withError: TWithError[];
+  successData: TSuccessData[];
 };
