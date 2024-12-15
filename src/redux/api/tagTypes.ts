@@ -8,6 +8,7 @@ export enum tagTypes {
   admins = 'admins',
   brands = 'brands',
   product = 'product',
+  bulkUpload = 'bulkUpload',
 }
 
 export const tagTypesList = [
@@ -19,4 +20,5 @@ export const tagTypesList = [
   tagTypes.admins,
   tagTypes.brands,
   tagTypes.product,
+  tagTypes.bulkUpload,
 ];

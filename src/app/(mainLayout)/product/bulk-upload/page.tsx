@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { globalError } from '@/lib/utils';
 import UploadResults from '@/components/product/bulk upload/UploadResults';
 import { TBulkUploadResults } from '@/interface/product.interface';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
 
 export type TMapedField = {
   key: string;
@@ -20,6 +22,7 @@ const BulkUploadPage = () => {
   const [currentTab, setCurrentTab] = useState<number>(1);
   const [bulkUpload, { isLoading: isUploading }] = useBulkUploadMutation();
   const [results, setResults] = useState<TBulkUploadResults | null>(null);
+  const router = useRouter();
 
   const compByStep: { step: number; title: string }[] = [
     {
@@ -71,6 +74,22 @@ const BulkUploadPage = () => {
 
   return (
     <div>
+      <Tabs defaultValue="bulk-upload" className="mb-4 w-[400px]">
+        <TabsList>
+          <TabsTrigger
+            onClick={() => router.push('/product/bulk-upload')}
+            value="bulk-upload"
+          >
+            Bulk upload
+          </TabsTrigger>
+          <TabsTrigger
+            onClick={() => router.push('/product/bulk-upload/result')}
+            value="upload-history"
+          >
+            Upload History
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div className="flex items-center justify-between pb-4">
         <h4 className="page-title">Bulk Upload</h4>
       </div>
