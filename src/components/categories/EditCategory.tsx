@@ -1,13 +1,16 @@
-import { TCategory, TProductCategory } from '@/interface/category';
+import {
+  TCategory,
+  TProductCategory,
+  TUpdateCategory,
+} from '@/interface/category';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Form, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import MultipleSelector from '../ui/multiselect';
+import MultipleSelector, { Option } from '../ui/multiselect';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TSelectOptions } from './interface';
 import { toast } from 'sonner';
 import { useUpdateCategoryMutation } from '@/redux/api/categories';
 import { useGetDetailsCategoriesQuery } from '@/redux/api/detailsCategory';
@@ -37,9 +40,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
     error,
     isLoading,
   } = useGetDetailsCategoriesQuery(undefined);
-  const [detailsCategories, setDetailsCategories] = useState<TSelectOptions[]>(
-    [],
-  );
+  const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
   const [updateCategory] = useUpdateCategoryMutation();
 
   const selectOptions = detailsCategoryData?.data?.map(
@@ -99,7 +100,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
       return;
     }
 
-    const payload = {
+    const payload: TUpdateCategory = {
       name: values.name,
       product_details_categories,
     };

@@ -7,9 +7,9 @@ import { FaAngleDown } from 'react-icons/fa';
 interface CustomSelectProps {
   data: TSelectOptions[];
   // eslint-disable-next-line no-unused-vars
-  onChange: (value: string | boolean | null) => void;
+  onChange: (value: string | boolean | null | number) => void;
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   allowDeselect?: boolean;
   className?: string;
   dropdownClassName?: string;

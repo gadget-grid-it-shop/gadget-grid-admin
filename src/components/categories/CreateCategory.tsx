@@ -13,12 +13,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useGetDetailsCategoriesQuery } from '@/redux/api/detailsCategory';
-import { TProductCategory } from '@/interface/category';
-import MultipleSelector from '../ui/multiselect';
+import { TCreateCategory, TProductCategory } from '@/interface/category';
+import MultipleSelector, { Option } from '../ui/multiselect';
 import { useCreateCategoryMutation } from '@/redux/api/categories';
 import { toast } from 'sonner';
 import { TParentCat } from '@/app/(mainLayout)/category/page';
-import { TSelectOptions } from './interface';
 import { globalError } from '@/lib/utils';
 
 type TCategoryProps = {
@@ -44,9 +43,7 @@ const CreateCategory = ({
   setOpen,
   setParent,
 }: TCategoryProps) => {
-  const [detailsCategories, setDetailsCategories] = useState<TSelectOptions[]>(
-    [],
-  );
+  const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
   const {
     data: detailsCategoryData,
     error,
@@ -114,7 +111,7 @@ const CreateCategory = ({
       return;
     }
 
-    const payload = {
+    const payload: TCreateCategory = {
       name: values.name,
       parent_id: values.parent_id || null,
       product_details_categories,

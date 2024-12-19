@@ -1,4 +1,7 @@
 'use client';
+import SuccessResultTable from '@/components/product/uploadResults/SuccessResultTable';
+import TableSkeleton from '@/components/shared/TableSkeleton';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableHeader,
@@ -12,19 +15,31 @@ import { TBulkUploadHistory } from '@/interface/bulkupload.interface';
 import { globalError } from '@/lib/utils';
 import { useGetAllUploadHistoryQuery } from '@/redux/api/bulkUploadApi';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
+import { FaAngleDown } from 'react-icons/fa6';
 
 const BulkUploadResultPage = () => {
-  const { data, error } = useGetAllUploadHistoryQuery(undefined);
+  const { data, error, isLoading } = useGetAllUploadHistoryQuery(undefined);
+  const [activeHistory, setActiveHistory] = useState<TBulkUploadHistory | null>(
+    null,
+  );
   const router = useRouter();
 
   if (error) {
     globalError(error);
   }
-  console.log(data);
+
+  const handleHistoryOpen = (history: TBulkUploadHistory) => {
+    if (activeHistory && activeHistory._id === history._id) {
+      setActiveHistory(null);
+    } else {
+      setActiveHistory(history);
+    }
+  };
+
   return (
     <div>
-      <Tabs defaultValue="upload-history" className="w-[400px]">
+      <Tabs defaultValue="upload-history" className="mb-4 w-[400px]">
         <TabsList>
           <TabsTrigger
             onClick={() => router.push('/product/bulk-upload')}
@@ -41,29 +56,69 @@ const BulkUploadResultPage = () => {
         </TabsList>
       </Tabs>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead></TableHead>
-            {/* <TableHead className="">Title</TableHead> */}
-            <TableHead className="text-right">Total Data</TableHead>
-            <TableHead>Total Successes</TableHead>
-            <TableHead>Total Fails</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.data?.map((history: TBulkUploadHistory, i: number) => (
-            <div key={history._id}>
-              <TableRow className="w-full">
-                <TableCell className="font-medium">{i + 1}</TableCell>
-                <TableCell className="font-medium">
-                  {history.totalUploads}
-                </TableCell>
-              </TableRow>
-            </div>
-          ))}
-        </TableBody>
-      </Table>
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        <Table className="">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Serial</TableHead>
+              <TableHead>Total Data</TableHead>
+              <TableHead>Successfull</TableHead>
+              <TableHead>Fails</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data?.data?.map((history: TBulkUploadHistory, i: number) => (
+              <>
+                <TableRow key={history?._id}>
+                  <TableCell>
+                    <p className="max-w-20">{i + 1}</p>
+                  </TableCell>
+                  <TableCell>{`${history.totalUploads}`}</TableCell>
+                  <TableCell className="flex items-center gap-3">
+                    {history.successData?.length}
+                  </TableCell>
+
+                  <TableCell className="font-semibold">
+                    {history.withError?.length}
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Button
+                        variant="icon"
+                        size={'sm'}
+                        onClick={() => handleHistoryOpen(history)}
+                      >
+                        <FaAngleDown
+                          className={`${history._id === activeHistory?._id ? 'rotate-180 text-bright-cyan' : ''} transition-all`}
+                          size={18}
+                        />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+                {activeHistory?._id === history._id && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <div className="rounded-sm p-3">
+                        <h3 className="text-lg font-semibold">
+                          Successfull Uploads
+                        </h3>
+                        <SuccessResultTable
+                          successData={activeHistory?.successData || []}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
