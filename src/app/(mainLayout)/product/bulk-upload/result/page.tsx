@@ -103,7 +103,7 @@ const BulkUploadResultPage = () => {
                 {activeHistory?._id === history._id && (
                   <TableRow>
                     <TableCell colSpan={5}>
-                      <div className="rounded-sm p-3">
+                      <div className="rounded-sm">
                         <h3 className="text-lg font-semibold">
                           Successfull Uploads
                         </h3>

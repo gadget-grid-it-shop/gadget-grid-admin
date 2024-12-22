@@ -67,7 +67,7 @@ const menus: TMenu[] = [
     children: [
       {
         id: 1,
-        title: 'Create Product',
+        title: 'Create/Update Product',
         link: '/product/create-product',
         icon: <BiAddToQueue />,
       },
@@ -159,7 +159,7 @@ const Sidebar = () => {
         <div className="fixed z-30 h-screen w-screen bg-overlay"></div>
       )}
       <div
-        className={`fixed top-0 z-50 flex h-screen flex-col overflow-y-auto p-4 shadow-md ${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} lg:w-[260px] min-[1200px]:sticky 2xl:w-[280px] ${!isDesktopOrLaptop ? 'bg-background-foreground' : 'bg-background'}`}
+        className={`fixed top-0 z-50 flex h-screen flex-col overflow-y-auto px-2 py-4 shadow-md ${!isDesktopOrLaptop && !isMenuOpen ? 'hidden' : 'visible'} lg:w-[260px] min-[1200px]:sticky 2xl:w-[280px] ${!isDesktopOrLaptop ? 'bg-background-foreground' : 'bg-background'}`}
       >
         <div className="flex justify-between gap-5">
           <Image
@@ -184,7 +184,7 @@ const Sidebar = () => {
             if (!item?.children) {
               return (
                 <Link
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : 'text-gray'}`}
+                  className={`flex items-center gap-2 rounded-lg px-2 py-2 text-sm ${isLinkActive(item.link) ? 'bg-primary text-pure-white' : 'text-gray'}`}
                   key={item.id}
                   href={item.link}
                 >
@@ -217,7 +217,7 @@ const Sidebar = () => {
                     {openRoute.find((id) => id === item.id) &&
                       item.children.map((child) => (
                         <Link
-                          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm ${
+                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-sm ${
                             isLinkActive(child.link)
                               ? 'bg-primary text-pure-white'
                               : 'text-gray'
