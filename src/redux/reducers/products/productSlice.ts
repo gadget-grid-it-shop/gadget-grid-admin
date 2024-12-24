@@ -86,6 +86,12 @@ const productSlice = createSlice({
         state.step = action.payload;
       }
     },
+    setUpdateId: (state, action: PayloadAction<string>) => {
+      state.updateId = action.payload;
+    },
+    setProductForUpdate: (state, action: PayloadAction<TProduct>) => {
+      state.product = action.payload;
+    },
     resetProductData: () => initialState,
   },
 });
@@ -95,6 +101,8 @@ export const {
   setSelectedCategoryName,
   setCreateProductStep,
   resetProductData,
+  setUpdateId,
+  setProductForUpdate,
 } = productSlice.actions;
 
 export default productSlice.reducer;

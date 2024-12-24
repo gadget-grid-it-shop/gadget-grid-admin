@@ -1,6 +1,7 @@
 'use client';
 import SuccessResultTable from '@/components/product/uploadResults/SuccessResultTable';
 import TableSkeleton from '@/components/shared/TableSkeleton';
+import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -14,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TBulkUploadHistory } from '@/interface/bulkupload.interface';
 import { globalError } from '@/lib/utils';
 import { useGetAllUploadHistoryQuery } from '@/redux/api/bulkUploadApi';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa6';
@@ -66,6 +68,8 @@ const BulkUploadResultPage = () => {
               <TableHead>Total Data</TableHead>
               <TableHead>Successfull</TableHead>
               <TableHead>Fails</TableHead>
+              <TableHead>Upload Date</TableHead>
+              <TableHead>Uploaded By</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -86,6 +90,23 @@ const BulkUploadResultPage = () => {
                   </TableCell>
 
                   <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <span>
+                        {dayjs(history.createdAt).format('DD MMM, YYYY')}
+                      </span>
+                      <span className="text-xs">
+                        {dayjs(history.createdAt).format('hh:mm A')}
+                      </span>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div>
+                      <Avatar />
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
                     <div className="flex items-center gap-3">
                       <Button
                         variant="icon"
@@ -102,7 +123,7 @@ const BulkUploadResultPage = () => {
                 </TableRow>
                 {activeHistory?._id === history._id && (
                   <TableRow>
-                    <TableCell colSpan={5}>
+                    <TableCell colSpan={7}>
                       <div className="rounded-sm">
                         <h3 className="text-lg font-semibold">
                           Successfull Uploads

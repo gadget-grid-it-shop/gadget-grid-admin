@@ -4,19 +4,25 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
   resetProductData,
   setCreateProductStep,
+  setProductForUpdate,
 } from '@/redux/reducers/products/productSlice';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import AddBasicData from '@/components/product/createProduct/AddBasicData';
 import AddSpecifications from '@/components/product/createProduct/AddSpecifications';
 import { Button } from '@/components/ui/button';
 import Modal from '@/components/custom/Modal';
-import { useAddNewProductMutation } from '@/redux/api/productApi';
+import {
+  useAddNewProductMutation,
+  useGetSingleProductQuery,
+  useUpdateProductMutation,
+} from '@/redux/api/productApi';
 import { toast } from 'sonner';
 import { globalError } from '@/lib/utils';
 import AddDescription from '@/components/product/createProduct/AddDescription';
 import { ProductValidations } from '@/validations/createProductValidations';
 import { ZodError } from 'zod';
 import AddMetaData from '@/components/product/createProduct/AddMetaData';
+import { TProduct } from '@/interface/product.interface';
 
 type TCompByStep = {
   step: number;
@@ -26,8 +32,22 @@ type TCompByStep = {
 
 const CreateProduct = () => {
   const dispatch = useAppDispatch();
-  const { step, product } = useAppSelector((state) => state.products);
-  const [addNewProduct] = useAddNewProductMutation();
+  const { step, product, updateId } = useAppSelector((state) => state.products);
+  const [addNewProduct, { isLoading: isCreating }] = useAddNewProductMutation();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+
+  const { data: updateProductData } = useGetSingleProductQuery(
+    updateId as string,
+    { skip: updateId === null },
+  );
+
+  const productData: TProduct | undefined = updateProductData?.data;
+
+  useEffect(() => {
+    if (productData) {
+      dispatch(setProductForUpdate(productData));
+    }
+  }, [productData]);
 
   const [resetOpen, setResetOpen] = useState(false);
 
@@ -39,6 +59,22 @@ const CreateProduct = () => {
   const hanldeAddProduct = async () => {
     try {
       const res = await addNewProduct(product).unwrap();
+      if (res) {
+        toast.success(res.message);
+        dispatch(resetProductData());
+      }
+    } catch (err) {
+      globalError(err);
+    }
+  };
+
+  const handleUpdateProduct = async () => {
+    try {
+      const res = await updateProduct({
+        id: updateId as string,
+        payload: product,
+      }).unwrap();
+
       if (res) {
         toast.success(res.message);
         dispatch(resetProductData());
@@ -120,7 +156,9 @@ const CreateProduct = () => {
     <>
       <div>
         <div className="flex items-center justify-between pb-4">
-          <h4 className="page-title">Create Product</h4>
+          <h4 className="page-title">
+            {updateId === null ? 'Create Product' : 'Update Product'}
+          </h4>
           <Button onClick={() => setResetOpen(true)} variant={'edit'}>
             Reset Form
           </Button>
@@ -166,9 +204,27 @@ const CreateProduct = () => {
               Back
             </Button>
           )}
-          <Button onClick={hanldeAddProduct} className="mx-auto">
-            Add Product
-          </Button>
+          {step === 4 && (
+            <>
+              {updateId ? (
+                <Button
+                  onClick={handleUpdateProduct}
+                  loading={isUpdating}
+                  className="mx-auto"
+                >
+                  Update Product
+                </Button>
+              ) : (
+                <Button
+                  onClick={hanldeAddProduct}
+                  loading={isCreating}
+                  className="mx-auto"
+                >
+                  Add Product
+                </Button>
+              )}
+            </>
+          )}
           {step !== compByStep.length && (
             <Button onClick={handleNext}>Next</Button>
           )}
