@@ -23,6 +23,7 @@ import { ProductValidations } from '@/validations/createProductValidations';
 import { ZodError } from 'zod';
 import AddMetaData from '@/components/product/createProduct/AddMetaData';
 import { TProduct } from '@/interface/product.interface';
+import { useSearchParams } from 'next/navigation';
 
 type TCompByStep = {
   step: number;
@@ -32,13 +33,16 @@ type TCompByStep = {
 
 const CreateProduct = () => {
   const dispatch = useAppDispatch();
-  const { step, product, updateId } = useAppSelector((state) => state.products);
+  const { step, product } = useAppSelector((state) => state.products);
   const [addNewProduct, { isLoading: isCreating }] = useAddNewProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
+  const searchParams = useSearchParams();
+  const updateId = searchParams.get('updateId');
+
   const { data: updateProductData } = useGetSingleProductQuery(
     updateId as string,
-    { skip: updateId === null },
+    { skip: !updateId },
   );
 
   const productData: TProduct | undefined = updateProductData?.data;
@@ -46,6 +50,8 @@ const CreateProduct = () => {
   useEffect(() => {
     if (productData) {
       dispatch(setProductForUpdate(productData));
+    } else {
+      dispatch(resetProductData());
     }
   }, [productData]);
 
@@ -226,7 +232,9 @@ const CreateProduct = () => {
             </>
           )}
           {step !== compByStep.length && (
-            <Button onClick={handleNext}>Next</Button>
+            <Button className="ms-auto" onClick={handleNext}>
+              Next
+            </Button>
           )}
         </div>
 

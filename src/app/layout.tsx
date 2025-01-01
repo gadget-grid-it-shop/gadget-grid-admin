@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-
+import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 import GlobalProvider from '@/provider/provider';
 import '@mdxeditor/editor/style.css';
@@ -22,6 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
+        <NextTopLoader
+          showSpinner={false}
+          color="linear-gradient(90deg, hsla(234, 88%, 77%, 1) 0%, hsla(232, 97%, 59%, 1) 100%)"
+        />
         <GlobalProvider>
           <Suspense>
             {children}

@@ -105,9 +105,9 @@ const ImageGallery = ({
     error,
     refetch: refetchGallery,
   } = useGetAllImagesQuery(parentFolder);
-  const [updateFolder] = useUpdateFolderMutation();
-  const [createFolder] = useCreateFolderMutation();
-  const [deleteFolder] = useDeleteFolderMutation();
+  const [updateFolder, { isLoading: isEditing }] = useUpdateFolderMutation();
+  const [createFolder, { isLoading: isCreating }] = useCreateFolderMutation();
+  const [deleteFolder, { isLoading: isDeleting }] = useDeleteFolderMutation();
   const [addFolderModal, setAddFolderModal] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [editOpen, setEditOpen] = useState(false);
@@ -353,7 +353,10 @@ const ImageGallery = ({
                           onChange={(e) => setFolderName(e.target.value)}
                           type="text"
                         />
-                        <Button onClick={() => handleEditFolder(folder._id)}>
+                        <Button
+                          loading={isEditing}
+                          onClick={() => handleEditFolder(folder._id)}
+                        >
                           Edit
                         </Button>
                       </div>
@@ -376,7 +379,10 @@ const ImageGallery = ({
                         <p>This is a desctructive </p>
                       </DialogDescription>
                       <div className="flex flex-col gap-4">
-                        <Button onClick={() => handleDeleteFolder(folder._id)}>
+                        <Button
+                          loading={isDeleting}
+                          onClick={() => handleDeleteFolder(folder._id)}
+                        >
                           Delete
                         </Button>
                       </div>
@@ -579,7 +585,9 @@ const ImageGallery = ({
               onChange={(e) => setFolderName(e.target.value)}
               type="text"
             />
-            <Button onClick={handleAddFolder}>Add</Button>
+            <Button loading={isCreating} onClick={handleAddFolder}>
+              Add
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

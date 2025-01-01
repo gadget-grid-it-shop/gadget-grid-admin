@@ -6,16 +6,11 @@ import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Button } from '@/components/ui/button';
 import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
-import {
-  TProduct,
-  TProductCategory,
-  TProductWarrenty,
-} from '@/interface/product.interface';
+import { TCategory } from '@/interface/category';
+import { TProduct, TProductWarrenty } from '@/interface/product.interface';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
-
-type TPopulatedProductCategory = TProductCategory & { id: { name: string } };
 
 const AllProducts = () => {
   const { data: productData, error } = useGetAllProductsQuery(undefined);
@@ -43,11 +38,8 @@ const AllProducts = () => {
       accessorKey: 'category',
       header: 'Category',
       cell: ({ row }) => {
-        const categories: TPopulatedProductCategory[] =
-          row.getValue('category') || [];
-        const category: TPopulatedProductCategory | undefined =
-          categories?.find((cat: TPopulatedProductCategory) => cat.main);
-        return <div className="">{category?.id?.name}</div>;
+        const category: TCategory = row.getValue('category');
+        return <div className="">{category?.name}</div>;
       },
     },
     {
@@ -58,7 +50,7 @@ const AllProducts = () => {
         return (
           <div className="flex items-center gap-1">
             <CustomAvatar src={brand.image} />
-            <p className="text-gray">{brand.name}</p>
+            <EllipsisText width={60} className="text-gray" text={brand.name} />
           </div>
         );
       },
@@ -68,7 +60,7 @@ const AllProducts = () => {
       accessorKey: 'model',
       header: 'Model',
       cell: ({ row }) => {
-        return <div className="">{row.getValue('model')}</div>;
+        return <EllipsisText width={70} text={row.getValue('model')} />;
       },
     },
     {

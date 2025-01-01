@@ -16,10 +16,11 @@ const productApi = baseApi.injectEndpoints({
     }),
 
     getAllProducts: build.query({
-      query: () => {
+      query: (params?: Record<string, string>) => {
         return {
           url: '/product/get-all',
           method: 'GET',
+          params: params || {},
         };
       },
       providesTags: [tagTypes.product],

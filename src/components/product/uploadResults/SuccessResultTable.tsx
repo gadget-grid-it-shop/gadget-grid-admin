@@ -2,8 +2,6 @@ import { DataTable } from '@/components/custom/DataTable';
 import { Button } from '@/components/ui/button';
 import Pagination from '@/components/ui/pagination';
 import { TSuccessData } from '@/interface/bulkupload.interface';
-import { useAppDispatch } from '@/redux/hooks';
-import { setUpdateId } from '@/redux/reducers/products/productSlice';
 import { ColumnDef } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -14,12 +12,10 @@ const SuccessResultTable = ({
   successData: TSuccessData[];
 }) => {
   const [data, setData] = useState<TSuccessData[]>([]);
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleGoToUpdate = (id: string) => {
-    dispatch(setUpdateId(id as string));
-    router.push('/product/create-product');
+    router.push(`/product/create-product?updateId=${id}`);
   };
 
   useEffect(() => {
