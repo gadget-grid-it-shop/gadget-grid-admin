@@ -1,19 +1,43 @@
 'use client';
+import { TSelectOptions } from '@/components/categories/interface';
 import CustomAvatar from '@/components/custom/CustomAvatar';
 import { DataTable } from '@/components/custom/DataTable';
 import EllipsisText from '@/components/custom/EllipsisText';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Button } from '@/components/ui/button';
+import Pagination from '@/components/ui/pagination';
+import Select from '@/components/ui/select';
+import { TAdminData } from '@/interface/admin.interface';
 import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
 import { TCategory } from '@/interface/category';
 import { TProduct, TProductWarrenty } from '@/interface/product.interface';
+import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
+import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
 import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
+import React, { useState } from 'react';
 
 const AllProducts = () => {
-  const { data: productData, error } = useGetAllProductsQuery(undefined);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [createdBy, setCreatedBy] = useState('');
+  const [brand, setBrand] = useState('');
+  const {
+    data: productData,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetAllProductsQuery({
+    page,
+    limit,
+    ...(createdBy ? { createdBy } : {}),
+    ...(brand ? { brand } : {}),
+  });
+  const { data: adminData } = useGetAllAdminsQuery(undefined);
+  const { data: brandData } = useGetAllBrandsQuery(undefined);
+
+  const paginationData = productData?.data?.pagination;
 
   const columns: ColumnDef<TProduct>[] = [
     {
@@ -129,13 +153,57 @@ const AllProducts = () => {
     },
   ];
 
+  const adminSelectData: TSelectOptions[] = adminData?.data?.map(
+    (admin: TAdminData) => ({
+      label: admin?.fullName,
+      value: admin?.user?._id,
+    }),
+  );
+  const brandSelectData: TSelectOptions[] = brandData?.data?.map(
+    (brand: TBrand) => ({
+      label: brand?.name,
+      value: brand?._id,
+    }),
+  );
+
+  const handlePageChange = (page: number, limit: number) => {
+    console.log({ page }, { limit });
+    setPage(page);
+    setLimit(limit);
+  };
+
+  console.log({ isLoading });
+
   return (
     <div>
-      {!error && productData?.data ? (
-        <DataTable columns={columns} data={productData?.data || []} />
-      ) : (
+      <div className="flex gap-3">
+        <Select
+          placeholder="Brand"
+          value={brand}
+          data={brandSelectData}
+          onChange={(val) => setBrand(val as string)}
+        />
+        <Select
+          placeholder="Created By"
+          value={createdBy}
+          data={adminSelectData}
+          onChange={(val) => setCreatedBy(val as string)}
+        />
+      </div>
+
+      {isFetching ? (
         <TableSkeleton />
+      ) : !error && productData?.data ? (
+        <DataTable columns={columns} data={productData?.data?.products || []} />
+      ) : (
+        <div>Error loading data</div> // Handle the error case
       )}
+      <Pagination
+        currentPage={page}
+        totalItems={paginationData ? paginationData?.total : 0}
+        itemsPerPage={20}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

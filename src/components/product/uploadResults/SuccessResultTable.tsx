@@ -12,6 +12,7 @@ const SuccessResultTable = ({
   successData: TSuccessData[];
 }) => {
   const [data, setData] = useState<TSuccessData[]>([]);
+  const [currentPage] = useState(1);
   const router = useRouter();
 
   const handleGoToUpdate = (id: string) => {
@@ -67,6 +68,7 @@ const SuccessResultTable = ({
       <div className="bg-white px-3 py-1">
         <DataTable columns={columns} data={data} />
         <Pagination
+          currentPage={currentPage}
           itemsPerPage={20}
           totalItems={successData.length}
           onPageChange={handlePageChange}

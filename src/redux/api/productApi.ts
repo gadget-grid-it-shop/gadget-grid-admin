@@ -16,7 +16,7 @@ const productApi = baseApi.injectEndpoints({
     }),
 
     getAllProducts: build.query({
-      query: (params?: Record<string, string>) => {
+      query: (params?: Record<string, string | number>) => {
         return {
           url: '/product/get-all',
           method: 'GET',

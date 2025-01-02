@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 interface PaginationProps {
   totalItems: number;
   itemsPerPage: number;
+  currentPage: number;
   onPageChange: (_page: number, _limit: number) => void;
 }
 
@@ -10,8 +11,9 @@ const Pagination: React.FC<PaginationProps> = ({
   totalItems,
   itemsPerPage,
   onPageChange,
+  currentPage: page,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(page);
   const [limit, setLimit] = useState(itemsPerPage);
 
   const totalPages = Math.ceil(totalItems / limit);
