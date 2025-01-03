@@ -64,39 +64,30 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <nav className="flex flex-col items-center justify-between px-4 py-3 sm:flex-row sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <button
-          onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-          className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
-            currentPage === 1
-              ? 'text-gray-300 cursor-not-allowed'
-              : 'text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          Previous
-        </button>
-        <button
-          onClick={() =>
-            handlePageChange(Math.min(totalPages, currentPage + 1))
-          }
-          disabled={currentPage === totalPages}
-          className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
-            currentPage === totalPages
-              ? 'text-gray-300 cursor-not-allowed'
-              : 'text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          Next
-        </button>
-      </div>
+    <nav className="flex flex-col items-center justify-between px-1 py-3 sm:flex-row sm:justify-normal sm:px-0">
       <div className="flex flex-col sm:flex-1 sm:flex-row sm:items-center sm:justify-between">
-        <div className="mb-4 sm:mb-0">
+        <div className="flex justify-between sm:mb-0">
           <p className="text-sm text-gray">
             Showing page <span className="font-medium">{currentPage}</span> of{' '}
             <span className="font-medium">{totalPages}</span>
           </p>
+
+          <div className="flex items-center sm:hidden">
+            <label htmlFor="limit" className="mr-2 text-sm text-gray">
+              Items per page:
+            </label>
+            <select
+              id="limit"
+              value={limit}
+              onChange={(e) => handleLimitChange(Number(e.target.value))}
+              className="rounded-md border-none outline-none"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
         </div>
 
         <div className="mt-4 sm:mt-0">
@@ -154,7 +145,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </nav>
         </div>
 
-        <div className="flex items-center">
+        <div className="hidden items-center md:flex">
           <label htmlFor="limit" className="mr-2 text-sm text-gray">
             Items per page:
           </label>

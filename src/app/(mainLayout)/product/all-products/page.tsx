@@ -5,6 +5,7 @@ import { DataTable } from '@/components/custom/DataTable';
 import EllipsisText from '@/components/custom/EllipsisText';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import Pagination from '@/components/ui/pagination';
 import Select from '@/components/ui/select';
@@ -19,6 +20,7 @@ import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
 import { ColumnDef } from '@tanstack/react-table';
+import { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 
 const AllProducts = () => {
@@ -28,6 +30,7 @@ const AllProducts = () => {
   const [brand, setBrand] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
+  const [createdAt, setCreateAt] = useState<Dayjs | null>(null);
   const debouncedSearchTerm = useDebounce(searchTerm);
   const {
     data: productData,
@@ -37,6 +40,7 @@ const AllProducts = () => {
     page,
     limit,
     searchTerm: debouncedSearchTerm,
+    ...(createdAt ? { createdAt: createdAt.toISOString() } : {}),
     ...(createdBy ? { createdBy } : {}),
     ...(brand ? { brand } : {}),
     ...(category ? { category } : {}),
@@ -99,7 +103,9 @@ const AllProducts = () => {
       accessorKey: 'sku',
       header: 'SKU',
       cell: ({ row }) => {
-        return <div className="">{row.getValue('sku')}</div>;
+        return (
+          <EllipsisText width={80} className="" text={row.getValue('sku')} />
+        );
       },
     },
     {
@@ -188,7 +194,7 @@ const AllProducts = () => {
 
   return (
     <div>
-      <div className="flex gap-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         <Input
           type="text"
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -215,6 +221,12 @@ const AllProducts = () => {
           value={category}
           data={categorySelectData}
           onChange={(val) => setCategory(val as string)}
+        />
+        <DatePicker
+          value={createdAt}
+          bordered={true}
+          disableFuture
+          onChange={(val) => setCreateAt(val || null)}
         />
       </div>
 

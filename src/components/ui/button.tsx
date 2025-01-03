@@ -22,6 +22,7 @@ const buttonVariants = cva(
         default_outline:
           'border border-primary shadow hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary bg-lavender-mist',
         icon: 'border-none p-0 m-0 text-xl',
+        bordered: 'border border-border-color p-0 m-0 text-base',
         plain: 'border-none p-0 m-0 text-base',
         create_button:
           'border border-border-color h-10 w-10 text-lg p-0 hover:bg-primary/90 text-primary hover:text-pure-white hover:bg-primary bg-background',
