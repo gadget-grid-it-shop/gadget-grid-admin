@@ -5,14 +5,17 @@ import { DataTable } from '@/components/custom/DataTable';
 import EllipsisText from '@/components/custom/EllipsisText';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Pagination from '@/components/ui/pagination';
 import Select from '@/components/ui/select';
+import useDebounce from '@/hooks/useDebounce';
 import { TAdminData } from '@/interface/admin.interface';
 import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
 import { TCategory } from '@/interface/category';
 import { TProduct, TProductWarrenty } from '@/interface/product.interface';
 import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
+import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
 import { ColumnDef } from '@tanstack/react-table';
@@ -23,19 +26,24 @@ const AllProducts = () => {
   const [limit, setLimit] = useState(20);
   const [createdBy, setCreatedBy] = useState('');
   const [brand, setBrand] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const {
     data: productData,
     error,
-    isLoading,
     isFetching,
   } = useGetAllProductsQuery({
     page,
     limit,
+    searchTerm: debouncedSearchTerm,
     ...(createdBy ? { createdBy } : {}),
     ...(brand ? { brand } : {}),
+    ...(category ? { category } : {}),
   });
   const { data: adminData } = useGetAllAdminsQuery(undefined);
   const { data: brandData } = useGetAllBrandsQuery(undefined);
+  const { data: categoryData } = useGetAllCategoriesQuery(false);
 
   const paginationData = productData?.data?.pagination;
 
@@ -165,6 +173,12 @@ const AllProducts = () => {
       value: brand?._id,
     }),
   );
+  const categorySelectData: TSelectOptions[] = categoryData?.data?.map(
+    (category: TCategory) => ({
+      label: category?.name,
+      value: category?._id,
+    }),
+  );
 
   const handlePageChange = (page: number, limit: number) => {
     console.log({ page }, { limit });
@@ -172,27 +186,40 @@ const AllProducts = () => {
     setLimit(limit);
   };
 
-  console.log({ isLoading });
-
   return (
     <div>
       <div className="flex gap-3">
+        <Input
+          type="text"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-border-color bg-background-foreground"
+          placeholder="Search by name/sku/key features"
+        />
         <Select
+          bordered
           placeholder="Brand"
           value={brand}
           data={brandSelectData}
           onChange={(val) => setBrand(val as string)}
         />
         <Select
+          bordered
           placeholder="Created By"
           value={createdBy}
           data={adminSelectData}
           onChange={(val) => setCreatedBy(val as string)}
         />
+        <Select
+          bordered
+          placeholder="Category"
+          value={category}
+          data={categorySelectData}
+          onChange={(val) => setCategory(val as string)}
+        />
       </div>
 
       {isFetching ? (
-        <TableSkeleton />
+        <TableSkeleton className="pt-2" />
       ) : !error && productData?.data ? (
         <DataTable columns={columns} data={productData?.data?.products || []} />
       ) : (

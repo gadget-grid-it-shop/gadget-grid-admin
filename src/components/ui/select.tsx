@@ -7,6 +7,7 @@ import { FaAngleDown } from 'react-icons/fa';
 interface CustomSelectProps {
   data: TSelectOptions[];
   // eslint-disable-next-line no-unused-vars
+  bordered?: boolean;
   onChange: (value: string | boolean | null | number) => void;
   placeholder?: string;
   value?: string | number;
@@ -17,6 +18,7 @@ interface CustomSelectProps {
 
 const Select: React.FC<CustomSelectProps> = ({
   data = [],
+  bordered = false,
   onChange,
   placeholder,
   value,
@@ -77,6 +79,7 @@ const Select: React.FC<CustomSelectProps> = ({
       <div
         className={cn(
           'flex h-10 cursor-pointer items-center rounded-md px-3 text-sm text-gray',
+          `${bordered && 'border border-border-color'}`,
           `${value ? 'bg-lavender-mist' : 'bg-background-foreground'}`,
           className,
         )}

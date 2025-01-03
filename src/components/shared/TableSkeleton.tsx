@@ -1,9 +1,9 @@
 import React from 'react';
 import { Skeleton } from '../ui/skeleton';
 
-const TableSkeleton = () => {
+const TableSkeleton = ({ className }: { className?: string }) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${className}`}>
       <Skeleton className="h-12 w-full bg-lavender-mist" />
 
       {Array.from({ length: 10 }, (item: unknown, i: number) => {

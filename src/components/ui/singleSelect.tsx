@@ -6,6 +6,7 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Command, CommandItem, CommandList } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
+import useDebounce from '@/hooks/useDebounce';
 
 export interface Option {
   value: string;
@@ -32,20 +33,6 @@ interface SingleSelectorProps {
     React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>,
     'value' | 'placeholder' | 'disabled'
   >;
-}
-
-export function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
 }
 
 const SingleSelector = React.forwardRef<HTMLDivElement, SingleSelectorProps>(

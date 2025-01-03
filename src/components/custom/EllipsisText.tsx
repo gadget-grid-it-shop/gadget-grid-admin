@@ -21,7 +21,7 @@ const EllipsisText = ({ text, width = 200, className }: TProps) => {
           <p
             style={{ width }}
             className={cn(
-              `overflow-hidden text-ellipsis whitespace-nowrap`,
+              `overflow-hidden text-ellipsis whitespace-nowrap text-gray`,
               className,
             )}
           >
@@ -29,7 +29,7 @@ const EllipsisText = ({ text, width = 200, className }: TProps) => {
           </p>
         </TooltipTrigger>
         <TooltipContent>
-          <p className="w-48">{text}</p>
+          <p className={cn('w-48 text-pure-white')}>{text}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
