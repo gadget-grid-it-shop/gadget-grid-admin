@@ -52,7 +52,7 @@ const productApi = baseApi.injectEndpoints({
           data: payload,
         };
       },
-      invalidatesTags: [tagTypes.upload],
+      invalidatesTags: [tagTypes.product],
     }),
   }),
 });

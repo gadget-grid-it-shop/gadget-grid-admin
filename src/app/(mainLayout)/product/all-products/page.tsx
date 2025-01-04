@@ -22,6 +22,7 @@ import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
 import { ColumnDef } from '@tanstack/react-table';
 import { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
+import { useRouter } from 'nextjs-toploader/app';
 
 const AllProducts = () => {
   const [page, setPage] = useState(1);
@@ -50,6 +51,8 @@ const AllProducts = () => {
   const { data: categoryData } = useGetAllCategoriesQuery(false);
 
   const paginationData = productData?.data?.pagination;
+
+  const router = useRouter();
 
   const columns: ColumnDef<TProduct>[] = [
     {
@@ -155,11 +158,18 @@ const AllProducts = () => {
     {
       accessorKey: 'actions',
       header: 'Actions',
-      cell: () => {
+      cell: ({ row }) => {
+        const _id = row.getValue('_id');
         return (
           <div className="flex gap-2">
             <Button variant={'view_button'} size={'base'} />
-            <Button variant={'edit_button'} size={'base'} />
+            <Button
+              onClick={() =>
+                router.push(`/product/create-product?updateId=${_id}`)
+              }
+              variant={'edit_button'}
+              size={'base'}
+            />
             <Button variant={'delete_button'} size={'base'} />
           </div>
         );

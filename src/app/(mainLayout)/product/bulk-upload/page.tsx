@@ -9,7 +9,7 @@ import { globalError } from '@/lib/utils';
 import UploadResults from '@/components/product/bulk upload/UploadResults';
 import { TBulkUploadResults } from '@/interface/product.interface';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 export type TMapedField = {
   key: string;

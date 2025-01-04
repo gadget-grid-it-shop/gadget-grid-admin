@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { LuCalendarDays } from 'react-icons/lu';
+import { FaXmark } from 'react-icons/fa6';
 
 interface DatePickerDemoProps {
   value?: Dayjs | string | null;
@@ -60,13 +61,19 @@ export function DatePicker({
     return false;
   };
 
+  const handleClearDate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onChange?.(undefined);
+    setDate(undefined);
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={bordered ? 'bordered' : 'plain'}
           className={cn(
-            `min-h-10 w-full justify-start bg-background-foreground text-left text-sm font-normal text-gray`,
+            `relative min-h-10 w-full justify-start bg-background-foreground text-left text-sm font-normal text-gray`,
             !date && 'text-muted-foreground',
 
             className,
@@ -78,6 +85,15 @@ export function DatePicker({
             date.format('MMM D, YYYY')
           ) : (
             <span className="text-gray">{placeholder}</span>
+          )}
+
+          {date && (
+            <button
+              onClick={handleClearDate}
+              className="absolute right-2 bg-transparent"
+            >
+              <FaXmark />
+            </button>
           )}
         </Button>
       </PopoverTrigger>

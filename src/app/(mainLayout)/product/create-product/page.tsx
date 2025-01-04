@@ -24,6 +24,7 @@ import { ZodError } from 'zod';
 import AddMetaData from '@/components/product/createProduct/AddMetaData';
 import { TProduct } from '@/interface/product.interface';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 type TCompByStep = {
   step: number;
@@ -36,7 +37,7 @@ const CreateProduct = () => {
   const { step, product } = useAppSelector((state) => state.products);
   const [addNewProduct, { isLoading: isCreating }] = useAddNewProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-
+  const router = useRouter();
   const searchParams = useSearchParams();
   const updateId = searchParams.get('updateId');
 
@@ -84,6 +85,7 @@ const CreateProduct = () => {
       if (res) {
         toast.success(res.message);
         dispatch(resetProductData());
+        router.push('/product/all-products');
       }
     } catch (err) {
       globalError(err);
