@@ -9,29 +9,29 @@ import { baseApi } from '../api/baseApi';
 
 let instance;
 try {
-  instance = localforage.createInstance({
-    driver: localforage.INDEXEDDB,
-    name: 'gadget_grid_admin',
-  });
+    instance = localforage.createInstance({
+        driver: localforage.INDEXEDDB,
+        name: 'gadget_grid_admin',
+    });
 } catch (error) {
-  console.log(error);
+    console.log(error);
 }
 
 const authPersistConfig = {
-  key: 'auth',
-  storage: instance || storage,
+    key: 'auth',
+    storage: instance || storage,
 };
 
 const productPersistConfig = {
-  key: 'general',
-  storage: instance || storage,
+    key: 'general',
+    storage: instance || storage,
 };
 
 const rootReducer = combineSlices({
-  [baseApi.reducerPath]: baseApi.reducer,
-  products: persistReducer(productPersistConfig, productReducer),
-  auth: persistReducer(authPersistConfig, authSlice),
-  general: generalSlice,
+    [baseApi.reducerPath]: baseApi.reducer,
+    products: persistReducer(productPersistConfig, productReducer),
+    auth: persistReducer(authPersistConfig, authSlice),
+    general: generalSlice,
 });
 
 export default rootReducer;

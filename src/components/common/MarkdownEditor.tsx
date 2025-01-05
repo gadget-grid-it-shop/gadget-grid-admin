@@ -5,27 +5,27 @@ import dynamic from 'next/dynamic';
 import React, { forwardRef } from 'react';
 
 const Editor = dynamic(() => import('./MarkdownEditorInitializer'), {
-  // Make sure we turn SSR off
-  ssr: false,
+    // Make sure we turn SSR off
+    ssr: false,
 });
 
 export const MarkdownEditor = forwardRef<
-  MDXEditorMethods,
-  MDXEditorProps & { className?: string }
+    MDXEditorMethods,
+    MDXEditorProps & { className?: string }
 >(({ className, ...props }, ref) => {
-  const { theme } = useTheme();
+    const { theme } = useTheme();
 
-  return (
-    <Editor
-      className={cn(
-        theme,
-        `markdown-editor rounded-md bg-background-foreground`,
-        className,
-      )}
-      {...props}
-      editorRef={ref}
-    />
-  );
+    return (
+        <Editor
+            className={cn(
+                theme,
+                `markdown-editor rounded-md bg-background-foreground`,
+                className,
+            )}
+            {...props}
+            editorRef={ref}
+        />
+    );
 });
 
 MarkdownEditor.displayName = 'ForwardRefEditor';

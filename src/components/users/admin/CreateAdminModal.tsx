@@ -16,179 +16,206 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 type TProps = {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const createAdminSchema = z.object({
-  email: z
-    .string({ required_error: 'User name is required' })
-    .email('Not a valid email'),
-  name: z.object({
-    firstName: z
-      .string({ required_error: 'FirstName is required' })
-      .min(1, 'FirstName is required'),
-    middleName: z.string().optional(),
-    lastName: z
-      .string({ required_error: 'LastName is required' })
-      .min(1, 'LastName is required'),
-  }),
-  password: z
-    .string({
-      required_error: 'Password is required',
-      invalid_type_error: 'Password must be a string',
-    })
-    .min(6, 'Password must be at least 6 characters'),
+    email: z
+        .string({ required_error: 'User name is required' })
+        .email('Not a valid email'),
+    name: z.object({
+        firstName: z
+            .string({ required_error: 'FirstName is required' })
+            .min(1, 'FirstName is required'),
+        middleName: z.string().optional(),
+        lastName: z
+            .string({ required_error: 'LastName is required' })
+            .min(1, 'LastName is required'),
+    }),
+    password: z
+        .string({
+            required_error: 'Password is required',
+            invalid_type_error: 'Password must be a string',
+        })
+        .min(6, 'Password must be at least 6 characters'),
 });
 
 const CreateAdminModal = ({ open, setOpen }: TProps) => {
-  const { data: roleData } = useGetRolesQuery(undefined);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [roleError, setRoleError] = useState(false);
-  const [createAdmin, { isLoading: isCreatingAdmin }] =
-    useCreateAdminMutation();
+    const { data: roleData } = useGetRolesQuery(undefined);
+    const [selectedRole, setSelectedRole] = useState<string | null>(null);
+    const [roleError, setRoleError] = useState(false);
+    const [createAdmin, { isLoading: isCreatingAdmin }] =
+        useCreateAdminMutation();
 
-  const form = useForm<z.infer<typeof createAdminSchema>>({
-    resolver: zodResolver(createAdminSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      name: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-      },
-    },
-  });
+    const form = useForm<z.infer<typeof createAdminSchema>>({
+        resolver: zodResolver(createAdminSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+            name: {
+                firstName: '',
+                middleName: '',
+                lastName: '',
+            },
+        },
+    });
 
-  const selectOptions: TSelectOptions[] = roleData?.data?.map((role: TRole) => {
-    return {
-      label: role.role,
-      value: role._id,
-    };
-  });
+    const selectOptions: TSelectOptions[] = roleData?.data?.map(
+        (role: TRole) => {
+            return {
+                label: role.role,
+                value: role._id,
+            };
+        },
+    );
 
-  async function onSubmit(values: z.infer<typeof createAdminSchema>) {
-    setRoleError(false);
-    if (!selectedRole) {
-      setRoleError(true);
-      toast.error('Please select role');
-    } else {
-      const payload: TCreateAdmin = {
-        email: values.email,
-        password: values.password,
-        role: selectedRole,
-        name: values.name,
-      };
+    async function onSubmit(values: z.infer<typeof createAdminSchema>) {
+        setRoleError(false);
+        if (!selectedRole) {
+            setRoleError(true);
+            toast.error('Please select role');
+        } else {
+            const payload: TCreateAdmin = {
+                email: values.email,
+                password: values.password,
+                role: selectedRole,
+                name: values.name,
+            };
 
-      try {
-        const res = await createAdmin(payload).unwrap();
-        toast.success(res.message);
-        setOpen(false);
-        form.reset();
-        setSelectedRole(null);
-      } catch (err) {
-        console.log(err);
-        globalError(err);
-      }
+            try {
+                const res = await createAdmin(payload).unwrap();
+                toast.success(res.message);
+                setOpen(false);
+                form.reset();
+                setSelectedRole(null);
+            } catch (err) {
+                console.log(err);
+                globalError(err);
+            }
+        }
     }
-  }
 
-  console.log(selectedRole);
+    console.log(selectedRole);
 
-  return (
-    <div>
-      <Modal
-        open={open}
-        setOpen={setOpen}
-        triggerText="Create Admin"
-        title="Create new admin"
-        withTrigger={true}
-      >
-        <Form {...form}>
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <FormField
-              control={form.control}
-              name="name.firstName"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-2">
-                    <label>First Name *</label>
-                    <Input {...field} placeholder="Enter first name" />
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-red">{fieldState.error.message}</p>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name.middleName"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-2">
-                    <label>Middle Name</label>
-                    <Input {...field} placeholder="Enter middle name" />
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-red">{fieldState.error.message}</p>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name.lastName"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-2">
-                    <label>last Name *</label>
-                    <Input {...field} placeholder="Enter last name" />
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-red">{fieldState.error.message}</p>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-2">
-                    <label>Email *</label>
-                    <Input {...field} placeholder="Enter user email" />
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-red">{fieldState.error.message}</p>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-2">
-                    <label>Password *</label>
-                    <Input {...field} placeholder="Enter a simple password" />
-                  </div>
-                  {fieldState.error && (
-                    <p className="text-red">{fieldState.error.message}</p>
-                  )}
-                </FormItem>
-              )}
-            />
+    return (
+        <div>
+            <Modal
+                open={open}
+                setOpen={setOpen}
+                triggerText='Create Admin'
+                title='Create new admin'
+                withTrigger={true}
+            >
+                <Form {...form}>
+                    <form
+                        className='flex flex-col gap-3'
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
+                        <FormField
+                            control={form.control}
+                            name='name.firstName'
+                            render={({ field, fieldState }) => (
+                                <FormItem>
+                                    <div className='flex flex-col gap-2'>
+                                        <label>First Name *</label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter first name'
+                                        />
+                                    </div>
+                                    {fieldState.error && (
+                                        <p className='text-red'>
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='name.middleName'
+                            render={({ field, fieldState }) => (
+                                <FormItem>
+                                    <div className='flex flex-col gap-2'>
+                                        <label>Middle Name</label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter middle name'
+                                        />
+                                    </div>
+                                    {fieldState.error && (
+                                        <p className='text-red'>
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='name.lastName'
+                            render={({ field, fieldState }) => (
+                                <FormItem>
+                                    <div className='flex flex-col gap-2'>
+                                        <label>last Name *</label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter last name'
+                                        />
+                                    </div>
+                                    {fieldState.error && (
+                                        <p className='text-red'>
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='email'
+                            render={({ field, fieldState }) => (
+                                <FormItem>
+                                    <div className='flex flex-col gap-2'>
+                                        <label>Email *</label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter user email'
+                                        />
+                                    </div>
+                                    {fieldState.error && (
+                                        <p className='text-red'>
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='password'
+                            render={({ field, fieldState }) => (
+                                <FormItem>
+                                    <div className='flex flex-col gap-2'>
+                                        <label>Password *</label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter a simple password'
+                                        />
+                                    </div>
+                                    {fieldState.error && (
+                                        <p className='text-red'>
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </FormItem>
+                            )}
+                        />
 
-            <div className="flex flex-col gap-2">
-              <label>Role *</label>
-              {/* <SingleSelector
+                        <div className='flex flex-col gap-2'>
+                            <label>Role *</label>
+                            {/* <SingleSelector
                   options={selectOptions}
                   value={selectedRole || undefined}
                   placeholder="Select role for the user"
@@ -197,37 +224,42 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
                     setRoleError(false);
                   }}
                 /> */}
-              <Select
-                placeholder="Select role"
-                className="bg-background"
-                data={selectOptions}
-                onChange={(val) => {
-                  setSelectedRole(val as string);
-                  setRoleError(false);
-                }}
-              />
+                            <Select
+                                placeholder='Select role'
+                                className='bg-background'
+                                data={selectOptions}
+                                onChange={(val) => {
+                                    setSelectedRole(val as string);
+                                    setRoleError(false);
+                                }}
+                            />
 
-              {roleError && <p className="text-red">Select role</p>}
-            </div>
+                            {roleError && (
+                                <p className='text-red'>Select role</p>
+                            )}
+                        </div>
 
-            <div className="flex w-full justify-between gap-3">
-              <Button
-                type="button"
-                className="w-full"
-                variant={'delete_solid'}
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button loading={isCreatingAdmin} className="w-full">
-                Create
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </Modal>
-    </div>
-  );
+                        <div className='flex w-full justify-between gap-3'>
+                            <Button
+                                type='button'
+                                className='w-full'
+                                variant={'delete_solid'}
+                                onClick={() => setOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                loading={isCreatingAdmin}
+                                className='w-full'
+                            >
+                                Create
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+            </Modal>
+        </div>
+    );
 };
 
 export default CreateAdminModal;

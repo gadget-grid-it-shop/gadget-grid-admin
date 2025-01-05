@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogTrigger,
 } from '../ui/dialog';
 import { FiPlus } from 'react-icons/fi';
 import { Form, FormField, FormItem, FormMessage } from '../ui/form';
@@ -21,205 +21,215 @@ import { TParentCat } from '@/app/(mainLayout)/category/page';
 import { globalError } from '@/lib/utils';
 
 type TCategoryProps = {
-  parent: TParentCat;
-  setParent: Dispatch<SetStateAction<TParentCat>>;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  open: boolean;
+    parent: TParentCat;
+    setParent: Dispatch<SetStateAction<TParentCat>>;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    open: boolean;
 };
 
 const CategorySchema = z.object({
-  name: z
-    .string({
-      required_error: 'Category name is required',
-      invalid_type_error: 'Category name is required',
-    })
-    .min(1, { message: 'Category name is required' }),
-  parent_id: z.string().optional(),
+    name: z
+        .string({
+            required_error: 'Category name is required',
+            invalid_type_error: 'Category name is required',
+        })
+        .min(1, { message: 'Category name is required' }),
+    parent_id: z.string().optional(),
 });
 
 const CreateCategory = ({
-  parent,
-  open,
-  setOpen,
-  setParent,
+    parent,
+    open,
+    setOpen,
+    setParent,
 }: TCategoryProps) => {
-  const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
-  const {
-    data: detailsCategoryData,
-    error,
-    isLoading,
-  } = useGetDetailsCategoriesQuery(undefined);
-  const [detailsCategoryError, setDetailsCategoryError] = useState<{
-    error: boolean;
-    message: string;
-  }>({ error: false, message: '' });
+    const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
+    const {
+        data: detailsCategoryData,
+        error,
+        isLoading,
+    } = useGetDetailsCategoriesQuery(undefined);
+    const [detailsCategoryError, setDetailsCategoryError] = useState<{
+        error: boolean;
+        message: string;
+    }>({ error: false, message: '' });
 
-  const [createCategory, { isLoading: isCreatingCategory }] =
-    useCreateCategoryMutation();
+    const [createCategory, { isLoading: isCreatingCategory }] =
+        useCreateCategoryMutation();
 
-  const selectOptions = detailsCategoryData?.data?.map(
-    (item: TProductCategory) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    },
-  );
-
-  const form = useForm<z.infer<typeof CategorySchema>>({
-    resolver: zodResolver(CategorySchema),
-    defaultValues: {
-      name: '',
-      parent_id: '',
-    },
-  });
-
-  const errors: FieldErrors<FormData> = form.formState.errors;
-
-  console.log(errors);
-
-  useEffect(() => {
-    if (parent) {
-      form.reset({
-        name: '',
-        parent_id: parent.id || '',
-      });
-    }
-  }, [parent, form]);
-
-  const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
-    console.log('works');
-
-    setDetailsCategoryError({ error: false, message: '' });
-
-    const detailsCategorySchema = z
-      .array(z.string())
-      .min(1, { message: 'Please select at least one details category' });
-
-    const product_details_categories = detailsCategories.map(
-      (item) => item.value,
+    const selectOptions = detailsCategoryData?.data?.map(
+        (item: TProductCategory) => {
+            return {
+                label: item.name,
+                value: item._id,
+            };
+        },
     );
 
-    const check = detailsCategorySchema.safeParse(product_details_categories);
+    const form = useForm<z.infer<typeof CategorySchema>>({
+        resolver: zodResolver(CategorySchema),
+        defaultValues: {
+            name: '',
+            parent_id: '',
+        },
+    });
 
-    if (!check.success) {
-      setDetailsCategoryError({
-        error: true,
-        message: check.error.errors[0]?.message,
-      });
+    const errors: FieldErrors<FormData> = form.formState.errors;
 
-      return;
-    }
+    console.log(errors);
 
-    const payload: TCreateCategory = {
-      name: values.name,
-      parent_id: values.parent_id || null,
-      product_details_categories,
+    useEffect(() => {
+        if (parent) {
+            form.reset({
+                name: '',
+                parent_id: parent.id || '',
+            });
+        }
+    }, [parent, form]);
+
+    const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
+        console.log('works');
+
+        setDetailsCategoryError({ error: false, message: '' });
+
+        const detailsCategorySchema = z
+            .array(z.string())
+            .min(1, { message: 'Please select at least one details category' });
+
+        const product_details_categories = detailsCategories.map(
+            (item) => item.value,
+        );
+
+        const check = detailsCategorySchema.safeParse(
+            product_details_categories,
+        );
+
+        if (!check.success) {
+            setDetailsCategoryError({
+                error: true,
+                message: check.error.errors[0]?.message,
+            });
+
+            return;
+        }
+
+        const payload: TCreateCategory = {
+            name: values.name,
+            parent_id: values.parent_id || null,
+            product_details_categories,
+        };
+
+        try {
+            const res = await createCategory(payload).unwrap();
+
+            if (res.success) {
+                toast.success(res.message);
+
+                setOpen(false);
+                form.reset({
+                    name: '',
+                    parent_id: '',
+                });
+                setDetailsCategories([]);
+            }
+        } catch (err) {
+            globalError(err);
+        }
     };
 
-    try {
-      const res = await createCategory(payload).unwrap();
+    console.log(parent);
 
-      if (res.success) {
-        toast.success(res.message);
-
-        setOpen(false);
-        form.reset({
-          name: '',
-          parent_id: '',
-        });
-        setDetailsCategories([]);
-      }
-    } catch (err) {
-      globalError(err);
-    }
-  };
-
-  console.log(parent);
-
-  return (
-    <div>
-      <Dialog
-        open={open}
-        onOpenChange={() => {
-          setOpen(!open);
-          setParent({
-            name: '',
-            id: '',
-          });
-        }}
-      >
-        <DialogTrigger className="primary-btn">
-          <FiPlus size={18} /> Create Category
-        </DialogTrigger>
-        <DialogContent>
-          <DialogTitle>Create New Category</DialogTitle>
-
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onsubmit)}
-              className="flex flex-col gap-4"
+    return (
+        <div>
+            <Dialog
+                open={open}
+                onOpenChange={() => {
+                    setOpen(!open);
+                    setParent({
+                        name: '',
+                        id: '',
+                    });
+                }}
             >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <label className="text-black">Name *</label>
-                    <Input
-                      {...field}
-                      placeholder="Enter category name"
-                      type="text"
-                    />
+                <DialogTrigger className='primary-btn'>
+                    <FiPlus size={18} /> Create Category
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogTitle>Create New Category</DialogTitle>
 
-                    {fieldState.error && (
-                      <FormMessage className="text-sm text-red">
-                        {fieldState.error.message}
-                      </FormMessage>
-                    )}
-                  </FormItem>
-                )}
-              />
-              {parent.id && (
-                <FormField
-                  control={form.control}
-                  name="parent_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <label className="text-black">Parent</label>
-                      <Input
-                        disabled
-                        {...field}
-                        value={parent.name}
-                        type="text"
-                      />
-                    </FormItem>
-                  )}
-                />
-              )}
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onsubmit)}
+                            className='flex flex-col gap-4'
+                        >
+                            <FormField
+                                control={form.control}
+                                name='name'
+                                render={({ field, fieldState }) => (
+                                    <FormItem>
+                                        <label className='text-black'>
+                                            Name *
+                                        </label>
+                                        <Input
+                                            {...field}
+                                            placeholder='Enter category name'
+                                            type='text'
+                                        />
 
-              <div className="flex flex-col gap-2">
-                <label className="text-black">Product Details Category *</label>
-                {!isLoading && !error && (
-                  <MultipleSelector
-                    options={selectOptions}
-                    value={detailsCategories}
-                    onChange={(value) => setDetailsCategories(value)}
-                  />
-                )}
-                {detailsCategoryError.error && (
-                  <p className="text-sm text-red">
-                    {detailsCategoryError.message}
-                  </p>
-                )}
-              </div>
-              <Button loading={isCreatingCategory}>Create</Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
+                                        {fieldState.error && (
+                                            <FormMessage className='text-sm text-red'>
+                                                {fieldState.error.message}
+                                            </FormMessage>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                            {parent.id && (
+                                <FormField
+                                    control={form.control}
+                                    name='parent_id'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <label className='text-black'>
+                                                Parent
+                                            </label>
+                                            <Input
+                                                disabled
+                                                {...field}
+                                                value={parent.name}
+                                                type='text'
+                                            />
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
+
+                            <div className='flex flex-col gap-2'>
+                                <label className='text-black'>
+                                    Product Details Category *
+                                </label>
+                                {!isLoading && !error && (
+                                    <MultipleSelector
+                                        options={selectOptions}
+                                        value={detailsCategories}
+                                        onChange={(value) =>
+                                            setDetailsCategories(value)
+                                        }
+                                    />
+                                )}
+                                {detailsCategoryError.error && (
+                                    <p className='text-sm text-red'>
+                                        {detailsCategoryError.message}
+                                    </p>
+                                )}
+                            </div>
+                            <Button loading={isCreatingCategory}>Create</Button>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
 };
 
 export default CreateCategory;

@@ -10,51 +10,51 @@ import { TProduct } from '@/interface/product.interface';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+    return twMerge(clsx(inputs));
 }
 
 export const verifyToken = (token: string) => {
-  const decoded = jwtDecode(token);
-  return decoded;
+    const decoded = jwtDecode(token);
+    return decoded;
 };
 
 export const globalError = (error: unknown) => {
-  const typeError = error as { data: TGenericErrorResponse };
+    const typeError = error as { data: TGenericErrorResponse };
 
-  if (typeError?.data?.errorSources?.length > 0) {
-    toast.error(typeError.data?.errorSources[0]?.message);
-  } else {
-    toast.error('An unknown error occurred');
-  }
+    if (typeError?.data?.errorSources?.length > 0) {
+        toast.error(typeError.data?.errorSources[0]?.message);
+    } else {
+        toast.error('An unknown error occurred');
+    }
 };
 
 export const getAccessToken = () => {
-  const { token } = store.getState().auth;
-  if (token) {
-    return token;
-  } else {
-    return null;
-  }
+    const { token } = store.getState().auth;
+    if (token) {
+        return token;
+    } else {
+        return null;
+    }
 };
 
 export const handleLogout = () => {
-  store.dispatch(resetAuthData());
-  clearCookie();
+    store.dispatch(resetAuthData());
+    clearCookie();
 };
 
 export function isValidUrl(url: string): boolean {
-  try {
-    new URL(url);
-    return true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_) {
-    return false;
-  }
+    try {
+        new URL(url);
+        return true;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {
+        return false;
+    }
 }
 
 export const handleProductChange = <K extends keyof TProduct>(
-  key: K,
-  value: TProduct[K],
+    key: K,
+    value: TProduct[K],
 ) => {
-  store.dispatch(updateProduct({ key, value }));
+    store.dispatch(updateProduct({ key, value }));
 };

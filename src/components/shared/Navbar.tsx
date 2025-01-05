@@ -6,13 +6,13 @@ import { useMediaQuery } from 'react-responsive';
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useEffect, useState } from 'react';
@@ -26,127 +26,147 @@ import { handleLogout } from '@/lib/utils';
 import ImageGallery from '../product/ImageGallery';
 
 const Navbar = () => {
-  const [loaded, setLoaded] = useState(false);
-  const { isAuthenticated, user } = useAppSelector((s) => s.auth);
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const dispatch = useAppDispatch();
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1200px)',
-  });
+    const [loaded, setLoaded] = useState(false);
+    const { isAuthenticated, user } = useAppSelector((s) => s.auth);
+    const [galleryOpen, setGalleryOpen] = useState(false);
+    const dispatch = useAppDispatch();
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-width: 1200px)',
+    });
 
-  const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
 
-  return (
-    <nav className="">
-      <div className="mt-3 flex justify-between rounded-md bg-white px-4 py-4 shadow-md">
-        {!isDesktopOrLaptop && (
-          <Button
-            className="px-0 text-2xl"
-            onClick={() => dispatch(setMenuOpen(true))}
-            variant={'icon'}
-          >
-            <HiMiniBars3BottomLeft />
-          </Button>
-        )}
-        <div className="flex w-full justify-end">
-          <Button
-            onClick={() => setGalleryOpen(true)}
-            className="gap-1 bg-bright-turquoise text-sm"
-          >
-            <TbPhotoSquareRounded size={18} /> Gallery
-          </Button>
-          {isAuthenticated && (
-            <div className="flex justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="icon">
-                    <Avatar>
-                      <AvatarImage src={user?.profilePicture} />
-                      <AvatarFallback className="capitalize">
-                        {user?.name.firstName.slice(0, 1)}
-                        {user?.name.lastName.slice(0, 1)}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="-right-10 w-72 pb-4">
-                  <DropdownMenuLabel>
-                    <div className="flex items-center justify-between rounded-tl-md rounded-tr-md bg-primary px-3 py-4 text-pure-white">
-                      <div>
-                        <h2 className="pb-1 font-semibold capitalize text-pure-white">{`${user?.name.firstName} ${user?.name.middleName} ${user?.name.lastName}`}</h2>
-                        <h3 className="text-sm text-pure-white">
-                          Role: {user?.role?.role}
-                        </h3>
-                      </div>
-                      <Button
-                        variant={'delete_solid'}
-                        className="bg-background text-red"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Button>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Link
-                        href={'/my-profile'}
-                        className="flex items-center gap-3"
-                      >
-                        <FaRegUserCircle size={18} />
-                        <span>Profile</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link
-                        href={'/settings'}
-                        className="flex items-center gap-3"
-                      >
-                        <IoSettingsOutline size={18} />
-                        <span>Settings</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+    return (
+        <nav className=''>
+            <div className='mt-3 flex justify-between rounded-md bg-white px-4 py-4 shadow-md'>
+                {!isDesktopOrLaptop && (
+                    <Button
+                        className='px-0 text-2xl'
+                        onClick={() => dispatch(setMenuOpen(true))}
+                        variant={'icon'}
+                    >
+                        <HiMiniBars3BottomLeft />
+                    </Button>
+                )}
+                <div className='flex w-full justify-end'>
+                    <Button
+                        onClick={() => setGalleryOpen(true)}
+                        className='gap-1 bg-bright-turquoise text-sm'
+                    >
+                        <TbPhotoSquareRounded size={18} /> Gallery
+                    </Button>
+                    {isAuthenticated && (
+                        <div className='flex justify-end'>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant='icon'>
+                                        <Avatar>
+                                            <AvatarImage
+                                                src={user?.profilePicture}
+                                            />
+                                            <AvatarFallback className='capitalize'>
+                                                {user?.name.firstName.slice(
+                                                    0,
+                                                    1,
+                                                )}
+                                                {user?.name.lastName.slice(
+                                                    0,
+                                                    1,
+                                                )}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className='-right-10 w-72 pb-4'>
+                                    <DropdownMenuLabel>
+                                        <div className='flex items-center justify-between rounded-tl-md rounded-tr-md bg-primary px-3 py-4 text-pure-white'>
+                                            <div>
+                                                <h2 className='pb-1 font-semibold capitalize text-pure-white'>{`${user?.name.firstName} ${user?.name.middleName} ${user?.name.lastName}`}</h2>
+                                                <h3 className='text-sm text-pure-white'>
+                                                    Role: {user?.role?.role}
+                                                </h3>
+                                            </div>
+                                            <Button
+                                                variant={'delete_solid'}
+                                                className='bg-background text-red'
+                                                onClick={handleLogout}
+                                            >
+                                                Logout
+                                            </Button>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem>
+                                            <Link
+                                                href={'/my-profile'}
+                                                className='flex items-center gap-3'
+                                            >
+                                                <FaRegUserCircle size={18} />
+                                                <span>Profile</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <Link
+                                                href={'/settings'}
+                                                className='flex items-center gap-3'
+                                            >
+                                                <IoSettingsOutline size={18} />
+                                                <span>Settings</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
 
-              {loaded && (
-                <div className="mx-auto flex w-fit items-center justify-center rounded-full border border-border-color bg-lavender-mist font-semibold shadow-lg">
-                  <button
-                    onClick={() =>
-                      setTheme(theme === 'dark' ? 'light' : 'dark')
-                    }
-                    className={`flex h-full items-center gap-2 rounded-full px-3 py-2 text-black ${
-                      theme === 'light' ? '' : 'bg-primary text-pure-white'
-                    }`}
-                  >
-                    <BsMoonFill />
-                  </button>
-                  <button
-                    onClick={() =>
-                      setTheme(theme === 'light' ? 'dark' : 'light')
-                    }
-                    className={`flex h-full items-center gap-2 rounded-full px-3 py-2 text-black ${
-                      theme === 'light' ? 'bg-primary text-pure-white' : ''
-                    }`}
-                  >
-                    <TbSunFilled />
-                  </button>
+                            {loaded && (
+                                <div className='mx-auto flex w-fit items-center justify-center rounded-full border border-border-color bg-lavender-mist font-semibold shadow-lg'>
+                                    <button
+                                        onClick={() =>
+                                            setTheme(
+                                                theme === 'dark'
+                                                    ? 'light'
+                                                    : 'dark',
+                                            )
+                                        }
+                                        className={`flex h-full items-center gap-2 rounded-full px-3 py-2 text-black ${
+                                            theme === 'light'
+                                                ? ''
+                                                : 'bg-primary text-pure-white'
+                                        }`}
+                                    >
+                                        <BsMoonFill />
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            setTheme(
+                                                theme === 'light'
+                                                    ? 'dark'
+                                                    : 'light',
+                                            )
+                                        }
+                                        className={`flex h-full items-center gap-2 rounded-full px-3 py-2 text-black ${
+                                            theme === 'light'
+                                                ? 'bg-primary text-pure-white'
+                                                : ''
+                                        }`}
+                                    >
+                                        <TbSunFilled />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
-              )}
-            </div>
-          )}
-        </div>
 
-        <ImageGallery open={galleryOpen} setOpen={setGalleryOpen} />
-      </div>
-    </nav>
-  );
+                <ImageGallery open={galleryOpen} setOpen={setGalleryOpen} />
+            </div>
+        </nav>
+    );
 };
 
 export default Navbar;
