@@ -23,6 +23,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
+import PageHeader from '@/components/common/PageHeader';
 
 const AllProducts = () => {
   const [page, setPage] = useState(1);
@@ -210,6 +211,20 @@ const AllProducts = () => {
 
   return (
     <div>
+      <PageHeader
+        title={'All Products'}
+        subtitle="Manage and Organize All Products in Your Inventory"
+        buttons={
+          <>
+            <Button
+              onClick={() => router.push('/product/create-product')}
+              variant={'default'}
+            >
+              Create new product
+            </Button>
+          </>
+        }
+      />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         <Input
           type="text"

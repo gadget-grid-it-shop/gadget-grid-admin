@@ -21,6 +21,7 @@ import CreateBrand from '@/components/brand/CreateBrand';
 import Modal from '@/components/custom/Modal';
 import { toast } from 'sonner';
 import EditBrand from '@/components/brand/EditBrand';
+import PageHeader from '@/components/common/PageHeader';
 
 const BrandPage = () => {
   const { data: brandData, isLoading, error } = useGetAllBrandsQuery(undefined);
@@ -48,10 +49,11 @@ const BrandPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between pb-4">
-        <h4 className="page-title">Brands</h4>
-        <CreateBrand />
-      </div>
+      <PageHeader
+        subtitle="Create and Organize Product Brands"
+        title="Brands"
+        buttons={<CreateBrand />}
+      />
 
       {isLoading ? (
         <TableSkeleton />

@@ -25,6 +25,7 @@ import AddMetaData from '@/components/product/createProduct/AddMetaData';
 import { TProduct } from '@/interface/product.interface';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'nextjs-toploader/app';
+import PageHeader from '@/components/common/PageHeader';
 
 type TCompByStep = {
   step: number;
@@ -163,14 +164,17 @@ const CreateProduct = () => {
   return (
     <>
       <div>
-        <div className="flex items-center justify-between pb-4">
-          <h4 className="page-title">
-            {updateId === null ? 'Create Product' : 'Update Product'}
-          </h4>
-          <Button onClick={() => setResetOpen(true)} variant={'edit'}>
-            Reset Form
-          </Button>
-        </div>
+        <PageHeader
+          title={updateId === null ? 'Create Product' : 'Update Product'}
+          subtitle="Add New Products to Your Inventory"
+          buttons={
+            <>
+              <Button onClick={() => setResetOpen(true)} variant={'edit'}>
+                Reset Form
+              </Button>
+            </>
+          }
+        />
 
         <div className="mb-7 mt-3 flex justify-center px-8 sm:mb-16 sm:px-14 md:px-20">
           {compByStep.map((s) => {

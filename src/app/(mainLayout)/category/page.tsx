@@ -3,6 +3,7 @@
 import CategorySkeleton from '@/components/categories/CategorySkeleton';
 import CreateCategory from '@/components/categories/CreateCategory';
 import EditCategory from '@/components/categories/EditCategory';
+import PageHeader from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -216,15 +217,18 @@ const Category = () => {
 
   return (
     <div className="text-black">
-      <div className="flex items-center justify-between pb-4">
-        <h4 className="page-title">Categories</h4>
-        <CreateCategory
-          open={open}
-          setOpen={setOpen}
-          parent={parent}
-          setParent={setParent}
-        />
-      </div>
+      <PageHeader
+        title="Categories"
+        subtitle="Manage and Organize Product Categories"
+        buttons={
+          <CreateCategory
+            open={open}
+            setOpen={setOpen}
+            parent={parent}
+            setParent={setParent}
+          />
+        }
+      />
 
       <div className="text-md grid grid-cols-2 rounded-md bg-lavender-mist p-4 font-semibold">
         <h2>Name</h2>

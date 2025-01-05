@@ -135,6 +135,9 @@ input {
 .page-title {
   @apply text-[1.2rem] font-semibold text-black lg:text-[1.5rem];
 }
+.page-subtitle {
+  @apply text-sm text-gray lg:text-base;
+}
 
 .mdxeditor-root-contenteditable {
   @apply min-h-40;

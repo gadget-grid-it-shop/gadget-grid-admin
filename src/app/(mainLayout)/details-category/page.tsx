@@ -1,5 +1,6 @@
 'use client';
 
+import PageHeader from '@/components/common/PageHeader';
 import CreateNewDetailsCategory from '@/components/details-category/CreateNewDetailsCategory';
 import DetailsCategoryInfo from '@/components/details-category/DetailsCategoryInfo';
 import DetailsCategorySkeleton from '@/components/details-category/DetailsCategorySkeleton';
@@ -17,10 +18,11 @@ const DetailsCategory = () => {
   return (
     <>
       <div>
-        <div className="flex items-center justify-between gap-2 pb-4 max-[640px]:flex-col max-[640px]:items-start lg:flex-row">
-          <h4 className="page-title">Product Details Category </h4>
-          <CreateNewDetailsCategory />
-        </div>
+        <PageHeader
+          title="Product Details Category"
+          subtitle="Define and Manage Product Detail Categories with Custom Fields"
+          buttons={<CreateNewDetailsCategory />}
+        />
 
         {!isLoading ? (
           <DetailsCategoryInfo data={data?.data} />

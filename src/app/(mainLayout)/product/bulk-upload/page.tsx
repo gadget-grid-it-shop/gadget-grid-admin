@@ -10,6 +10,7 @@ import UploadResults from '@/components/product/bulk upload/UploadResults';
 import { TBulkUploadResults } from '@/interface/product.interface';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRouter } from 'nextjs-toploader/app';
+import PageHeader from '@/components/common/PageHeader';
 
 export type TMapedField = {
   key: string;
@@ -74,6 +75,11 @@ const BulkUploadPage = () => {
 
   return (
     <div>
+      <PageHeader
+        title="Bulk Upload"
+        subtitle="Efficiently Upload Multiple Products at Once"
+      />
+
       <Tabs defaultValue="bulk-upload" className="mb-4 w-[400px]">
         <TabsList>
           <TabsTrigger

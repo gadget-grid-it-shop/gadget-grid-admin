@@ -1,4 +1,5 @@
 'use client';
+import PageHeader from '@/components/common/PageHeader';
 import SuccessResultTable from '@/components/product/uploadResults/SuccessResultTable';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Avatar } from '@/components/ui/avatar';
@@ -41,6 +42,10 @@ const BulkUploadResultPage = () => {
 
   return (
     <div>
+      <PageHeader
+        title="Bulk Upload History"
+        subtitle="View and Track Bulk Product Upload History"
+      />
       <Tabs defaultValue="upload-history" className="mb-4 w-[400px]">
         <TabsList>
           <TabsTrigger
