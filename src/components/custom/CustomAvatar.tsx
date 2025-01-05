@@ -10,8 +10,8 @@ const CustomAvatar = ({
   fallback?: string;
 }) => {
   return (
-    <Avatar>
-      <AvatarImage height={30} width={30} src={src} />
+    <Avatar className="h-[25px] w-[25px]">
+      <AvatarImage height={25} width={25} src={src} />
       <AvatarFallback>
         {fallback ? (
           fallback
@@ -23,8 +23,8 @@ const CustomAvatar = ({
                 '/brand-fallback.png')
             }
             className="object-contain"
-            height={35}
-            width={35}
+            height={25}
+            width={25}
             alt="brand image"
           />
         )}

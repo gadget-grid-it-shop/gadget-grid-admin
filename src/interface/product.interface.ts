@@ -1,3 +1,4 @@
+import { TCategory } from './category';
 import { TErrorSourse } from './error.interface';
 
 export interface TReview {
@@ -56,6 +57,7 @@ export type TProduct = {
   meta?: TMeta;
   tags?: string[];
   isFeatured?: boolean;
+  mainCategory?: TCategory | null;
   sales?: number;
   createdBy: string;
   shipping: TShipping;

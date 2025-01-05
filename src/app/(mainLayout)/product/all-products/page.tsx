@@ -74,11 +74,17 @@ const AllProducts = () => {
       },
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'mainCategory',
       header: 'Category',
       cell: ({ row }) => {
-        const category: TCategory = row.getValue('category');
-        return <div className="">{category?.name}</div>;
+        const category: TCategory = row.getValue('mainCategory');
+        return (
+          <EllipsisText
+            width={120}
+            className="text-gray"
+            text={category?.name}
+          />
+        );
       },
     },
     {
