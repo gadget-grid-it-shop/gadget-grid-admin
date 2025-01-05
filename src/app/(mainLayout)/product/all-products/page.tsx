@@ -20,7 +20,7 @@ import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
 import { ColumnDef } from '@tanstack/react-table';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
@@ -108,27 +108,45 @@ const AllProducts = () => {
                 );
             },
         },
-
         {
-            accessorKey: 'model',
-            header: 'Model',
+            accessorKey: 'createdAt',
+            header: 'Created At',
             cell: ({ row }) => {
-                return <EllipsisText width={70} text={row.getValue('model')} />;
-            },
-        },
-        {
-            accessorKey: 'sku',
-            header: 'SKU',
-            cell: ({ row }) => {
+                const createdAt = row.getValue('createdAt');
                 return (
-                    <EllipsisText
-                        width={80}
-                        className=''
-                        text={row.getValue('sku')}
-                    />
+                    <div>
+                        {dayjs(createdAt as string).format('DD MMM, YYYY')}
+                    </div>
                 );
             },
         },
+        {
+            accessorKey: 'updatedAt',
+            header: 'Updated At',
+            cell: ({ row }) => {
+                const createdAt = row.getValue('createdAt') as string;
+                const updatedAt = row.getValue('updatedAt') as string;
+                const isSame = createdAt === updatedAt;
+                return (
+                    <div>
+                        {!isSame ? (
+                            dayjs(createdAt as string).format('DD MMM, YYYY')
+                        ) : (
+                            <span className='text-red-orange'>Not updated</span>
+                        )}
+                    </div>
+                );
+            },
+        },
+
+        // {
+        //     accessorKey: 'model',
+        //     header: 'Model',
+        //     cell: ({ row }) => {
+        //         return <EllipsisText width={70} text={row.getValue('model')} />;
+        //     },
+        // },
+
         {
             accessorKey: 'price',
             header: 'Price',
