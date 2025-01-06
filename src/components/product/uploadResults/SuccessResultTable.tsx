@@ -66,7 +66,11 @@ const SuccessResultTable = ({
     return (
         <>
             <div className='bg-white px-3 py-1'>
-                <DataTable columns={columns} data={data} />
+                <DataTable
+                    tableName='update-result-table'
+                    columns={columns}
+                    data={data}
+                />
                 <Pagination
                     currentPage={currentPage}
                     itemsPerPage={20}

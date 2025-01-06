@@ -16,28 +16,30 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useEffect, useState } from 'react';
+import { useAppSelector } from '@/redux/hooks';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    tableName: string;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    tableName,
 }: DataTableProps<TData, TValue>) {
     const [viewColumns, setViewColumns] =
         useState<ColumnDef<TData, TValue>[]>(columns);
 
-    const rowIds: string[] = columns?.map((c) => {
-        return c.header as string;
-    });
+    const { tableChecklist } = useAppSelector((state) => state.table);
+    const checkList = tableChecklist.find((item) => item.route === tableName);
 
     useEffect(() => {
         setViewColumns(
-            columns.filter((c) => rowIds.includes(c.header as string)),
+            columns.filter((c) => checkList?.list.includes(c.header as string)),
         );
-    }, []);
+    }, [checkList]);
     const table = useReactTable({
         data,
         columns: viewColumns,

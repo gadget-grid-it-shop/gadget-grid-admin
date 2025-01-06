@@ -6,6 +6,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import localforage from 'localforage';
 import { baseApi } from '../api/baseApi';
+import tableReducer from './tableCollumn/tableReducer';
 
 let instance;
 try {
@@ -27,11 +28,17 @@ const productPersistConfig = {
     storage: instance || storage,
 };
 
+const tablePersistConfig = {
+    key: 'table',
+    storage: instance || storage,
+};
+
 const rootReducer = combineSlices({
     [baseApi.reducerPath]: baseApi.reducer,
     products: persistReducer(productPersistConfig, productReducer),
     auth: persistReducer(authPersistConfig, authSlice),
     general: generalSlice,
+    table: persistReducer(tablePersistConfig, tableReducer),
 });
 
 export default rootReducer;

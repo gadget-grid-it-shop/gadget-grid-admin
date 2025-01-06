@@ -25,6 +25,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
 import { IoSettingsSharp } from 'react-icons/io5';
+import ColumnSettings from '@/components/shared/ColumnSettings';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -258,9 +259,10 @@ const AllProducts = () => {
                         >
                             Create new product
                         </Button>
-                        <Button variant='edit' size={'icon'}>
-                            <IoSettingsSharp />
-                        </Button>
+                        <ColumnSettings
+                            columns={columns}
+                            tableName='product_table'
+                        />
                     </>
                 }
             />
@@ -304,6 +306,7 @@ const AllProducts = () => {
                 <TableSkeleton className='pt-2' />
             ) : !error && productData?.data ? (
                 <DataTable
+                    tableName='product_table'
                     columns={columns}
                     data={productData?.data?.products || []}
                 />

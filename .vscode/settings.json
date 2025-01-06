@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[javascriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
@@ -14,7 +14,6 @@
     "[scss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "eslint.run": "onType",
