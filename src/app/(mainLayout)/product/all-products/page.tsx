@@ -24,6 +24,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
+import { IoSettingsSharp } from 'react-icons/io5';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -114,7 +115,7 @@ const AllProducts = () => {
             cell: ({ row }) => {
                 const createdAt = row.getValue('createdAt');
                 return (
-                    <div>
+                    <div className='min-w-24'>
                         {dayjs(createdAt as string).format('DD MMM, YYYY')}
                     </div>
                 );
@@ -128,7 +129,7 @@ const AllProducts = () => {
                 const updatedAt = row.getValue('updatedAt') as string;
                 const isSame = createdAt === updatedAt;
                 return (
-                    <div>
+                    <div className='min-w-24'>
                         {!isSame ? (
                             dayjs(createdAt as string).format('DD MMM, YYYY')
                         ) : (
@@ -256,6 +257,9 @@ const AllProducts = () => {
                             variant={'default'}
                         >
                             Create new product
+                        </Button>
+                        <Button variant='edit' size={'icon'}>
+                            <IoSettingsSharp />
                         </Button>
                     </>
                 }

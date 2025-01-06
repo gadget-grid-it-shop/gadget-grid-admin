@@ -15,7 +15,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -26,20 +26,23 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
-
     const [viewColumns, setViewColumns] =
         useState<ColumnDef<TData, TValue>[]>(columns);
 
-    // const rowIds: string[] = columns.map((c) => {
-    //     return c.header;
-    // });
+    const rowIds: string[] = columns?.map((c) => {
+        return c.header as string;
+    });
 
-    // console.log(rowIds);
+    useEffect(() => {
+        setViewColumns(
+            columns.filter((c) => rowIds.includes(c.header as string)),
+        );
+    }, []);
+    const table = useReactTable({
+        data,
+        columns: viewColumns,
+        getCoreRowModel: getCoreRowModel(),
+    });
 
     return (
         <div>
@@ -83,7 +86,7 @@ export function DataTable<TData, TValue>({
                     ) : (
                         <TableRow>
                             <TableCell
-                                colSpan={columns.length}
+                                colSpan={viewColumns.length}
                                 className='h-24 text-center'
                             >
                                 No results.

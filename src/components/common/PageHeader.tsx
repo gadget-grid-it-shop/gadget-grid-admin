@@ -13,7 +13,7 @@ const PageHeader = ({ title, subtitle, buttons }: TProps) => {
                 <h4 className='page-title'>{title}</h4>
                 <p className='page-subtitle'>{subtitle}</p>
             </div>
-            {buttons}
+            <div className='flex gap-2'>{buttons}</div>
         </div>
     );
 };
