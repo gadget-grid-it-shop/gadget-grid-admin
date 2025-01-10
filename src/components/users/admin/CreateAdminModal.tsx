@@ -96,8 +96,6 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
         }
     }
 
-    console.log(selectedRole);
-
     return (
         <div>
             <Modal
