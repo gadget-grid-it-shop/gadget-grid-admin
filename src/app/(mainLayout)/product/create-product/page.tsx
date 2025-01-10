@@ -253,7 +253,7 @@ const CreateProduct = () => {
 
                 <Modal
                     open={resetOpen}
-                    setOpen={setResetOpen}
+                    onOpenChange={() => setResetOpen(false)}
                     title='Reset product form'
                 >
                     <h3>

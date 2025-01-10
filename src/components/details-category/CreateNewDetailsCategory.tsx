@@ -114,39 +114,6 @@ const CreateNewDetailsCategory = () => {
         } catch (err) {
             globalError(err);
         }
-
-        //   .post(`${process.env.NEXT_PUBLIC_URL}/product-details-category/create`, payload)
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     if (res.data.success) {
-        //       toast.success(res.data.message, {
-        //         position: "top-center",
-        //         autoClose: 3000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //       })
-        //       setFields([
-        //         {
-        //           field: "",
-        //           id: generateID(),
-        //         },
-        //       ]);
-        //       setIsOpen(false);
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     toast.error("something went wrong", {
-        //       position: "top-center",
-        //       autoClose: 3000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //     });
-        //     console.log(err);
-        //   });
     }
 
     const handleAddField = () => {

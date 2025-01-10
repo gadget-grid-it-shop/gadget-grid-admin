@@ -145,7 +145,7 @@ const BrandPage = () => {
             {/* ================= delete brand modal================ */}
             <Modal
                 open={deleteOpen !== null}
-                setOpen={() => setDeleteOpen(null)}
+                onOpenChange={() => setDeleteOpen(null)}
                 title='Delete Brand'
             >
                 <>

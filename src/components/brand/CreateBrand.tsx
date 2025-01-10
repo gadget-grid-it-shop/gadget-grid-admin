@@ -56,7 +56,7 @@ const CreateBrand = () => {
     return (
         <Modal
             open={open}
-            setOpen={setOpen}
+            onOpenChange={() => setOpen(false)}
             title='Add new brand'
             triggerText='Add Brand'
             withTrigger={true}

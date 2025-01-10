@@ -71,7 +71,7 @@ const EditBrand = ({ openBrand, setOpen }: TProps) => {
     return (
         <Modal
             open={openBrand !== null}
-            setOpen={() => setOpen(null)}
+            onOpenChange={() => setOpen(null)}
             title='Edit brand'
             withTrigger={false}
         >

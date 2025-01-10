@@ -102,7 +102,7 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
         <div>
             <Modal
                 open={open}
-                setOpen={setOpen}
+                onOpenChange={setOpen}
                 triggerText='Create Admin'
                 title='Create new admin'
                 withTrigger={true}

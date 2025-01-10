@@ -93,14 +93,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
                 payload,
             }).unwrap();
             if (res.success) {
-                toast.success(res.message, {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                toast.success(res.message);
                 handleCloseModal();
                 setFields([
                     {

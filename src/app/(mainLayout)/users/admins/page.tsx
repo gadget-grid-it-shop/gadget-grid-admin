@@ -187,7 +187,7 @@ const Admins = () => {
 
             <Modal
                 open={deleteOpen !== null}
-                setOpen={() => setDeleteOpen(null)}
+                onOpenChange={() => setDeleteOpen(null)}
                 title='Delete Admin'
             >
                 <div>

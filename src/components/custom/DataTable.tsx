@@ -36,9 +36,13 @@ export function DataTable<TData, TValue>({
     const checkList = tableChecklist.find((item) => item.route === tableName);
 
     useEffect(() => {
-        setViewColumns(
-            columns.filter((c) => checkList?.list.includes(c.header as string)),
-        );
+        if (checkList) {
+            setViewColumns(
+                columns.filter((c) =>
+                    checkList?.list.includes(c.header as string),
+                ),
+            );
+        }
     }, [checkList]);
     const table = useReactTable({
         data,

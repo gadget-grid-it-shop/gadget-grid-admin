@@ -21,6 +21,12 @@ export interface TProductAttribute {
     fields: Record<string, string>;
 }
 
+export type TProductFilter = {
+    filter: string;
+    key: string;
+    value: string;
+};
+
 export interface TMeta {
     title: string;
     description: string;
@@ -54,6 +60,7 @@ export type TProduct = {
     thumbnail: string;
     slug: string;
     attributes?: TProductAttribute[];
+    filters?: TProductFilter[];
     meta?: TMeta;
     tags?: string[];
     isFeatured?: boolean;

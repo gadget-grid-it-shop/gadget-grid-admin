@@ -10,7 +10,7 @@ import { FiPlus } from 'react-icons/fi';
 
 type TProps = React.ComponentPropsWithRef<typeof Dialog> & {
     open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
+    // setOpen: Dispatch<SetStateAction<boolean>>;
     children?: ReactNode;
     triggerText?: string | ReactNode;
     title?: string;
@@ -22,7 +22,7 @@ const Modal = React.forwardRef<HTMLDivElement, TProps>(
     (
         {
             open,
-            setOpen,
+            // setOpen,
             children,
             triggerText = 'Open',
             title = 'New Modal',
@@ -33,13 +33,7 @@ const Modal = React.forwardRef<HTMLDivElement, TProps>(
         ref,
     ) => {
         return (
-            <Dialog
-                ref={ref}
-                modal
-                open={open}
-                onOpenChange={setOpen}
-                {...rest}
-            >
+            <Dialog ref={ref} modal open={open} {...rest}>
                 {withTrigger && (
                     <DialogTrigger
                         className={`${

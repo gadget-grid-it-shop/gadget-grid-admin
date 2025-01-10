@@ -36,6 +36,7 @@ const initialState: TInitialState = {
         videos: [],
         gallery: [],
         attributes: [],
+        filters: [],
         meta: {
             title: '',
             description: '',

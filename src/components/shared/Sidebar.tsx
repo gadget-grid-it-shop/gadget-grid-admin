@@ -25,6 +25,7 @@ import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 import { FaUsersCog } from 'react-icons/fa';
 import { PiUsersThreeBold } from 'react-icons/pi';
 import { LuHardDriveUpload, LuTags } from 'react-icons/lu';
+import { BsSliders } from 'react-icons/bs';
 
 interface TMenu {
     id: number;
@@ -70,6 +71,12 @@ const menus: TMenu[] = [
                 title: 'Create/Update Product',
                 link: '/product/create-product',
                 icon: <BiAddToQueue />,
+            },
+            {
+                id: 4,
+                title: 'Product Filters',
+                link: '/product/filters',
+                icon: <BsSliders />,
             },
             {
                 id: 2,

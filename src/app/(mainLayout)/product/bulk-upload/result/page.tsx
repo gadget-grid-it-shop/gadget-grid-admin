@@ -1,6 +1,9 @@
 'use client';
 import PageHeader from '@/components/common/PageHeader';
+import CustomAvatar from '@/components/custom/CustomAvatar';
+import EllipsisText from '@/components/custom/EllipsisText';
 import SuccessResultTable from '@/components/product/uploadResults/SuccessResultTable';
+import ColumnSettings from '@/components/shared/ColumnSettings';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -13,9 +16,15 @@ import {
     TableCell,
 } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TBulkUploadHistory } from '@/interface/bulkupload.interface';
+import { TBrand } from '@/interface/brand.interface';
+import {
+    TBulkUploadHistory,
+    TSuccessData,
+} from '@/interface/bulkupload.interface';
+import { TCategory } from '@/interface/category';
 import { globalError } from '@/lib/utils';
 import { useGetAllUploadHistoryQuery } from '@/redux/api/bulkUploadApi';
+import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -31,6 +40,105 @@ const BulkUploadResultPage = () => {
         globalError(error);
     }
 
+    const handleGoToUpdate = (id: string) => {
+        router.push(`/product/create-product?updateId=${id}`);
+    };
+
+    const columns: ColumnDef<TSuccessData>[] = [
+        {
+            accessorKey: '_id',
+            header: 'Serial',
+            cell: ({ row }) => {
+                return <p>{row.index + 1}</p>;
+            },
+        },
+        {
+            accessorKey: 'name',
+            header: 'Name',
+            cell: ({ row }) => {
+                return <p>{row.getValue('name')}</p>;
+            },
+        },
+        {
+            accessorKey: 'mainCategory',
+            header: 'Category',
+            cell: ({ row }) => {
+                const category: TCategory = row.getValue('mainCategory');
+                return (
+                    <EllipsisText
+                        width={120}
+                        className='text-gray'
+                        text={category?.name}
+                    />
+                );
+            },
+        },
+        {
+            accessorKey: 'brand',
+            header: 'Brand',
+            cell: ({ row }) => {
+                const brand: TBrand = row.getValue('brand');
+                return (
+                    <div className='flex items-center gap-1'>
+                        <CustomAvatar src={brand?.image} />
+                        <EllipsisText
+                            width={60}
+                            className='text-gray'
+                            text={brand?.name}
+                        />
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: 'createdAt',
+            header: 'Created At',
+            cell: ({ row }) => {
+                const createdAt = row.getValue('createdAt');
+                return (
+                    <div className='min-w-24'>
+                        {dayjs(createdAt as string).format('DD MMM, YYYY')}
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: 'updatedAt',
+            header: 'Updated At',
+            cell: ({ row }) => {
+                const createdAt = row.getValue('createdAt') as string;
+                const updatedAt = row.getValue('updatedAt') as string;
+                const isSame = createdAt === updatedAt;
+                return (
+                    <div className='min-w-24'>
+                        {!isSame ? (
+                            dayjs(createdAt as string).format('DD MMM, YYYY')
+                        ) : (
+                            <span className='text-red-orange'>Not updated</span>
+                        )}
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: '',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.getValue('_id');
+                return (
+                    <div className='flex gap-2'>
+                        <Button variant={'view_button'} size={'base'} />
+                        <Button
+                            onClick={() => handleGoToUpdate(id as string)}
+                            variant={'edit_button'}
+                            size={'base'}
+                        />
+                    </div>
+                );
+            },
+        },
+    ];
+
     const handleHistoryOpen = (history: TBulkUploadHistory) => {
         if (activeHistory && activeHistory._id === history._id) {
             setActiveHistory(null);
@@ -44,6 +152,14 @@ const BulkUploadResultPage = () => {
             <PageHeader
                 title='Bulk Upload History'
                 subtitle='View and Track Bulk Product Upload History'
+                buttons={
+                    <>
+                        <ColumnSettings
+                            columns={columns}
+                            tableName='update-result-table'
+                        />
+                    </>
+                }
             />
             <Tabs defaultValue='upload-history' className='mb-4 w-[400px]'>
                 <TabsList>
@@ -144,6 +260,7 @@ const BulkUploadResultPage = () => {
                                                         Successfull Uploads
                                                     </h3>
                                                     <SuccessResultTable
+                                                        columns={columns}
                                                         successData={
                                                             activeHistory?.successData ||
                                                             []
