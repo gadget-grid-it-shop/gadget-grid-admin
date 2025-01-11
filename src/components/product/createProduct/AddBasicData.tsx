@@ -18,6 +18,12 @@ import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
 import { cn, handleProductChange, isValidUrl } from '@/lib/utils';
+import MultipleSelector, { Option } from '@/components/ui/multiselect';
+import {
+    TCreateProductFilter,
+    useGetAllProductFiltersQuery,
+} from '@/redux/api/filtersApi';
+import { TProductFilter } from '@/interface/product.interface';
 
 const AddBasicData = () => {
     const dispatch = useAppDispatch();
@@ -40,30 +46,33 @@ const AddBasicData = () => {
         category,
         shipping,
         thumbnail,
+        filters,
         sku,
     } = product;
 
-    // const handleMarkdownChange = useCallback(
-    //   debounce(<K extends keyof TProduct>(
-    //     key: K,
-    //     value: TProduct[K],
-    //   ) => {
-    //     dispatch(updateProduct({ key, value }));
-    //   },
-    //     300),
-    //   [])
+    const { data: filtersData } = useGetAllProductFiltersQuery(undefined);
 
     const handleRemoveFromGallery = (img: string) => {
         const filteredGallery = gallery?.filter((image) => image !== img) || [];
 
         dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
     };
+    const [selectedFilters, setSelectedFilters] = useState<Option[]>([]);
 
     const brandDropdownData: TSelectOptions[] = brandData?.data?.map(
         (brand: TBrand) => {
             return {
                 label: brand.name,
                 value: brand._id,
+            };
+        },
+    );
+
+    const filtersDropdownData: Option[] = filtersData?.data?.map(
+        (filter: TCreateProductFilter) => {
+            return {
+                label: filter.title,
+                value: filter?._id,
             };
         },
     );
@@ -79,6 +88,10 @@ const AddBasicData = () => {
             ? keyFeaturesRef.current.getMarkdown()
             : '';
         handleProductChange('key_features', val);
+    };
+
+    const handleFilterSelect = (val: Option[]) => {
+        setSelectedFilters(val);
     };
 
     return (
@@ -100,16 +113,6 @@ const AddBasicData = () => {
                     />
                 </div>
 
-                {/* <div className="flex flex-col gap-2">
-          <label className="text-sm">Category *</label>
-          <Select
-            data={categorySelectData}
-            onChange={(value) => handleProductChange('category', value as string)}
-            placeholder="Select category"
-            value={category}
-          />
-        </div> */}
-
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Category *</label>
                     <TreeDropdown
@@ -129,12 +132,6 @@ const AddBasicData = () => {
                         data={brandDropdownData}
                         placeholder='Select brand'
                     />
-                    {/* <Input
-            value={brand}
-            onChange={(e) => handleProductChange('brand', e.target.value)}
-            className="bg-background-foreground"
-            placeholder="Enter Brand Name"
-          /> */}
                 </div>
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Model *</label>
@@ -158,6 +155,18 @@ const AddBasicData = () => {
                         }
                         className='bg-background-foreground'
                         placeholder='Enter product SKU'
+                    />
+                </div>
+
+                {/* ===================filters=================== */}
+
+                <div className='mb-3 flex flex-col gap-2'>
+                    <label className='text-sm'>Filters</label>
+                    <MultipleSelector
+                        value={selectedFilters}
+                        onChange={handleFilterSelect}
+                        placeholder='Select brand'
+                        options={filtersDropdownData}
                     />
                 </div>
 

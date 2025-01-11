@@ -131,7 +131,6 @@ const CreateProduct = () => {
                 );
                 dispatch(setCreateProductStep((step + 1) as 1 | 2 | 3 | 4));
             } catch (err) {
-                console.log(err);
                 if (err instanceof ZodError) {
                     console.log(err.issues[0].message);
                     toast.error(err.issues[0].message);
