@@ -456,7 +456,7 @@ const MultipleSelector = React.forwardRef<
             >
                 <div
                     className={cn(
-                        'focus-within:ring-ring min-h-10 rounded-md bg-background text-sm ring-offset-background focus-within:ring-2 focus-within:ring-offset-2',
+                        ' min-h-10 rounded-md bg-background text-sm',
                         {
                             'px-3 py-2': selected.length !== 0,
                             'cursor-text': !disabled && selected.length !== 0,
@@ -484,7 +484,7 @@ const MultipleSelector = React.forwardRef<
                                     {option.label}
                                     <button
                                         className={cn(
-                                            'focus:ring-ring ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-offset-2',
+                                            'ml-1 rounded-full outline-none',
                                             (disabled || option.fixed) &&
                                                 'hidden',
                                         )}
@@ -534,7 +534,7 @@ const MultipleSelector = React.forwardRef<
                                     : placeholder
                             }
                             className={cn(
-                                'placeholder:text-muted-foreground flex-1 bg-transparent outline-none blur-0',
+                                'placeholder:text-gray flex-1 bg-transparent outline-none focus:ring-0 blur-0',
                                 {
                                     'w-full': hidePlaceholderWhenSelected,
                                     'px-3 py-2': selected.length === 0,
@@ -566,7 +566,7 @@ const MultipleSelector = React.forwardRef<
                 <div className='relative'>
                     {open && (
                         <CommandList
-                            className='absolute top-1 z-[9999] w-full rounded-md bg-background text-black shadow-md outline-none blur-0 animate-in'
+                            className='absolute top-1 z-[9999] min-h-10 w-full rounded-md bg-background text-black shadow-md outline-none blur-0 animate-in border border-border-color'
                             onMouseLeave={() => {
                                 setOnScrollbar(false);
                             }}

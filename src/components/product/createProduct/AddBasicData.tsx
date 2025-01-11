@@ -94,6 +94,38 @@ const AddBasicData = () => {
         setSelectedFilters(val);
     };
 
+    const handleFilterChange = (
+        value: string | null,
+        filter: string,
+        key: string,
+    ) => {
+        const exist = filters?.find((f) => f.filter === filter);
+
+        let newfilters: TProductFilter[] = [...(filters || [])];
+
+        if (!exist) {
+            newfilters.push({
+                filter,
+                key,
+                value: value || '',
+            });
+        }
+
+        newfilters =
+            (newfilters?.map((f) => {
+                if (f.filter === filter) {
+                    return {
+                        ...f,
+                        value,
+                    };
+                } else {
+                    return f;
+                }
+            }) as TProductFilter[]) || [];
+
+        handleProductChange('filters', newfilters);
+    };
+
     return (
         <>
             <h2 className='pb-5 text-lg font-semibold text-black'>
@@ -163,12 +195,42 @@ const AddBasicData = () => {
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Filters</label>
                     <MultipleSelector
+                        className='bg-background-foreground'
                         value={selectedFilters}
                         onChange={handleFilterSelect}
-                        placeholder='Select brand'
+                        placeholder='Select filters'
                         options={filtersDropdownData}
                     />
                 </div>
+
+                {selectedFilters.map((s) => {
+                    const options: TSelectOptions[] =
+                        (filtersData?.data as TCreateProductFilter[])
+                            ?.find((f) => f._id === s.value)
+                            ?.options.map((op) => ({ label: op, value: op })) ||
+                        [];
+
+                    return (
+                        <div key={s.value} className='mb-3 flex flex-col gap-2'>
+                            <label className='text-sm'>{s.label} *</label>
+                            <Select
+                                value={
+                                    filters?.find((f) => s.value === f.filter)
+                                        ?.value
+                                }
+                                onChange={(val) =>
+                                    handleFilterChange(
+                                        val as string,
+                                        s.value,
+                                        s.label,
+                                    )
+                                }
+                                data={options}
+                                placeholder={`Select ${s.label}`}
+                            />
+                        </div>
+                    );
+                })}
 
                 <div className='grid gap-x-4 lg:grid-cols-2'>
                     <div className='mb-3 flex flex-col gap-2'>

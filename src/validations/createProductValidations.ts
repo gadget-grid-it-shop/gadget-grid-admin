@@ -65,6 +65,13 @@ const generalDataValidationSchema = z.object({
         .string({ required_error: 'Please upload a product thumbnail.' })
         .min(1, 'Please upload a product thumbnail.'),
     gallery: z.array(z.string()).optional(),
+    filters: z.array(
+        z.object({
+            filter: z.string(),
+            key: z.string(),
+            value: z.string().min(1, 'Please select filter value'),
+        }),
+    ),
 });
 
 const attributeValidationSchema = z.object({
