@@ -4,10 +4,15 @@ import { Button } from '../ui/button';
 
 type TProps = {
     setUpdateFilter: Dispatch<SetStateAction<TCreateProductFilter | null>>;
+    setDeleteOpen: Dispatch<SetStateAction<TCreateProductFilter | null>>;
     data: TCreateProductFilter[];
 };
 
-const ProductFilterCard = ({ data, setUpdateFilter }: TProps) => {
+const ProductFilterCard = ({
+    data,
+    setUpdateFilter,
+    setDeleteOpen,
+}: TProps) => {
     return (
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {data?.map((filter: TCreateProductFilter) => (
@@ -41,10 +46,9 @@ const ProductFilterCard = ({ data, setUpdateFilter }: TProps) => {
                         <Button
                             variant={'delete_button'}
                             size={'base'}
-                            // onClick={() => {
-                            //     setOpenDeleteId(cat?._id);
-                            //     setSelectedCat(cat);
-                            // }}
+                            onClick={() => {
+                                setDeleteOpen(filter);
+                            }}
                         ></Button>
                     </div>
                 </div>

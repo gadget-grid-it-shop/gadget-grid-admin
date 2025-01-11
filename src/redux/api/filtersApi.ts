@@ -26,6 +26,14 @@ const filtersApi = baseApi.injectEndpoints({
             invalidatesTags: [tagTypes.productFilter],
         }),
 
+        deleteProductFilter: build.mutation({
+            query: (id: string) => ({
+                url: `/product-filters/delete/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [tagTypes.productFilter],
+        }),
+
         updateProductFilter: build.mutation({
             query: ({
                 payload,
@@ -47,4 +55,5 @@ export const {
     useCreateProductFilterMutation,
     useUpdateProductFilterMutation,
     useGetAllProductFiltersQuery,
+    useDeleteProductFilterMutation,
 } = filtersApi;
