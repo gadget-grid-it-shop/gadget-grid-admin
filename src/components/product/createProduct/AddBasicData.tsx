@@ -157,7 +157,7 @@ const AddBasicData = () => {
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Brand *</label>
                     <Select
-                        value={brand}
+                        value={brand as string}
                         onChange={(val) =>
                             handleProductChange('brand', val as string)
                         }

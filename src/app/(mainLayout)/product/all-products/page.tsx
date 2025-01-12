@@ -26,6 +26,11 @@ import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
 import { IoSettingsSharp } from 'react-icons/io5';
 import ColumnSettings from '@/components/shared/ColumnSettings';
+import { BsFillGrid3X3GapFill, BsTable } from 'react-icons/bs';
+import AllProductsGridView from '@/components/product/all-product/AllProductsGridView';
+import ProductSkeleton from '@/components/product/all-product/ProductSkeleton';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setViewMode } from '@/redux/reducers/products/productSlice';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -56,6 +61,8 @@ const AllProducts = () => {
     const paginationData = productData?.data?.pagination;
 
     const router = useRouter();
+    const dispatch = useAppDispatch();
+    const { viewMode } = useAppSelector((s) => s.products);
 
     const columns: ColumnDef<TProduct>[] = [
         {
@@ -259,6 +266,26 @@ const AllProducts = () => {
                         >
                             Create new product
                         </Button>
+                        <Button
+                            tooltip='Grid view'
+                            variant={
+                                viewMode === 'grid' ? 'default' : 'secondary'
+                            }
+                            size={'icon'}
+                            onClick={() => dispatch(setViewMode('grid'))}
+                        >
+                            <BsFillGrid3X3GapFill />
+                        </Button>
+                        <Button
+                            tooltip='Table view'
+                            variant={
+                                viewMode === 'table' ? 'default' : 'secondary'
+                            }
+                            size={'icon'}
+                            onClick={() => dispatch(setViewMode('table'))}
+                        >
+                            <BsTable />
+                        </Button>
                         <ColumnSettings
                             columns={columns}
                             tableName='product_table'
@@ -303,16 +330,27 @@ const AllProducts = () => {
             </div>
 
             {isFetching ? (
-                <TableSkeleton className='pt-2' />
+                viewMode === 'table' ? (
+                    <TableSkeleton className='pt-2' />
+                ) : (
+                    <ProductSkeleton className='pt-2' />
+                )
             ) : !error && productData?.data ? (
-                <DataTable
-                    tableName='product_table'
-                    columns={columns}
-                    data={productData?.data?.products || []}
-                />
+                viewMode === 'table' ? (
+                    <DataTable
+                        tableName='product_table'
+                        columns={columns}
+                        data={productData?.data?.products || []}
+                    />
+                ) : (
+                    <AllProductsGridView
+                        data={productData?.data?.products || []}
+                    />
+                )
             ) : (
                 <div>Error loading data</div> // Handle the error case
             )}
+
             <Pagination
                 currentPage={page}
                 totalItems={paginationData ? paginationData?.total : 0}

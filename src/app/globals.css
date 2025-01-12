@@ -45,6 +45,7 @@ input {
     :root {
         --overlay-color: #0707075d;
         --primary: #4a2cf2;
+        --primary-text: #4a2cf2;
         --bright-turquoise: #19c2dd;
         --ultramarine-blue: #355bfb;
         --light-cyan: #d1f3f8;
@@ -73,9 +74,11 @@ input {
         --solid-saffron-orange: #f2994a;
         --white: #fff;
     }
+
     .dark {
         --overlay-color: #080808a8;
         --primary: hsl(249, 98%, 61%);
+        --primary-text: #e8e3ff;
         --bright-turquoise: #19c2dd;
         --ultramarine-blue: #355bfb;
         --light-cyan: #2f3738;
@@ -135,6 +138,7 @@ input {
 .page-title {
     @apply text-[1.2rem] font-semibold text-black lg:text-[1.5rem];
 }
+
 .page-subtitle {
     @apply text-sm text-gray lg:text-base;
 }
@@ -210,6 +214,7 @@ input {
 .large-modal {
     @apply w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] xl:max-w-[60vw] 2xl:max-w-[50vw];
 }
+
 .medium-modal {
     @apply w-[90vw] sm:max-w-[70vw] md:max-w-[60vw] xl:max-w-[50vw] 2xl:max-w-[40vw];
 }

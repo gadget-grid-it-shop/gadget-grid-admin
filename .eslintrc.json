@@ -2,9 +2,11 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript",
-    "prettier"  
+    "prettier"
   ],
-  "plugins": ["prettier"],
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -21,6 +23,7 @@
     ],
     "@typescript-eslint/no-explicit-any": 0,
     "react/no-unescaped-entities": 0,
-    "no-console": "warn"
+    "no-console": "warn",
+    "@typescript-eslint/no-require-imports": "warn"
   }
 }

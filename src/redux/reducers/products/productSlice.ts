@@ -5,6 +5,7 @@ interface TInitialState {
     product: TProduct;
     selectedCategoryName: string;
     step: 1 | 2 | 3 | 4;
+    viewMode: 'table' | 'grid';
 }
 
 interface CustomPayloadAction<K extends keyof TProduct> {
@@ -14,7 +15,7 @@ interface CustomPayloadAction<K extends keyof TProduct> {
 
 const initialState: TInitialState = {
     product: {
-        id: '',
+        _id: '',
         name: '',
         price: 0,
         sku: '',
@@ -52,6 +53,7 @@ const initialState: TInitialState = {
     },
     selectedCategoryName: '',
     step: 1,
+    viewMode: 'table',
 };
 
 const productSlice = createSlice({
@@ -88,6 +90,9 @@ const productSlice = createSlice({
         setProductForUpdate: (state, action: PayloadAction<TProduct>) => {
             state.product = action.payload;
         },
+        setViewMode: (state, action: PayloadAction<'table' | 'grid'>) => {
+            state.viewMode = action.payload;
+        },
         resetProductData: () => initialState,
     },
 });
@@ -98,6 +103,7 @@ export const {
     setCreateProductStep,
     resetProductData,
     setProductForUpdate,
+    setViewMode,
 } = productSlice.actions;
 
 export default productSlice.reducer;

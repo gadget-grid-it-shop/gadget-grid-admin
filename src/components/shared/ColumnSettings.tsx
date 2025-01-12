@@ -58,7 +58,11 @@ const ColumnSettings = ({ columns, tableName }: TProps) => {
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <Button variant='edit' size={'icon'}>
+                    <Button
+                        tooltip='Table column settings'
+                        variant='edit'
+                        size={'icon'}
+                    >
                         <IoSettingsSharp />
                     </Button>
                 </DropdownMenuTrigger>

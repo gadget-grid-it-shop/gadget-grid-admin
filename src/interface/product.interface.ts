@@ -1,3 +1,4 @@
+import { TBrand } from './brand.interface';
 import { TCategory } from './category';
 import { TErrorSourse } from './error.interface';
 
@@ -39,7 +40,7 @@ export type TShipping = {
 };
 
 export type TProduct = {
-    id: string;
+    _id: string;
     name: string;
     price: number;
     discount?: {
@@ -47,7 +48,7 @@ export type TProduct = {
         value: number;
     };
     sku: string;
-    brand: string;
+    brand: TBrand | string; //when creating string, from database TBrand
     model: string;
     warranty: TProductWarrenty;
     reviews?: TReview[];
@@ -67,6 +68,8 @@ export type TProduct = {
     mainCategory?: TCategory | null;
     sales?: number;
     createdBy: string;
+    createdAt?: string;
+    updatedAt?: string;
     shipping: TShipping;
 };
 

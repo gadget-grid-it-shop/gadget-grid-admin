@@ -7,6 +7,12 @@ import { cn } from '@/lib/utils';
 import { FiLoader, FiPlus } from 'react-icons/fi';
 import { BiSolidEditAlt } from 'react-icons/bi';
 import { HiEye } from 'react-icons/hi2';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from './tooltip';
 
 const buttonVariants = cva(
     'inline-flex items-center text-gray justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45',
@@ -15,7 +21,7 @@ const buttonVariants = cva(
             variant: {
                 default:
                     'bg-primary shadow hover:bg-primary/90 text-pure-white',
-                secondary: 'bg-bright-gray text-md shadow text-pure-white',
+                secondary: 'bg-lavender-mist text-md shadow text-primary-text',
                 delete: 'border-red text-red border text-md shadow hover:bg-red hover:text-pure-white',
                 delete_solid: 'text-md shadow bg-red text-pure-white',
                 edit: 'text-pure-white text-md shadow bg-vivid-orange',
@@ -50,6 +56,7 @@ const buttonVariants = cva(
 
 type TExtraProps = {
     loading?: boolean;
+    tooltip?: string;
 };
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -67,12 +74,43 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             loading,
             asChild = false,
             children,
+            tooltip,
             ...props
         },
         ref,
     ) => {
         const Comp = asChild ? Slot : 'button';
-        return (
+        return tooltip ? (
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <Comp
+                            className={cn(
+                                buttonVariants({ variant, size, className }),
+                            )}
+                            ref={ref}
+                            {...props}
+                            disabled={loading || props.disabled}
+                        >
+                            {loading ? (
+                                <FiLoader className='animate-spin' size={20} />
+                            ) : variant === 'delete_button' ? (
+                                <PiTrashSimpleFill />
+                            ) : variant === 'edit_button' ? (
+                                <BiSolidEditAlt />
+                            ) : variant === 'view_button' ? (
+                                <HiEye />
+                            ) : variant === 'create_button' ? (
+                                <FiPlus />
+                            ) : (
+                                children
+                            )}
+                        </Comp>
+                    </TooltipTrigger>
+                    <TooltipContent>{tooltip}</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        ) : (
             <Comp
                 className={cn(buttonVariants({ variant, size, className }))}
                 ref={ref}
