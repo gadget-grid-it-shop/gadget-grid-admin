@@ -1,6 +1,7 @@
 import { TProduct } from '@/interface/product.interface';
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
+import { TResponse } from '@/interface/common.interface';
 
 const productApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -15,8 +16,11 @@ const productApi = baseApi.injectEndpoints({
             invalidatesTags: [tagTypes.product],
         }),
 
-        getAllProducts: build.query({
-            query: (params?: Record<string, string | number>) => {
+        getAllProducts: build.query<
+            TResponse<TProduct[]>,
+            Record<string, string | number> | undefined
+        >({
+            query: (params) => {
                 return {
                     url: '/product/get-all',
                     method: 'GET',
@@ -26,8 +30,8 @@ const productApi = baseApi.injectEndpoints({
             providesTags: [tagTypes.product],
         }),
 
-        getSingleProduct: build.query({
-            query: (id: string) => ({
+        getSingleProduct: build.query<TResponse<TProduct>, string>({
+            query: (id) => ({
                 url: `/product/single/${id}`,
                 method: 'GET',
             }),

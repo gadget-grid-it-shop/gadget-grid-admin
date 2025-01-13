@@ -31,6 +31,7 @@ import AllProductsGridView from '@/components/product/all-product/AllProductsGri
 import ProductSkeleton from '@/components/product/all-product/ProductSkeleton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setViewMode } from '@/redux/reducers/products/productSlice';
+import UserCard from '@/components/common/UserCard';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -58,8 +59,7 @@ const AllProducts = () => {
     const { data: brandData } = useGetAllBrandsQuery(undefined);
     const { data: categoryData } = useGetAllCategoriesQuery(false);
 
-    const paginationData = productData?.data?.pagination;
-
+    const paginationData = productData?.pagination;
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { viewMode } = useAppSelector((s) => s.products);
@@ -190,16 +190,8 @@ const AllProducts = () => {
             accessorKey: 'createdBy',
             header: 'CreatedBy',
             cell: ({ row }) => {
-                const createdBy: TUser = row.getValue('createdBy');
-                return (
-                    <div className=''>
-                        <EllipsisText
-                            text={createdBy.email}
-                            className='text-gray'
-                            width={150}
-                        />
-                    </div>
-                );
+                const createdBy: string = row.getValue('createdBy');
+                return <UserCard id={createdBy} />;
             },
         },
         {
@@ -340,12 +332,10 @@ const AllProducts = () => {
                     <DataTable
                         tableName='product_table'
                         columns={columns}
-                        data={productData?.data?.products || []}
+                        data={productData?.data || []}
                     />
                 ) : (
-                    <AllProductsGridView
-                        data={productData?.data?.products || []}
-                    />
+                    <AllProductsGridView data={productData?.data || []} />
                 )
             ) : (
                 <div>Error loading data</div> // Handle the error case

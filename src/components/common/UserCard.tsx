@@ -12,7 +12,7 @@ const UserCard = ({ id }: { id: string }) => {
     const user: TAdminData = findUser(id);
     console.log(user);
     return (
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-2 items-center min-w-40'>
             <Avatar>
                 <AvatarImage
                     className='size-10 object-cover'
