@@ -13,6 +13,7 @@ import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
 import { io } from 'socket.io-client';
+import { toast } from 'sonner';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();
@@ -24,6 +25,13 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         setHydrated(true);
         const socket = io('http://localhost:5000');
+        socket.emit('adminJoin', { adminJoinId: process.env.admin_join_id });
+
+        socket.on('newNotification', (payload) => {
+            toast('new notification', {
+                position: 'bottom-right',
+            });
+        });
     }, []);
 
     useEffect(() => {
