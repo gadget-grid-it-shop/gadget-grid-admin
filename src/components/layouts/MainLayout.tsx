@@ -13,6 +13,7 @@ import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
 import { io } from 'socket.io-client';
+import { connectSocket, disconnectSocket, socket } from '@/lib/socket';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();
@@ -23,7 +24,19 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         setHydrated(true);
-        const socket = io('http://localhost:5000');
+    }, []);
+
+    useEffect(() => {
+        const initilaAction = async () => {
+            await connectSocket();
+            socket?.emit('adminJoin');
+        };
+
+        initilaAction();
+
+        return () => {
+            disconnectSocket();
+        };
     }, []);
 
     useEffect(() => {
