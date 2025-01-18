@@ -11,6 +11,7 @@ const categoriesApi = baseApi.injectEndpoints({
                     method: 'GET',
                 };
             },
+            keepUnusedDataFor: 320,
             providesTags: [tagTypes.categories],
         }),
 

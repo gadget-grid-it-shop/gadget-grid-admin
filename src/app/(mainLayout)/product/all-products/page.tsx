@@ -46,15 +46,20 @@ const AllProducts = () => {
         data: productData,
         error,
         isFetching,
-    } = useGetAllProductsQuery({
-        page,
-        limit,
-        searchTerm: debouncedSearchTerm,
-        ...(createdAt ? { createdAt: createdAt.toISOString() } : {}),
-        ...(createdBy ? { createdBy } : {}),
-        ...(brand ? { brand } : {}),
-        ...(category ? { category } : {}),
-    });
+    } = useGetAllProductsQuery(
+        {
+            page,
+            limit,
+            searchTerm: debouncedSearchTerm,
+            ...(createdAt ? { createdAt: createdAt.toISOString() } : {}),
+            ...(createdBy ? { createdBy } : {}),
+            ...(brand ? { brand } : {}),
+            ...(category ? { category } : {}),
+        },
+        {
+            pollingInterval: 300000,
+        },
+    );
     const { data: adminData } = useGetAllAdminsQuery(undefined);
     const { data: brandData } = useGetAllBrandsQuery(undefined);
     const { data: categoryData } = useGetAllCategoriesQuery(false);

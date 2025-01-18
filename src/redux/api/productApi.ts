@@ -28,6 +28,7 @@ const productApi = baseApi.injectEndpoints({
                 };
             },
             providesTags: [tagTypes.product],
+            keepUnusedDataFor: 180,
         }),
 
         getSingleProduct: build.query<TResponse<TProduct>, string>({
