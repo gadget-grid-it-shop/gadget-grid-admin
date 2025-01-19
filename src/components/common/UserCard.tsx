@@ -1,8 +1,6 @@
 'use client';
 import useGetAdminData from '@/hooks/useGetAdminData';
 import { TAdminData } from '@/interface/admin.interface';
-import { isValidUrl } from '@/lib/utils';
-import Image from 'next/image';
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { FaUser } from 'react-icons/fa6';
@@ -10,7 +8,6 @@ import { FaUser } from 'react-icons/fa6';
 const UserCard = ({ id }: { id: string }) => {
     const findUser = useGetAdminData();
     const user: TAdminData = findUser(id);
-    console.log(user);
     return (
         <div className='flex gap-2 items-center min-w-40'>
             <Avatar>

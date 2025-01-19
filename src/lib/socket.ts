@@ -13,7 +13,7 @@ export const connectSocket = async () => {
             secure: true,
             rejectUnauthorized: false,
         };
-        socket = io(process.env.SK_PUBLIC_URL, options);
+        socket = io(process.env.NEXT_PUBLIC_SK_URL, options);
     }
     return socket;
 };

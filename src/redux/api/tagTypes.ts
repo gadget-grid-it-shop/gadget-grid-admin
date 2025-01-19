@@ -10,6 +10,7 @@ export enum tagTypes {
     product = 'product',
     bulkUpload = 'bulkUpload',
     productFilter = 'productFilter',
+    notification = 'notification',
 }
 
 export const tagTypesList = [
@@ -23,4 +24,5 @@ export const tagTypesList = [
     tagTypes.product,
     tagTypes.bulkUpload,
     tagTypes.productFilter,
+    tagTypes.notification,
 ];

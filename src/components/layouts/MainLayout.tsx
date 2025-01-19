@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
-import { io } from 'socket.io-client';
 import { connectSocket, disconnectSocket, socket } from '@/lib/socket';
+import { toast } from 'sonner';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();
@@ -22,6 +22,8 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
+    const { user } = useAppSelector((s) => s.auth);
+
     useEffect(() => {
         setHydrated(true);
     }, []);
@@ -29,7 +31,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const initilaAction = async () => {
             await connectSocket();
-            socket?.emit('adminJoin');
+            socket?.emit('adminJoin', { user: user?.user?._id });
         };
 
         initilaAction();
@@ -37,7 +39,18 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         return () => {
             disconnectSocket();
         };
-    }, []);
+    }, [user]);
+
+    useEffect(() => {
+        socket?.on('newNotification', (payload) => {
+            console.log(payload);
+            const audio = new Audio('/notification.mp3');
+            audio.play().catch((err) => {});
+            toast(payload.text || 'new notification', {
+                position: 'top-right',
+            });
+        });
+    });
 
     useEffect(() => {
         if (isAuthenticated) {

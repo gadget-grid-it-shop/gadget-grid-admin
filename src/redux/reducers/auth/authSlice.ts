@@ -1,14 +1,15 @@
+import { TAdminData } from '@/interface/admin.interface';
 import { TPermission, TUser } from '@/interface/auth.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type TSetUserData = {
-    user: TUser;
+    user: TAdminData;
     permissions: TPermission[];
 };
 
 type TInitialState = {
     isAuthenticated: boolean;
-    user: TUser | null;
+    user: TAdminData | null;
     permissions: TPermission[];
     isVerified: boolean;
     token: string | null;

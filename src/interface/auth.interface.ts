@@ -28,6 +28,7 @@ export interface TRole {
     role: string;
     description?: string;
     permissions: TPermission[];
+    isDeleted: boolean;
 }
 
 export interface TUserName {

@@ -88,7 +88,7 @@ const AddSpecifications = () => {
                                 {Object.entries(attr?.fields).map(
                                     (field: [string, string], i) => {
                                         const key = field ? field[0] : '';
-                                        console.log(field);
+
                                         return (
                                             <div
                                                 key={i}
