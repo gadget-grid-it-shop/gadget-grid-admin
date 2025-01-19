@@ -24,6 +24,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import { handleLogout } from '@/lib/utils';
 import ImageGallery from '../product/ImageGallery';
+import NotificationMenu from '../notifications/NotificationMenu';
 
 const Navbar = () => {
     const [loaded, setLoaded] = useState(false);
@@ -42,7 +43,7 @@ const Navbar = () => {
 
     return (
         <nav className=''>
-            <div className='mt-3 flex justify-between rounded-md bg-white px-4 py-4 shadow-md'>
+            <div className='mt-3 flex gap-2 justify-between rounded-md bg-white px-4 py-4 shadow-md'>
                 {!isDesktopOrLaptop && (
                     <Button
                         className='px-0 text-2xl'
@@ -52,18 +53,21 @@ const Navbar = () => {
                         <HiMiniBars3BottomLeft />
                     </Button>
                 )}
-                <div className='flex w-full justify-end'>
+                <div className='flex w-full justify-end gap-2'>
                     <Button
                         onClick={() => setGalleryOpen(true)}
                         className='gap-1 bg-bright-turquoise text-sm'
                     >
                         <TbPhotoSquareRounded size={18} /> Gallery
                     </Button>
+
+                    <NotificationMenu />
+
                     {isAuthenticated && (
-                        <div className='flex justify-end'>
+                        <div className='flex justify-end gap-2'>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant='icon'>
+                                    <Button variant='icon' size={'base'}>
                                         <Avatar>
                                             <AvatarImage
                                                 src={user?.profilePicture}

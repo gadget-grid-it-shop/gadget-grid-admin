@@ -54,6 +54,8 @@ const buttonVariants = cva(
     },
 );
 
+export type TButtonVariants = VariantProps<typeof buttonVariants>;
+
 type TExtraProps = {
     loading?: boolean;
     tooltip?: string;
@@ -61,7 +63,7 @@ type TExtraProps = {
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         TExtraProps,
-        VariantProps<typeof buttonVariants> {
+        TButtonVariants {
     asChild?: boolean;
 }
 
