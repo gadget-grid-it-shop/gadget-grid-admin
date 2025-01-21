@@ -8,7 +8,9 @@ const useGetAdminData = () => {
     const adminData = data?.data || ([] as TAdminData[]);
 
     const findAdmin = (id: string) => {
-        const admin = adminData.find((a: TAdminData) => a.user?._id === id);
+        const admin = adminData.find(
+            (a: TAdminData) => a.user?._id === id || a._id === id,
+        );
         return admin;
     };
 

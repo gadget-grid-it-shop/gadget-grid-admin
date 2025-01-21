@@ -5,14 +5,15 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { FaUser } from 'react-icons/fa6';
 
-const UserCard = ({ id }: { id: string }) => {
+const UserCard = ({ id, size = 'lg' }: { id: string; size?: 'sm' | 'lg' }) => {
     const findUser = useGetAdminData();
     const user: TAdminData = findUser(id);
+    console.log(user?.fullName);
     return (
         <div className='flex gap-2 items-center min-w-40'>
-            <Avatar>
+            <Avatar className={`${size === 'lg' ? 'size-10' : 'size-7'}`}>
                 <AvatarImage
-                    className='size-10 object-cover'
+                    className={`object-cover`}
                     src={user?.profilePicture}
                 />
                 <AvatarFallback className='capitalize'>
@@ -22,10 +23,16 @@ const UserCard = ({ id }: { id: string }) => {
                 </AvatarFallback>
             </Avatar>
             <div>
-                <h2 className='font-semibold capitalize text-gray'>
+                <h2
+                    className={`font-semibold capitalize text-gray ${size === 'sm' ? 'text-xs' : 'text-base'}`}
+                >
                     {user?.fullName || 'N/A'}
                 </h2>
-                <h2 className='text-gray'>{user?.role?.role || 'N/A'}</h2>
+                <h2
+                    className={`text-gray ${size === 'sm' ? 'text-xs' : 'text-sm'}`}
+                >
+                    {user?.role?.role || 'N/A'}
+                </h2>
             </div>
         </div>
     );

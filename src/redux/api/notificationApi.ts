@@ -4,7 +4,13 @@ import { TNotification } from '@/interface/notification.interface';
 
 const notificationApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getNotifications: build.query<TResponse<TNotification[]>, undefined>({
+        getNotifications: build.query<
+            TResponse<{
+                notifications: TNotification[];
+                unreadCount: number;
+            }>,
+            undefined
+        >({
             query: () => ({
                 url: '/notification/my-notifications',
                 method: 'GET',

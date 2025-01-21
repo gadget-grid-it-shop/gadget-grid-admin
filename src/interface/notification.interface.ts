@@ -19,4 +19,6 @@ export type TNotification = {
         | 'productFilter';
     text: string;
     source?: string;
+    createdAt: string;
+    updatedAt: string;
 };
