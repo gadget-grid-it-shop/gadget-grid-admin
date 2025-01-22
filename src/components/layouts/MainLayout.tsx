@@ -43,8 +43,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         socket?.on('newNotification', (payload) => {
-            console.log(payload);
-            const audio = new Audio('/notification.mp3');
+            const audio = new Audio('/notification_2.wav');
             audio.play().catch((err) => {});
             toast(payload.text || 'new notification', {
                 position: 'top-right',
