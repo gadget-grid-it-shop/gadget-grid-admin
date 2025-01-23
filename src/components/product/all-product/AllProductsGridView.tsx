@@ -103,7 +103,10 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
                                     CreatedBy:
                                 </h2>
                                 <div className='text-gray text-sm col-span-2'>
-                                    <UserCard id={product.createdBy} />
+                                    <UserCard
+                                        id={product.createdBy}
+                                        size='sm'
+                                    />
                                 </div>
                             </div>
                         </div>

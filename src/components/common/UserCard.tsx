@@ -1,14 +1,19 @@
 'use client';
 import useGetAdminData from '@/hooks/useGetAdminData';
 import { TAdminData } from '@/interface/admin.interface';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { FaUser } from 'react-icons/fa6';
 
 const UserCard = ({ id, size = 'lg' }: { id: string; size?: 'sm' | 'lg' }) => {
-    const findUser = useGetAdminData();
-    const user: TAdminData = findUser(id);
-    console.log(user?.fullName);
+    const { findAdmin } = useGetAdminData();
+    const [user, setUser] = useState<TAdminData>();
+
+    useEffect(() => {
+        const foundUser = findAdmin(id);
+        setUser(foundUser);
+    }, [findAdmin, id]);
+
     return (
         <div className='flex gap-2 items-center min-w-40'>
             <Avatar className={`${size === 'lg' ? 'size-10' : 'size-7'}`}>

@@ -14,6 +14,8 @@ import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
 import { connectSocket, disconnectSocket, socket } from '@/lib/socket';
 import { toast } from 'sonner';
+import { baseApi } from '@/redux/api/baseApi';
+import notificationApi from '@/redux/api/notificationApi';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();
@@ -41,15 +43,26 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         };
     }, [user]);
 
-    useEffect(() => {
-        socket?.on('newNotification', (payload) => {
-            const audio = new Audio('/notification_2.wav');
-            audio.play().catch((err) => {});
-            toast(payload.text || 'new notification', {
-                position: 'top-right',
-            });
-        });
-    });
+    // useEffect(() => {
+    //     socket?.on('newNotification', (payload) => {
+    //         const audio = new Audio('/notification_2.wav');
+    //         audio.play().catch((err) => console.log(err));
+    //         toast(payload.text || 'new notification', {
+    //             position: 'bottom-right',
+    //         });
+
+    //         dispatch(
+    //             notificationApi.util.updateQueryData(
+    //                 'getNotifications',
+    //                 undefined,
+    //                 (draft) => {
+    //                     draft.data.notifications.unshift(payload);
+    //                     draft.data.unreadCount = draft.data.unreadCount + 1;
+    //                 },
+    //             ),
+    //         );
+    //     });
+    // });
 
     useEffect(() => {
         if (isAuthenticated) {

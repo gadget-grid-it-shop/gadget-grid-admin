@@ -8,7 +8,10 @@ export let socket: Socket | null = null;
 export const connectSocket = async () => {
     if (!socket) {
         const options = {
-            rememberUpgrade: true,
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionAttemps: 10,
+            rememberUpgrade: false,
             transports: ['websocket'],
             secure: true,
             rejectUnauthorized: false,
