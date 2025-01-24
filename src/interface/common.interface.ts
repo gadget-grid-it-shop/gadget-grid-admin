@@ -3,6 +3,7 @@ export type TPagination = {
     currentPage: number;
     total: number;
     totalPage?: number;
+    hasMore?: boolean;
 };
 
 export type TResponse<T> = {
