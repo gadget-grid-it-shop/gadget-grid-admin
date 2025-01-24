@@ -13,7 +13,6 @@ import dayjs from '../utilities/Customdayjs';
 import { TNotification } from '@/interface/notification.interface';
 import { socket } from '@/lib/socket';
 import { toast } from 'sonner';
-import { FiLoader } from 'react-icons/fi';
 import { Skeleton } from '../ui/skeleton';
 
 const NotificationMenu = () => {
@@ -27,7 +26,9 @@ const NotificationMenu = () => {
     const [unreadCount, setUnreadCount] = useState(0);
 
     const handleClick = (noti: TNotification) => {
-        socket?.emit('notificationClicked', noti._id);
+        if (!noti.opened) {
+            socket?.emit('notificationClicked', noti._id);
+        }
     };
 
     useEffect(() => {
@@ -58,6 +59,7 @@ const NotificationMenu = () => {
                             }
                         }) || [],
                 );
+                setUnreadCount((prev) => prev - 1);
             }
         };
 
