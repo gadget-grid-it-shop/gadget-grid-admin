@@ -34,9 +34,6 @@ const CreateProduct = () => {
     const { step, product } = useAppSelector((state) => state.products);
     const [addNewProduct, { isLoading: isCreating }] =
         useAddNewProductMutation();
-    const [updateProduct, { isLoading: isUpdating }] =
-        useUpdateProductMutation();
-    const router = useRouter();
     const [resetOpen, setResetOpen] = useState(false);
 
     const handleReset = () => {

@@ -68,7 +68,7 @@ const menus: TMenu[] = [
         children: [
             {
                 id: 1,
-                title: 'Create/Update Product',
+                title: 'Create Product',
                 link: '/product/create-product',
                 icon: <BiAddToQueue />,
             },

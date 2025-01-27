@@ -11,9 +11,9 @@ import { IoMdClose } from 'react-icons/io';
 
 const AddMetaData = ({ edit }: { edit: boolean }) => {
     const metaDescriptionRef = useRef<MDXEditorMethods>(null);
-    const { editProduct } = useAppSelector((s) => s.products);
+    const { editProduct, product } = useAppSelector((s) => s.products);
     const [galleryOpen, setGalleryOpen] = useState(false);
-    const { meta } = editProduct;
+    const { meta } = edit ? editProduct : product;
 
     const handleDescriptionChange = () => {
         const val: string = metaDescriptionRef.current

@@ -48,13 +48,13 @@ const NotificationMenu = () => {
 
         const handleRead = (data: TNotification) => {
             const markedNoti = notifications?.find(
-                (noti) => noti._id === data._id,
+                (noti) => noti?._id === data?._id,
             );
             if (markedNoti) {
                 setNotifications(
                     (prev) =>
                         prev.map((noti: TNotification) => {
-                            if (noti._id === markedNoti._id) {
+                            if (noti?._id === markedNoti?._id) {
                                 return { ...markedNoti, opened: true };
                             } else {
                                 return noti;

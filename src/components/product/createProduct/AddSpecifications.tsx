@@ -15,19 +15,20 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
         error: cateoryError,
         // isLoading: categoryLoading,
     } = useGetAllCategoriesQuery(false);
-    const { editProduct } = useAppSelector((state) => state.products);
-    const { attributes } = editProduct;
-    const dispatch = useAppDispatch();
+    const { product, editProduct } = useAppSelector((state) => state.products);
+    const { attributes } = edit ? editProduct : product;
+
+    const currentProduct = edit ? editProduct : product;
 
     if (cateoryError) {
         globalError(cateoryError);
     }
 
     useEffect(() => {
-        if (editProduct.category.length !== 0) {
+        if (currentProduct.category.length !== 0) {
             const category: TCategory = categoryData?.data.find(
                 (cat: TCategory) =>
-                    cat._id === editProduct.category.find((c) => c.main)?.id,
+                    cat._id === currentProduct.category.find((c) => c.main)?.id,
             );
 
             if (category) {
@@ -51,7 +52,7 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editProduct.category]);
+    }, [currentProduct.category]);
 
     const handleChange = (attrName: string, key: string, value: string) => {
         const newAttributes = attributes?.map((attr) => {

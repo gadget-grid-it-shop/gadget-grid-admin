@@ -7,9 +7,10 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 const AddDescription = ({ edit }: { edit: boolean }) => {
     const descriptionRef = useRef<MDXEditorMethods>(null);
-    const {
-        editProduct: { description },
-    } = useAppSelector((s) => s.products);
+    const { editProduct, product } = useAppSelector((s) => s.products);
+    const currentProduct = edit ? editProduct : product;
+
+    const { description } = currentProduct;
 
     const handleChange = useCallback(
         <K extends keyof TProduct>(key: K, value: TProduct[K]) => {

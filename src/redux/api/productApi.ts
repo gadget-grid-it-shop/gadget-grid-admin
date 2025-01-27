@@ -8,9 +8,8 @@ const productApi = baseApi.injectEndpoints({
         addNewProduct: build.mutation({
             query: (product: TProduct) => {
                 const productClone = { ...product } as Partial<TProduct>; // Makes _id optional
-                if (productClone._id) {
-                    delete productClone._id;
-                }
+
+                delete productClone._id;
                 return {
                     url: '/product/create-product',
                     method: 'POST',
