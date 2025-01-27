@@ -1,8 +1,6 @@
 import { TResponse } from '@/interface/common.interface';
 import { baseApi } from './baseApi';
 import { TNotification } from '@/interface/notification.interface';
-import { socket } from '@/lib/socket';
-import { toast } from 'sonner';
 
 const notificationApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -21,6 +19,7 @@ const notificationApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: params || {},
             }),
+            keepUnusedDataFor: 0,
         }),
     }),
 });

@@ -25,11 +25,11 @@ import {
 } from '@/redux/api/filtersApi';
 import { TProductFilter } from '@/interface/product.interface';
 
-const AddBasicData = () => {
+const AddBasicData = ({ edit }: { edit: boolean }) => {
     const dispatch = useAppDispatch();
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [thumbOpen, setThumbOpen] = useState(false);
-    const { product } = useAppSelector((state) => state.products);
+    const { product, editProduct } = useAppSelector((state) => state.products);
     const { data: categoryData } = useGetAllCategoriesQuery(true);
     const { data: brandData } = useGetAllBrandsQuery(undefined);
     const keyFeaturesRef = useRef<MDXEditorMethods>(null);
@@ -48,7 +48,7 @@ const AddBasicData = () => {
         thumbnail,
         filters,
         sku,
-    } = product;
+    } = edit ? editProduct : product;
 
     const { data: filtersData } = useGetAllProductFiltersQuery(undefined);
 
@@ -87,7 +87,7 @@ const AddBasicData = () => {
         const val: string = keyFeaturesRef.current
             ? keyFeaturesRef.current.getMarkdown()
             : '';
-        handleProductChange('key_features', val);
+        handleProductChange('key_features', val, edit);
     };
 
     const handleFilterSelect = (val: Option[]) => {
@@ -123,7 +123,7 @@ const AddBasicData = () => {
                 }
             }) as TProductFilter[]) || [];
 
-        handleProductChange('filters', newfilters);
+        handleProductChange('filters', newfilters, edit);
     };
 
     return (
@@ -138,7 +138,7 @@ const AddBasicData = () => {
                     <Input
                         value={name}
                         onChange={(e) =>
-                            handleProductChange('name', e.target.value)
+                            handleProductChange('name', e.target.value, edit)
                         }
                         className='bg-background-foreground'
                         placeholder='Enter Product Name'
@@ -150,7 +150,9 @@ const AddBasicData = () => {
                     <TreeDropdown
                         value={category}
                         categories={categoryData?.data}
-                        onSelect={(val) => handleProductChange('category', val)}
+                        onSelect={(val) =>
+                            handleProductChange('category', val, edit)
+                        }
                     />
                 </div>
 
@@ -159,7 +161,7 @@ const AddBasicData = () => {
                     <Select
                         value={brand as string}
                         onChange={(val) =>
-                            handleProductChange('brand', val as string)
+                            handleProductChange('brand', val as string, edit)
                         }
                         data={brandDropdownData}
                         placeholder='Select brand'
@@ -170,7 +172,7 @@ const AddBasicData = () => {
                     <Input
                         value={model}
                         onChange={(e) =>
-                            handleProductChange('model', e.target.value)
+                            handleProductChange('model', e.target.value, edit)
                         }
                         className={`bg-background-foreground`}
                         placeholder='Enter Brand Name'
@@ -183,7 +185,7 @@ const AddBasicData = () => {
                         value={sku}
                         type='text'
                         onChange={(e) =>
-                            handleProductChange('sku', e.target.value)
+                            handleProductChange('sku', e.target.value, edit)
                         }
                         className='bg-background-foreground'
                         placeholder='Enter product SKU'
@@ -258,6 +260,7 @@ const AddBasicData = () => {
                                                     handleProductChange(
                                                         'thumbnail',
                                                         '',
+                                                        edit,
                                                     )
                                                 }
                                                 className='absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red'
@@ -348,7 +351,7 @@ const AddBasicData = () => {
                             const value = e.target.value;
                             const price =
                                 value === '' ? 0 : Math.ceil(Number(value));
-                            handleProductChange('price', Number(price));
+                            handleProductChange('price', Number(price), edit);
                         }}
                         className='bg-background-foreground'
                         placeholder='Enter Price'
@@ -364,6 +367,7 @@ const AddBasicData = () => {
                             handleProductChange(
                                 'quantity',
                                 parseInt(e.target.value),
+                                edit,
                             )
                         }
                         className='bg-background-foreground'
@@ -379,10 +383,14 @@ const AddBasicData = () => {
                                 checked={shipping?.free}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleProductChange('shipping', {
-                                        cost: 0,
-                                        free: !shipping.free,
-                                    });
+                                    handleProductChange(
+                                        'shipping',
+                                        {
+                                            cost: 0,
+                                            free: !shipping.free,
+                                        },
+                                        edit,
+                                    );
                                 }}
                             />
                             free
@@ -397,10 +405,14 @@ const AddBasicData = () => {
                             const value = e.target.value;
                             const cost =
                                 value === '' ? 0 : Math.ceil(Number(value)); // Prevent leading 0
-                            handleProductChange('shipping', {
-                                cost,
-                                free: false,
-                            });
+                            handleProductChange(
+                                'shipping',
+                                {
+                                    cost,
+                                    free: false,
+                                },
+                                edit,
+                            );
                         }}
                         className='bg-background-foreground'
                         placeholder='Enter warranty'
@@ -414,10 +426,14 @@ const AddBasicData = () => {
                                 checked={warranty.lifetime}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleProductChange('warranty', {
-                                        days: 0,
-                                        lifetime: !warranty.lifetime,
-                                    });
+                                    handleProductChange(
+                                        'warranty',
+                                        {
+                                            days: 0,
+                                            lifetime: !warranty.lifetime,
+                                        },
+                                        edit,
+                                    );
                                 }}
                             />
                             lifetime
@@ -432,10 +448,14 @@ const AddBasicData = () => {
                             const value = e.target.value;
                             const days =
                                 value === '' ? 0 : Math.ceil(Number(value)); // Prevent leading 0
-                            handleProductChange('warranty', {
-                                days,
-                                lifetime: false,
-                            });
+                            handleProductChange(
+                                'warranty',
+                                {
+                                    days,
+                                    lifetime: false,
+                                },
+                                edit,
+                            );
                         }}
                         className='bg-background-foreground'
                         placeholder='Enter warranty'
@@ -448,7 +468,7 @@ const AddBasicData = () => {
                 multiselect={false}
                 setOpen={setThumbOpen}
                 onChange={(val) =>
-                    handleProductChange('thumbnail', val as string)
+                    handleProductChange('thumbnail', val as string, edit)
                 }
             />
             <ImageGallery
@@ -456,7 +476,7 @@ const AddBasicData = () => {
                 multiselect={true}
                 setOpen={setGalleryOpen}
                 onChange={(val) =>
-                    handleProductChange('gallery', val as string[])
+                    handleProductChange('gallery', val as string[], edit)
                 }
             />
         </>

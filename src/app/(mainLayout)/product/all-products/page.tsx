@@ -196,7 +196,7 @@ const AllProducts = () => {
             header: 'CreatedBy',
             cell: ({ row }) => {
                 const createdBy: string = row.getValue('createdBy');
-                return <UserCard id={createdBy} />;
+                return <UserCard size='sm' id={createdBy} />;
             },
         },
         {
@@ -209,9 +209,7 @@ const AllProducts = () => {
                         <Button variant={'view_button'} size={'base'} />
                         <Button
                             onClick={() =>
-                                router.push(
-                                    `/product/create-product?updateId=${_id}`,
-                                )
+                                router.push(`/product/update-product/${_id}`)
                             }
                             variant={'edit_button'}
                             size={'base'}
@@ -243,7 +241,6 @@ const AllProducts = () => {
     );
 
     const handlePageChange = (page: number, limit: number) => {
-        console.log({ page }, { limit });
         setPage(page);
         setLimit(limit);
     };

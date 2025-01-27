@@ -62,7 +62,6 @@ const LoginPage = () => {
         axiosInstance
             .post(`/auth/admin-login`, { email, password })
             .then((res) => {
-                console.log(res.data);
                 if (res.data?.data?.isVerified === false) {
                     toast.warning(res.data.message);
                     router.push('/verify-email');
@@ -120,7 +119,7 @@ const LoginPage = () => {
     return (
         <>
             {!resetTab ? (
-                <div className='z-50 flex min-h-[60vh] w-[90vw] flex-col justify-center rounded-lg bg-background p-8 px-5 shadow-lg min-[540px]:px-10 md:w-[70vw] lg:w-1/2 2xl:w-1/3'>
+                <div className='z-50 flex min-h-[60vh] w-[90vw] flex-col justify-center rounded-lg bg-white/15 p-8 px-5 shadow-lg backdrop-blur-lg border border-border-color min-[540px]:px-10 md:w-[70vw] lg:w-1/2 2xl:w-1/3'>
                     <Image
                         className='mx-auto pb-4'
                         src={'/gadget-grid-logo.png'}

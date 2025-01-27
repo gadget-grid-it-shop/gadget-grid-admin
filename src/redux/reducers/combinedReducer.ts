@@ -24,8 +24,8 @@ const authPersistConfig = {
 };
 
 const productPersistConfig = {
-    key: 'general',
-    storage: instance || storage,
+    key: 'product',
+    storage: storage,
 };
 
 const tablePersistConfig = {

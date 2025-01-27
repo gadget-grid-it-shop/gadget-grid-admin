@@ -1,17 +1,18 @@
 'use client';
-
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
     resetProductData,
     setCreateProductStep,
+    setProductForUpdate,
+    setUpdateProductStep,
 } from '@/redux/reducers/products/productSlice';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import AddBasicData from '@/components/product/createProduct/AddBasicData';
 import AddSpecifications from '@/components/product/createProduct/AddSpecifications';
 import { Button } from '@/components/ui/button';
 import Modal from '@/components/custom/Modal';
 import {
-    useAddNewProductMutation,
+    useGetSingleProductQuery,
     useUpdateProductMutation,
 } from '@/redux/api/productApi';
 import { toast } from 'sonner';
@@ -20,6 +21,8 @@ import AddDescription from '@/components/product/createProduct/AddDescription';
 import { ProductValidations } from '@/validations/createProductValidations';
 import { ZodError } from 'zod';
 import AddMetaData from '@/components/product/createProduct/AddMetaData';
+import { TProduct } from '@/interface/product.interface';
+import { useParams } from 'next/navigation';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
 
@@ -29,27 +32,45 @@ type TCompByStep = {
     element: ReactNode;
 };
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
     const dispatch = useAppDispatch();
-    const { step, product } = useAppSelector((state) => state.products);
-    const [addNewProduct, { isLoading: isCreating }] =
-        useAddNewProductMutation();
+    const { editStep, editProduct } = useAppSelector((state) => state.products);
     const [updateProduct, { isLoading: isUpdating }] =
         useUpdateProductMutation();
     const router = useRouter();
+    const params = useParams();
+    const updateId = params.updateId;
+
+    const { data: updateProductData } = useGetSingleProductQuery(
+        updateId as string,
+        { skip: !updateId },
+    );
+
+    const productData: TProduct | undefined = updateProductData?.data;
+
+    useEffect(() => {
+        if (!updateId) {
+            router.push('/product/create-product');
+        }
+
+        if (productData) {
+            dispatch(setProductForUpdate(productData));
+        }
+    }, [dispatch, productData, updateId]);
+
     const [resetOpen, setResetOpen] = useState(false);
 
-    const handleReset = () => {
-        dispatch(resetProductData());
-        setResetOpen(false);
-    };
-
-    const hanldeAddProduct = async () => {
+    const handleUpdateProduct = async () => {
         try {
-            const res = await addNewProduct(product).unwrap();
+            const res = await updateProduct({
+                id: updateId as string,
+                payload: editProduct,
+            }).unwrap();
+
             if (res) {
                 toast.success(res.message);
                 dispatch(resetProductData());
+                router.push('/product/all-products');
             }
         } catch (err) {
             globalError(err);
@@ -60,37 +81,37 @@ const CreateProduct = () => {
         {
             step: 1,
             title: 'General Information',
-            element: <AddBasicData edit={false} />,
+            element: <AddBasicData edit={true} />,
         },
         {
             step: 2,
             title: 'Attributes',
-            element: <AddSpecifications edit={false} />,
+            element: <AddSpecifications edit={true} />,
         },
         {
             step: 3,
             title: 'Description',
-            element: <AddDescription edit={false} />,
+            element: <AddDescription edit={true} />,
         },
         {
             step: 4,
             title: 'Meta Data',
-            element: <AddMetaData edit={false} />,
+            element: <AddMetaData edit={true} />,
         },
     ];
 
     const renderSteps = () => {
-        const match = compByStep.find((s) => s.step === step);
+        const match = compByStep.find((s) => s.step === editStep);
         return match ? match.element : <></>;
     };
 
     const handleNext = async () => {
-        if (step === 1) {
+        if (editStep === 1) {
             try {
                 await ProductValidations.generalDataValidationSchema.parseAsync(
-                    product,
+                    editProduct,
                 );
-                dispatch(setCreateProductStep((step + 1) as 1 | 2 | 3 | 4));
+                dispatch(setUpdateProductStep((editStep + 1) as 1 | 2 | 3 | 4));
             } catch (err) {
                 if (err instanceof ZodError) {
                     console.log(err.issues[0].message);
@@ -100,23 +121,23 @@ const CreateProduct = () => {
             }
         }
 
-        if (step < 4) {
-            dispatch(setCreateProductStep((step + 1) as 1 | 2 | 3 | 4));
+        if (editStep < 4) {
+            dispatch(setUpdateProductStep((editStep + 1) as 1 | 2 | 3 | 4));
         }
     };
 
     const handleBack = () => {
-        if (step > 1) {
-            dispatch(setCreateProductStep((step - 1) as 1 | 2 | 3 | 4));
+        if (editStep > 1) {
+            dispatch(setUpdateProductStep((editStep - 1) as 1 | 2 | 3 | 4));
         }
     };
 
     const handleStepClick = (clickedStep: number) => {
-        if (clickedStep === step) {
+        if (clickedStep === editStep) {
             return;
         }
 
-        if (clickedStep > step) {
+        if (clickedStep > editStep) {
             handleNext();
         } else {
             handleBack();
@@ -127,18 +148,10 @@ const CreateProduct = () => {
         <>
             <div>
                 <PageHeader
-                    title={'Create Product'}
-                    subtitle='Add New Products to Your Inventory'
-                    buttons={
-                        <>
-                            <Button
-                                onClick={() => setResetOpen(true)}
-                                variant={'edit'}
-                            >
-                                Reset Form
-                            </Button>
-                        </>
+                    title={
+                        updateId === null ? 'Create Product' : 'Update Product'
                     }
+                    subtitle='Add New Products to Your Inventory'
                 />
 
                 <div className='mb-7 mt-3 flex justify-center px-8 sm:mb-16 sm:px-14 md:px-20'>
@@ -153,19 +166,19 @@ const CreateProduct = () => {
                                     onClick={() => handleStepClick(s.step)}
                                 >
                                     <div
-                                        className={`flex size-7 items-center justify-center rounded-full ${s.step <= step ? 'bg-primary text-pure-white' : 'bg-lavender-mist text-gray'}`}
+                                        className={`flex size-7 items-center justify-center rounded-full ${s.step <= editStep ? 'bg-primary text-pure-white' : 'bg-lavender-mist text-gray'}`}
                                     >
                                         {s.step}
                                     </div>
                                     <div
-                                        className={`absolute top-0 mt-9 hidden text-nowrap text-center sm:block ${s.step <= step ? 'text-primary' : 'text-gray'}`}
+                                        className={`absolute top-0 mt-9 hidden text-nowrap text-center sm:block ${s.step <= editStep ? 'text-primary' : 'text-gray'}`}
                                     >
                                         {s.title}
                                     </div>
                                 </div>
                                 {s.step !== compByStep.length && (
                                     <div
-                                        className={`flex-auto border-t-2 border-dashed border-border-color transition duration-500 ease-in-out ${s.step < step ? 'border-primary' : 'text-gray'}`}
+                                        className={`flex-auto border-t-2 border-dashed border-border-color transition duration-500 ease-in-out ${s.step < editStep ? 'border-primary' : 'text-gray'}`}
                                     ></div>
                                 )}
                             </div>
@@ -176,54 +189,31 @@ const CreateProduct = () => {
                 {renderSteps()}
 
                 <div className='flex justify-between pt-3'>
-                    {step !== 1 && (
+                    {editStep !== 1 && (
                         <Button variant={'edit'} onClick={handleBack}>
                             Back
                         </Button>
                     )}
-                    {step === 4 && (
+                    {editStep === 4 && (
                         <>
                             <Button
-                                onClick={hanldeAddProduct}
-                                loading={isCreating}
+                                onClick={handleUpdateProduct}
+                                loading={isUpdating}
                                 className='mx-auto'
                             >
-                                Add Product
+                                Update Product
                             </Button>
                         </>
                     )}
-                    {step !== compByStep.length && (
+                    {editStep !== compByStep.length && (
                         <Button className='ms-auto' onClick={handleNext}>
                             Next
                         </Button>
                     )}
                 </div>
-
-                <Modal
-                    open={resetOpen}
-                    onOpenChange={() => setResetOpen(false)}
-                    title='Reset product form'
-                >
-                    <h3>
-                        Are you sure you want to reset the form. All the data
-                        you entered will be lost
-                    </h3>
-                    <div className='flex w-full gap-2'>
-                        <Button
-                            variant={'delete_solid'}
-                            className='w-full'
-                            onClick={() => setResetOpen(false)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button className='w-full' onClick={handleReset}>
-                            Reset
-                        </Button>
-                    </div>
-                </Modal>
             </div>
         </>
     );
 };
 
-export default CreateProduct;
+export default UpdateProduct;

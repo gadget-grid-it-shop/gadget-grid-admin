@@ -43,69 +43,69 @@ input {
 
 @layer base {
     :root {
-        --overlay-color: #0707075d;
-        --primary: #4a2cf2;
-        --primary-text: #4a2cf2;
-        --bright-turquoise: #19c2dd;
-        --ultramarine-blue: #355bfb;
-        --light-cyan: #d1f3f8;
-        --lavender-blue: #d7defe;
-        --peach-pink: #fbcdba;
-        --red: #fc2119;
-        --red-orange: #fc5d19;
-        --bright-gray: #adadad;
-        --black: #000000;
-        --border: #dadada;
-        --sky-blue: #8af0ff;
-        --bright-cyan: #27d3ed;
-        --light-apricot: #ffc47e;
-        --vivid-orange: #ffab49;
-        --pastel-violet: #b195ff;
-        --vivid-violet: #7442ff;
-        --rich-black: #050313;
-        --gray: #4d4d4d;
-        --light-gray: #f1f1f1;
-        --lavender-mist: #ebeefc;
-        --solid-vivid-orange: #fc5d19;
-        --solid-sunset-gold: #f2c94c;
-        --solid-royal-purple: #6a13dd;
-        --solid-sky-blue: #19c1dd;
-        --solid-hot-pink: #ef5da8;
-        --solid-saffron-orange: #f2994a;
-        --white: #fff;
+        --overlay-color: 0, 0%, 2.75%, 0.36; /* rgba(7 7 7 0.36) */
+        --primary: 247.7, 87.53%, 56.08%; /* rgb(74 44 242) */
+        --primary-text: 247.7, 87.53%, 56.08%; /* rgb(74 44 242) */
+        --bright-turquoise: 189.23, 78.44%, 48.24%; /* rgb(25 194 221) */
+        --ultramarine-blue: 222.86, 96.02%, 59.61%; /* rgb(53 91 251) */
+        --light-cyan: 190.98, 74.14%, 89.41%; /* rgb(209 243 248) */
+        --lavender-blue: 231.43, 70.11%, 91.76%; /* rgb(215 222 254) */
+        --peach-pink: 19.51, 88.89%, 85.49%; /* rgb(251 205 186) */
+        --red: 1.57, 98.02%, 54.31%; /* rgb(252 33 25) */
+        --red-orange: 17.14, 97.59%, 54.31%; /* rgb(252 93 25) */
+        --bright-gray: 0, 0%, 67.84%; /* #adadad */
+        --black: 0, 0%, 0%; /* #000000 */
+        --border: 0, 0%, 85.49%; /* #dadada */
+        --sky-blue: 190.59, 100%, 77.26%; /* #8af0ff */
+        --bright-cyan: 190.39, 83.43%, 54.12%; /* #27d3ed */
+        --light-apricot: 35.29, 100%, 74.71%; /* #ffc47e */
+        --vivid-orange: 32.4, 100%, 64.51%; /* #ffab49 */
+        --pastel-violet: 259.05, 100%, 79.22%; /* #b195ff */
+        --vivid-violet: 260.11, 100%, 63.14%; /* #7442ff */
+        --rich-black: 249.23, 68.18%, 4.31%; /* #050313 */
+        --gray: 0, 0%, 30.2%; /* #4d4d4d */
+        --light-gray: 0, 0%, 94.51%; /* #f1f1f1 */
+        --lavender-mist: 231.43, 62.5%, 95.49%; /* #ebeefc */
+        --solid-vivid-orange: 17.97, 97.42%, 54.31%; /* #fc5d19 */
+        --solid-sunset-gold: 42.4, 85.29%, 62.35%; /* #f2c94c */
+        --solid-royal-purple: 261.94, 84.38%, 47.06%; /* #6a13dd */
+        --solid-sky-blue: 190.47, 79.83%, 48.24%; /* #19c1dd */
+        --solid-hot-pink: 332.58, 82.71%, 65.1%; /* #ef5da8 */
+        --solid-saffron-orange: 28.05, 85.18%, 61.96%; /* #f2994a */
+        --white: 0, 0%, 100%; /* #fff */
     }
 
     .dark {
-        --overlay-color: #080808a8;
-        --primary: hsl(249, 98%, 61%);
-        --primary-text: #e8e3ff;
-        --bright-turquoise: #19c2dd;
-        --ultramarine-blue: #355bfb;
-        --light-cyan: #2f3738;
-        --lavender-blue: #d7defe;
-        --peach-pink: #fbcdba;
-        --red: #b31812;
-        --red-orange: #ac3f11;
-        --bright-gray: #afafaf;
-        --black: #ffffff;
-        --border: #2b2b2b;
-        --sky-blue: #8af0ff;
-        --bright-cyan: #27d3ed;
-        --light-apricot: #ffc47e;
-        --vivid-orange: #ffab49;
-        --pastel-violet: #b195ff;
-        --vivid-violet: #7442ff;
-        --rich-black: #050313;
-        --gray: #b4b4b4;
-        --light-gray: #141414;
-        --lavender-mist: #242430;
-        --solid-vivid-orange: #fc5d19;
-        --solid-sunset-gold: #f2c94c;
-        --solid-royal-purple: #6a13dd;
-        --solid-sky-blue: #19c1dd;
-        --solid-hot-pink: #ef5da8;
-        --solid-saffron-orange: #f2994a;
-        --white: #000000;
+        --overlay-color: 0, 0%, 3.14%, 0.66; /* rgba(8, 8, 8, 0.66) */
+        --primary: 248.89, 84.72%, 56.08%; /* rgb(74 44 242) */
+        --primary-text: 249.6, 83.05%, 96.47%; /* rgb(242, 239, 254) */
+        --bright-turquoise: 189.2, 78.44%, 48.24%; /* rgb(25, 194, 221) */
+        --ultramarine-blue: 222.86, 96.02%, 59.61%; /* rgb(53, 91, 251) */
+        --light-cyan: 189.39, 8.55%, 20.2%; /* rgb(47, 55, 56) */
+        --lavender-blue: 231.43, 70.11%, 91.76%; /* rgb(215, 222, 254) */
+        --peach-pink: 19.51, 88.89%, 85.49%; /* rgb(251, 205, 186) */
+        --red: 1.92, 82.93%, 38.63%; /* rgb(179, 24, 18) */
+        --red-orange: 17.93, 81.36%, 37.06%; /* rgb(172, 63, 17) */
+        --bright-gray: 0, 0%, 68.63%; /* rgb(175, 175, 175) */
+        --black: 0, 0%, 100%; /* rgb(255, 255, 255) */
+        --border: 0, 0%, 16.86%; /* rgb(43, 43, 43) */
+        --sky-blue: 190.59, 100%, 77.26%; /* rgb(138, 240, 255) */
+        --bright-cyan: 190.39, 83.43%, 54.12%; /* rgb(39, 211, 237) */
+        --light-apricot: 35.29, 100%, 74.71%; /* rgb(255, 196, 126) */
+        --vivid-orange: 32.4, 100%, 64.51%; /* rgb(255, 171, 73) */
+        --pastel-violet: 259.05, 100%, 79.22%; /* rgb(177, 149, 255) */
+        --vivid-violet: 259.2, 100%, 63.14%; /* rgb(116, 66, 255) */
+        --rich-black: 249.23, 68.18%, 4.31%; /* rgb(5, 3, 19) */
+        --gray: 0, 0%, 70.59%; /* rgb(180, 180, 180) */
+        --light-gray: 0, 0%, 7.84%; /* rgb(20, 20, 20) */
+        --lavender-mist: 240, 14.29%, 16.47%; /* rgb(36, 36, 48) */
+        --solid-vivid-orange: 17.97, 97.42%, 54.31%; /* rgb(252, 93, 25) */
+        --solid-sunset-gold: 42.4, 85.29%, 62.35%; /* rgb(242, 201, 76) */
+        --solid-royal-purple: 261.94, 84.38%, 47.06%; /* rgb(106, 19, 221) */
+        --solid-sky-blue: 190.47, 79.83%, 48.24%; /* rgb(25, 193, 221) */
+        --solid-hot-pink: 332.58, 82.71%, 65.1%; /* rgb(239, 93, 168) */
+        --solid-saffron-orange: 28.05, 85.18%, 61.96%; /* rgb(242, 153, 74) */
+        --white: 0, 0%, 0%; /* rgb(0, 0, 0) */
     }
 }
 
@@ -228,18 +228,18 @@ input {
 
 /* Track */
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: var(--white);
-    border: 1px solid var(--white);
+    background: hsl(var(--white));
+    border: 1px solid hsl(var(--white));
 }
 
 /* Handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--lavender-mist);
+    background: hsl(var(--lavender-mist));
     width: 8px;
     border-radius: 6px;
 }
 
 /* Handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--pastel-violet);
+    background: hsl(var(--pastel-violet));
 }

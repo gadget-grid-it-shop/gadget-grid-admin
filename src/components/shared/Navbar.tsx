@@ -43,7 +43,7 @@ const Navbar = () => {
 
     return (
         <nav className=''>
-            <div className='mt-3 flex gap-2 justify-between rounded-md bg-white px-4 py-4 shadow-md'>
+            <div className='mt-3 flex gap-2 justify-between rounded-md bg-background px-4 py-4 shadow-md'>
                 {!isDesktopOrLaptop && (
                     <Button
                         className='px-0 text-2xl'

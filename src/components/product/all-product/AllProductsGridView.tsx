@@ -116,7 +116,7 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
                             <Button
                                 onClick={() =>
                                     router.push(
-                                        `/product/create-product?updateId=${product?._id}`,
+                                        `/product/update-product/${product?._id}`,
                                     )
                                 }
                                 variant={'edit_button'}

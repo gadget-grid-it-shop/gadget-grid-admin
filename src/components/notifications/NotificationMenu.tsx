@@ -17,10 +17,13 @@ import { Skeleton } from '../ui/skeleton';
 
 const NotificationMenu = () => {
     const [page, setPage] = useState(1);
-    const { data, isLoading, isFetching } = useGetNotificationsQuery({
-        page,
-        limit: 20,
-    });
+    const { data, isLoading, isFetching } = useGetNotificationsQuery(
+        {
+            page,
+            limit: 20,
+        },
+        { refetchOnMountOrArgChange: true },
+    );
     const [notifications, setNotifications] = useState<TNotification[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -48,12 +51,11 @@ const NotificationMenu = () => {
                 (noti) => noti._id === data._id,
             );
             if (markedNoti) {
-                markedNoti.opened = true;
                 setNotifications(
                     (prev) =>
                         prev.map((noti: TNotification) => {
                             if (noti._id === markedNoti._id) {
-                                return markedNoti;
+                                return { ...markedNoti, opened: true };
                             } else {
                                 return noti;
                             }
@@ -63,12 +65,21 @@ const NotificationMenu = () => {
             }
         };
 
+        const handleUpdateMarkAllRead = () => {
+            setUnreadCount(0);
+            setNotifications((prev) =>
+                prev.map((noti) => ({ ...noti, opened: true })),
+            );
+        };
+
         socket?.on('newNotification', handleNewNotification);
         socket?.on('notificationRead', handleRead);
+        socket?.on('markedAllasRead', handleUpdateMarkAllRead);
 
         return () => {
             socket?.off('newNotification', handleNewNotification);
             socket?.off('notificationRead', handleRead);
+            socket?.off('markedAllasRead', handleUpdateMarkAllRead);
         };
     });
 
@@ -99,6 +110,10 @@ const NotificationMenu = () => {
         }
     };
 
+    const handleMarkAllRead = () => {
+        socket?.emit('markAllRead');
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className='outline-none'>
@@ -110,9 +125,15 @@ const NotificationMenu = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className='-right-10 w-80 p-2 bg-background border border-border-color'>
                 <DropdownMenuLabel>
-                    <p className='font-semibold text-lg pb-1 mb-2 border-b border-border-color'>
-                        Notifications
-                    </p>
+                    <div className='pb-1 mb-2 border-b border-border-color flex justify-between'>
+                        <p className='font-semibold text-lg'>Notifications</p>
+                        <button
+                            onClick={handleMarkAllRead}
+                            className='text-xs text-primary'
+                        >
+                            Mark all as read
+                        </button>
+                    </div>
                 </DropdownMenuLabel>
 
                 <div

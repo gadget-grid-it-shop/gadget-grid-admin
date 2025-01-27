@@ -11,46 +11,65 @@ const config: Config = {
         extend: {
             colors: {
                 overlay: {
-                    DEFAULT: 'var(--overlay-color)',
+                    DEFAULT:
+                        'hsla(var(--overlay-color), var(--tw-bg-opacity,1))',
                 },
                 primary: {
-                    DEFAULT: 'var(--primary)',
+                    DEFAULT: 'hsla(var(--primary), var(--tw-bg-opacity,1))',
                 },
                 'primary-text': {
-                    DEFAULT: 'var(--primary-text)',
+                    DEFAULT:
+                        'hsla(var(--primary-text), var(--tw-bg-opacity,1))',
                 },
-                'pure-white': '#fff',
-                'bright-turquoise': 'var(--bright-turquoise)',
-                'ultramarine-blue': 'var(--ultramarine-blue)',
-                'light-cyan': 'var(--light-cyan)',
-                'lavender-blue': 'var(--lavender-blue)',
-                'peach-pink': 'var(--peach-pink)',
-                'red-orange': 'var(--red-orange)',
-                'bright-gray': 'var(--bright-gray)',
-                black: 'var(--black)',
-                red: 'var(--red)',
-                'sky-blue': 'var(--sky-blue)',
-                'bright-cyan': 'var(--bright-cyan)',
-                'light-apricot': 'var(--light-apricot)',
-                'vivid-orange': 'var(--vivid-orange)',
-                'pastel-violet': 'var(--pastel-violet)',
-                'vivid-violet': 'var(--vivid-violet)',
-                'rich-black': 'var(--rich-black)',
-                gray: 'var(--gray)',
-                'border-color': 'var(--border)',
+                'pure-white': 'hsla(0, 0%, 100%, 1)',
+                'bright-turquoise':
+                    'hsla(var(--bright-turquoise), var(--tw-bg-opacity,1))',
+                'ultramarine-blue':
+                    'hsla(var(--ultramarine-blue), var(--tw-bg-opacity,1))',
+                'light-cyan': 'hsla(var(--light-cyan), var(--tw-bg-opacity,1))',
+                'lavender-blue':
+                    'hsla(var(--lavender-blue), var(--tw-bg-opacity,1))',
+                'peach-pink': 'hsla(var(--peach-pink), var(--tw-bg-opacity,1))',
+                'red-orange': 'hsla(var(--red-orange), var(--tw-bg-opacity,1))',
+                'bright-gray':
+                    'hsla(var(--bright-gray), var(--tw-bg-opacity,1))',
+                black: 'hsla(var(--black), var(--tw-bg-opacity,1))',
+                red: 'hsla(var(--red), var(--tw-bg-opacity,1))',
+                'sky-blue': 'hsla(var(--sky-blue), var(--tw-bg-opacity,1))',
+                'bright-cyan':
+                    'hsla(var(--bright-cyan), var(--tw-bg-opacity,1))',
+                'light-apricot':
+                    'hsla(var(--light-apricot), var(--tw-bg-opacity,1))',
+                'vivid-orange':
+                    'hsla(var(--vivid-orange), var(--tw-bg-opacity,1))',
+                'pastel-violet':
+                    'hsla(var(--pastel-violet), var(--tw-bg-opacity,1))',
+                'vivid-violet':
+                    'hsla(var(--vivid-violet), var(--tw-bg-opacity,1))',
+                'rich-black': 'hsla(var(--rich-black), var(--tw-bg-opacity,1))',
+                gray: 'hsla(var(--gray), var(--tw-bg-opacity,1))',
+                'border-color': 'hsla(var(--border), var(--tw-bg-opacity,1))',
                 background: {
-                    DEFAULT: 'var(--white)',
-                    foreground: 'var(--light-gray)',
+                    DEFAULT: 'hsla(var(--white), var(--tw-bg-opacity,1))',
+                    foreground:
+                        'hsla(var(--light-gray), var(--tw-bg-opacity,1))',
                 },
-                'light-gray': 'var(--light-gray)',
-                'lavender-mist': 'var(--lavender-mist)',
-                'solid-vivid-orange': 'var(--solid-vivid-orange)',
-                'solid-sunset-gold': 'var(--solid-sunset-gold)',
-                'solid-royal-purple': 'var(--solid-royal-purple)',
-                'solid-sky-blue': 'var(--solid-sky-blue)',
-                'solid-hot-pink': 'var(--solid-hot-pink)',
-                'solid-saffron-orange': 'var(--solid-saffron-orange)',
-                white: 'var(--white)',
+                'light-gray': 'hsla(var(--light-gray), var(--tw-bg-opacity,1))',
+                'lavender-mist':
+                    'hsla(var(--lavender-mist), var(--tw-bg-opacity,1))',
+                'solid-vivid-orange':
+                    'hsla(var(--solid-vivid-orange), var(--tw-bg-opacity,1))',
+                'solid-sunset-gold':
+                    'hsla(var(--solid-sunset-gold), var(--tw-bg-opacity,1))',
+                'solid-royal-purple':
+                    'hsla(var(--solid-royal-purple), var(--tw-bg-opacity,1))',
+                'solid-sky-blue':
+                    'hsla(var(--solid-sky-blue), var(--tw-bg-opacity,1))',
+                'solid-hot-pink':
+                    'hsla(var(--solid-hot-pink), var(--tw-bg-opacity,1))',
+                'solid-saffron-orange':
+                    'hsla(var(--solid-saffron-orange), var(--tw-bg-opacity,1))',
+                white: 'hsla(var(--white), var(--tw-bg-opacity,1))',
             },
             keyframes: {
                 'accordion-down': {

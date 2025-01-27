@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Button, TButtonVariants } from './button';
 import { cn } from '@/lib/utils';
 
@@ -18,10 +18,12 @@ const BadgeButtton = ({
     icon,
     text,
     variant,
-}: TProps) => {
+    ...rest
+}: TProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
     return (
         <div className='relative'>
             <Button
+                {...rest}
                 tooltip={tooptip}
                 variant={variant || 'edit'}
                 className={cn(

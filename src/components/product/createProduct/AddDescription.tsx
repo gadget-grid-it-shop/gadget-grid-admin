@@ -1,22 +1,21 @@
 import { MarkdownEditor } from '@/components/common/MarkdownEditor';
 import { TProduct } from '@/interface/product.interface';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { updateProduct } from '@/redux/reducers/products/productSlice';
+import { handleProductChange } from '@/lib/utils';
+import { useAppSelector } from '@/redux/hooks';
 import { MDXEditorMethods } from '@mdxeditor/editor';
 import React, { useCallback, useEffect, useRef } from 'react';
 
-const AddDescription = () => {
+const AddDescription = ({ edit }: { edit: boolean }) => {
     const descriptionRef = useRef<MDXEditorMethods>(null);
     const {
-        product: { description },
+        editProduct: { description },
     } = useAppSelector((s) => s.products);
-    const dispatch = useAppDispatch();
 
     const handleChange = useCallback(
         <K extends keyof TProduct>(key: K, value: TProduct[K]) => {
-            dispatch(updateProduct({ key, value }));
+            handleProductChange(key, value, edit);
         },
-        [dispatch],
+        [edit],
     );
 
     useEffect(() => {

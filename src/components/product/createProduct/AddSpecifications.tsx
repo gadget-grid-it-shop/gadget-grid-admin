@@ -4,20 +4,19 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { TCategory, TProductCategory } from '@/interface/category';
 import { TProductAttribute } from '@/interface/product.interface';
-import { globalError } from '@/lib/utils';
+import { globalError, handleProductChange } from '@/lib/utils';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { updateProduct } from '@/redux/reducers/products/productSlice';
 import React, { useEffect } from 'react';
 
-const AddSpecifications = () => {
+const AddSpecifications = ({ edit }: { edit: boolean }) => {
     const {
         data: categoryData,
         error: cateoryError,
         // isLoading: categoryLoading,
     } = useGetAllCategoriesQuery(false);
-    const { product } = useAppSelector((state) => state.products);
-    const { attributes } = product;
+    const { editProduct } = useAppSelector((state) => state.products);
+    const { attributes } = editProduct;
     const dispatch = useAppDispatch();
 
     if (cateoryError) {
@@ -25,10 +24,10 @@ const AddSpecifications = () => {
     }
 
     useEffect(() => {
-        if (product.category.length !== 0) {
+        if (editProduct.category.length !== 0) {
             const category: TCategory = categoryData?.data.find(
                 (cat: TCategory) =>
-                    cat._id === product.category.find((c) => c.main)?.id,
+                    cat._id === editProduct.category.find((c) => c.main)?.id,
             );
 
             if (category) {
@@ -44,16 +43,15 @@ const AddSpecifications = () => {
                         return newAttr;
                     },
                 );
-                dispatch(
-                    updateProduct({ key: 'attributes', value: attributes }),
-                );
+
+                handleProductChange('attributes', attributes, edit);
             }
         } else {
-            dispatch(updateProduct({ key: 'attributes', value: [] }));
+            handleProductChange('attributes', [], edit);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [product.category]);
+    }, [editProduct.category]);
 
     const handleChange = (attrName: string, key: string, value: string) => {
         const newAttributes = attributes?.map((attr) => {
@@ -66,7 +64,7 @@ const AddSpecifications = () => {
             return attr;
         });
 
-        dispatch(updateProduct({ key: 'attributes', value: newAttributes }));
+        handleProductChange('attributes', newAttributes, edit);
     };
 
     return (

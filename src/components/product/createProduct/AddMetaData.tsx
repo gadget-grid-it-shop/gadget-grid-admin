@@ -9,21 +9,25 @@ import { handleProductChange, isValidUrl } from '@/lib/utils';
 import Image from 'next/image';
 import { IoMdClose } from 'react-icons/io';
 
-const AddMetaData = () => {
+const AddMetaData = ({ edit }: { edit: boolean }) => {
     const metaDescriptionRef = useRef<MDXEditorMethods>(null);
-    const { product } = useAppSelector((s) => s.products);
+    const { editProduct } = useAppSelector((s) => s.products);
     const [galleryOpen, setGalleryOpen] = useState(false);
-    const { meta } = product;
+    const { meta } = editProduct;
 
     const handleDescriptionChange = () => {
         const val: string = metaDescriptionRef.current
             ? metaDescriptionRef.current.getMarkdown()
             : '';
-        handleProductChange('meta', {
-            title: meta?.title || '',
-            description: val,
-            image: meta?.image || '',
-        });
+        handleProductChange(
+            'meta',
+            {
+                title: meta?.title || '',
+                description: val,
+                image: meta?.image || '',
+            },
+            edit,
+        );
     };
 
     return (
@@ -36,11 +40,15 @@ const AddMetaData = () => {
                     <Input
                         value={meta?.title}
                         onChange={(e) =>
-                            handleProductChange('meta', {
-                                title: e.target.value,
-                                description: meta?.description || '',
-                                image: meta?.image || '',
-                            })
+                            handleProductChange(
+                                'meta',
+                                {
+                                    title: e.target.value,
+                                    description: meta?.description || '',
+                                    image: meta?.image || '',
+                                },
+                                edit,
+                            )
                         }
                         className='bg-background-foreground'
                         placeholder='Enter Product Name'
@@ -67,8 +75,16 @@ const AddMetaData = () => {
                                         <div
                                             onClick={() =>
                                                 handleProductChange(
-                                                    'thumbnail',
-                                                    '',
+                                                    'meta',
+                                                    {
+                                                        title:
+                                                            meta?.title || '',
+                                                        description:
+                                                            meta?.description ||
+                                                            '',
+                                                        image: '',
+                                                    },
+                                                    edit,
                                                 )
                                             }
                                             className='absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red'
@@ -104,11 +120,15 @@ const AddMetaData = () => {
                 multiselect={false}
                 setOpen={setGalleryOpen}
                 onChange={(val) =>
-                    handleProductChange('meta', {
-                        title: meta?.title || '',
-                        description: meta?.description || '',
-                        image: val as string,
-                    })
+                    handleProductChange(
+                        'meta',
+                        {
+                            title: meta?.title || '',
+                            description: meta?.description || '',
+                            image: val as string,
+                        },
+                        edit,
+                    )
                 }
             />
         </div>
