@@ -11,6 +11,7 @@ import {
     updateEditProduct,
     updateProduct,
 } from '@/redux/reducers/products/productSlice';
+import axiosInstance from './axiosInstance';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -47,10 +48,12 @@ export const handleLogout = () => {
 
 export function isValidUrl(url: string): boolean {
     try {
+        // Validate URL format
         new URL(url);
+
         return true;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
+        // Invalid URL format
         return false;
     }
 }

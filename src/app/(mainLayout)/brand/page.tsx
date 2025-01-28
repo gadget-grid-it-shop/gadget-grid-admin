@@ -74,62 +74,62 @@ const BrandPage = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {brandData?.data?.map((brand: TBrand, i: number) => (
-                            <TableRow key={brand?._id}>
-                                <TableCell>{i + 1}</TableCell>
-                                <TableCell>{`${brand?.name}`}</TableCell>
-                                <TableCell>
-                                    <Image
-                                        src={
-                                            isValidUrl(brand?.image)
-                                                ? brand.image
-                                                : '/brand-fallback.png'
-                                        }
-                                        onError={(e) =>
-                                            ((
-                                                e.currentTarget as HTMLImageElement
-                                            ).src = '/brand-fallback.png')
-                                        }
-                                        className='object-contain'
-                                        height={50}
-                                        width={50}
-                                        alt='brand image'
-                                    />
-                                </TableCell>
-                                <TableCell className='flex items-center gap-3'>
-                                    {brand?.createdBy?.email || 'N/A'}
-                                </TableCell>
+                        {brandData?.data?.map((brand: TBrand, i: number) => {
+                            const image = isValidUrl(brand?.image)
+                                ? brand.image
+                                : '/brand-fallback.png';
+                            return (
+                                <TableRow key={brand?._id}>
+                                    <TableCell>{i + 1}</TableCell>
+                                    <TableCell>{`${brand?.name}`}</TableCell>
+                                    <TableCell>
+                                        <Image
+                                            src={image}
+                                            className='object-contain'
+                                            height={50}
+                                            width={50}
+                                            alt='brand image'
+                                        />
+                                    </TableCell>
+                                    <TableCell className='flex items-center gap-3'>
+                                        {brand?.createdBy?.email || 'N/A'}
+                                    </TableCell>
 
-                                <TableCell className='font-semibold'>
-                                    {brand?.isActive ? (
-                                        <p className='text-green-600'>True</p>
-                                    ) : (
-                                        <p className='text-red'>False</p>
-                                    )}
-                                </TableCell>
+                                    <TableCell className='font-semibold'>
+                                        {brand?.isActive ? (
+                                            <p className='text-green-600'>
+                                                True
+                                            </p>
+                                        ) : (
+                                            <p className='text-red'>False</p>
+                                        )}
+                                    </TableCell>
 
-                                <TableCell>
-                                    <div className='flex items-center gap-3'>
-                                        <Button
-                                            variant={'view_button'}
-                                            size={'base'}
-                                        ></Button>
-                                        <Button
-                                            onClick={() => setEditOpen(brand)}
-                                            variant={'edit_button'}
-                                            size={'base'}
-                                        ></Button>
-                                        <Button
-                                            onClick={() =>
-                                                setDeleteOpen(brand._id)
-                                            }
-                                            variant={'delete_button'}
-                                            size={'base'}
-                                        ></Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    <TableCell>
+                                        <div className='flex items-center gap-3'>
+                                            <Button
+                                                variant={'view_button'}
+                                                size={'base'}
+                                            ></Button>
+                                            <Button
+                                                onClick={() =>
+                                                    setEditOpen(brand)
+                                                }
+                                                variant={'edit_button'}
+                                                size={'base'}
+                                            ></Button>
+                                            <Button
+                                                onClick={() =>
+                                                    setDeleteOpen(brand._id)
+                                                }
+                                                variant={'delete_button'}
+                                                size={'base'}
+                                            ></Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             )}
