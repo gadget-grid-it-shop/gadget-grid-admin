@@ -14,7 +14,7 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
         data: categoryData,
         error: cateoryError,
         // isLoading: categoryLoading,
-    } = useGetAllCategoriesQuery(false);
+    } = useGetAllCategoriesQuery(undefined);
     const { product, editProduct } = useAppSelector((state) => state.products);
     const { attributes } = edit ? editProduct : product;
 
@@ -26,7 +26,7 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
 
     useEffect(() => {
         if (currentProduct.category.length !== 0) {
-            const category: TCategory = categoryData?.data.find(
+            const category: TCategory | undefined = categoryData?.data.find(
                 (cat: TCategory) =>
                     cat._id === currentProduct.category.find((c) => c.main)?.id,
             );

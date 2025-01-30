@@ -1,8 +1,9 @@
-import { TCategory } from '@/interface/category';
+import { TCategory, TTreeCategory } from '@/interface/category';
 import { cn } from '@/lib/utils';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import React, { useEffect, useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa6';
+import { generateCategoryTree } from '../utilities/category/categoryUtils';
 
 export interface TProductCategory {
     main: boolean;
@@ -10,7 +11,7 @@ export interface TProductCategory {
 }
 
 type TProps = {
-    categories: TCategory[];
+    categories: TTreeCategory[];
     placeholder?: string;
     // eslint-disable-next-line no-unused-vars
     onSelect: (ids: TProductCategory[] | []) => void;
@@ -24,7 +25,7 @@ const TreeDropdown = ({
     value,
 }: TProps) => {
     const [selectedCat, setSelectedCat] = useState<TProductCategory[]>(value);
-    const { data: categoryArray } = useGetAllCategoriesQuery(false);
+    const { data: categoryArray } = useGetAllCategoriesQuery(undefined);
     const [open, setOpen] = useState(false);
     const [activeCat, setActiveCat] = useState<string>();
 
@@ -57,7 +58,7 @@ const TreeDropdown = ({
     };
 
     useEffect(() => {
-        const cat: TCategory = categoryArray?.data?.find(
+        const cat: TCategory | undefined = categoryArray?.data?.find(
             (c: TCategory) => c._id === selectedCat.find((s) => s.main)?.id,
         );
         if (cat) {
@@ -65,7 +66,7 @@ const TreeDropdown = ({
         } else {
             setActiveCat('');
         }
-    }, [selectedCat, categoryArray?.data]);
+    }, [selectedCat, categoryArray]);
 
     useEffect(() => {
         setSelectedCat(value);
@@ -74,7 +75,7 @@ const TreeDropdown = ({
     const handleCatSelect = (cat: TCategory) => {
         setOpen(false);
 
-        const productCat = createCategoryArray(categoryArray?.data, cat);
+        const productCat = createCategoryArray(categoryArray?.data || [], cat);
 
         onSelect(productCat || []);
         setSelectedCat(productCat || []);
@@ -90,7 +91,7 @@ const TreeDropdown = ({
         return () => window.removeEventListener('click', handleClick);
     }, []);
 
-    const renderCategory = (categories: TCategory[]) => {
+    const renderCategory = (categories: TTreeCategory[]) => {
         return (
             <div className='flex flex-col items-start text-gray'>
                 {categories?.map((cat) => (

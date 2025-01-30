@@ -11,7 +11,6 @@ import Pagination from '@/components/ui/pagination';
 import Select from '@/components/ui/select';
 import useDebounce from '@/hooks/useDebounce';
 import { TAdminData } from '@/interface/admin.interface';
-import { TUser } from '@/interface/auth.interface';
 import { TBrand } from '@/interface/brand.interface';
 import { TCategory } from '@/interface/category';
 import { TProduct, TProductWarrenty } from '@/interface/product.interface';
@@ -24,7 +23,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
-import { IoSettingsSharp } from 'react-icons/io5';
 import ColumnSettings from '@/components/shared/ColumnSettings';
 import { BsFillGrid3X3GapFill, BsTable } from 'react-icons/bs';
 import AllProductsGridView from '@/components/product/all-product/AllProductsGridView';
@@ -62,7 +60,7 @@ const AllProducts = () => {
     );
     const { data: adminData } = useGetAllAdminsQuery(undefined);
     const { data: brandData } = useGetAllBrandsQuery(undefined);
-    const { data: categoryData } = useGetAllCategoriesQuery(false);
+    const { data: categoryData } = useGetAllCategoriesQuery(undefined);
 
     const paginationData = productData?.pagination;
     const router = useRouter();
@@ -233,12 +231,11 @@ const AllProducts = () => {
             value: brand?._id,
         }),
     );
-    const categorySelectData: TSelectOptions[] = categoryData?.data?.map(
-        (category: TCategory) => ({
+    const categorySelectData: TSelectOptions[] =
+        categoryData?.data?.map((category: TCategory) => ({
             label: category?.name,
             value: category?._id,
-        }),
-    );
+        })) || [];
 
     const handlePageChange = (page: number, limit: number) => {
         setPage(page);

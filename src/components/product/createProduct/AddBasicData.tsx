@@ -24,13 +24,14 @@ import {
     useGetAllProductFiltersQuery,
 } from '@/redux/api/filtersApi';
 import { TProductFilter } from '@/interface/product.interface';
+import { generateCategoryTree } from '@/components/utilities/category/categoryUtils';
 
 const AddBasicData = ({ edit }: { edit: boolean }) => {
     const dispatch = useAppDispatch();
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [thumbOpen, setThumbOpen] = useState(false);
     const { product, editProduct } = useAppSelector((state) => state.products);
-    const { data: categoryData } = useGetAllCategoriesQuery(true);
+    const { data: categoryData } = useGetAllCategoriesQuery(undefined);
     const { data: brandData } = useGetAllBrandsQuery(undefined);
     const keyFeaturesRef = useRef<MDXEditorMethods>(null);
 
@@ -126,6 +127,8 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
         handleProductChange('filters', newfilters, edit);
     };
 
+    const treeCategory = generateCategoryTree(categoryData?.data || []);
+
     return (
         <>
             <h2 className='pb-5 text-lg font-semibold text-black'>
@@ -149,7 +152,7 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                     <label className='text-sm'>Category *</label>
                     <TreeDropdown
                         value={category}
-                        categories={categoryData?.data}
+                        categories={treeCategory}
                         onSelect={(val) =>
                             handleProductChange('category', val, edit)
                         }

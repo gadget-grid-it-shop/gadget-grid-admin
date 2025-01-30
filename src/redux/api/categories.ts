@@ -1,14 +1,20 @@
-import { TCreateCategory, TUpdateCategory } from '@/interface/category';
+import {
+    TCategory,
+    TCreateCategory,
+    TUpdateCategory,
+} from '@/interface/category';
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
 import { socket } from '@/lib/socket';
+import { TSocketResponse } from '@/interface/common';
+import { TResponse } from '@/interface/common.interface';
 
 const categoriesApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllCategories: build.query({
-            query: (isTree: boolean = true) => {
+        getAllCategories: build.query<TResponse<TCategory[]>, undefined>({
+            query: () => {
                 return {
-                    url: `/category/get-all${!isTree ? '?isTree=false' : ''}`,
+                    url: `/category/get-all`,
                     method: 'GET',
                 };
             },
@@ -20,9 +26,12 @@ const categoriesApi = baseApi.injectEndpoints({
                 try {
                     await cacheDataLoaded;
 
-                    socket?.on('category', (data) => {
-                        console.log(data);
-                    });
+                    socket?.on(
+                        'category',
+                        (data: TSocketResponse<TCategory>) => {
+                            console.log(data);
+                        },
+                    );
                 } catch (err) {
                     console.log(err);
                 }

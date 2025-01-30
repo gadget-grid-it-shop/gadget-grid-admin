@@ -12,7 +12,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { TCategory } from '@/interface/category';
+import { generateCategoryTree } from '@/components/utilities/category/categoryUtils';
+import { TCategory, TTreeCategory } from '@/interface/category';
 import { globalError } from '@/lib/utils';
 import {
     useDeleteCategoryMutation,
@@ -41,7 +42,7 @@ const Category = () => {
         data: categoryData,
         error,
         isLoading,
-    } = useGetAllCategoriesQuery(true);
+    } = useGetAllCategoriesQuery(undefined);
     const [editOpen, setEditOpen] = useState(false);
     const [deleteCategory] = useDeleteCategoryMutation();
     const [editCategory, setEditCategory] = useState<TCategory | null>(null);
@@ -128,7 +129,11 @@ const Category = () => {
         }
     };
 
-    const renderCategory = (categories: TCategory[], level: number) => {
+    const treeCategory = generateCategoryTree(categories, null);
+
+    console.log(treeCategory);
+
+    const renderCategory = (categories: TTreeCategory[], level: number) => {
         return (
             <div className=''>
                 {categories?.map((category) => {
@@ -259,7 +264,7 @@ const Category = () => {
             <div className='mt-3 rounded-md'>
                 {!isLoading &&
                     categories.length > 0 &&
-                    renderCategory(categories, 0)}
+                    renderCategory(treeCategory, 0)}
             </div>
             {!isLoading && error !== undefined && (
                 <div className='flex h-48 items-center justify-center text-gray'>

@@ -9,7 +9,16 @@ export interface TCategory {
     parent_id: string | null;
     product_details_categories: TProductCategory[];
     _id: string;
-    subCategories: TCategory[];
+    isDeleted?: boolean;
+}
+
+export interface TTreeCategory {
+    name: string;
+    parent_id: string | null;
+    product_details_categories: TProductCategory[];
+    _id: string;
+    subCategories: TTreeCategory[];
+    isDeleted?: boolean;
 }
 
 export interface TCreateCategory {
