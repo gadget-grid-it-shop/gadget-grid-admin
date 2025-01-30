@@ -3,8 +3,8 @@ import { TUser } from './auth.interface';
 
 export type TNotification = {
     _id: string;
-    userTo: TAdminData;
-    userFrom: TUser;
+    userTo: TUser | string;
+    userFrom: TAdminData;
     opened: boolean;
     notificationType:
         | 'gallery'
@@ -21,4 +21,5 @@ export type TNotification = {
     source?: string;
     createdAt: string;
     updatedAt: string;
+    actionType: 'update' | 'create' | 'delete';
 };

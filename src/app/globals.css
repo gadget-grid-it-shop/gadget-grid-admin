@@ -43,7 +43,7 @@ input {
 
 @layer base {
     :root {
-        --overlay-color: 0, 0%, 2.75%, 0.36; /* rgba(7 7 7 0.36) */
+        --overlay-color: 0, 0%, 0%; /* rgba(7 7 7 0.36) */
         --primary: 247.7, 87.53%, 56.08%; /* rgb(74 44 242) */
         --primary-text: 247.7, 87.53%, 56.08%; /* rgb(74 44 242) */
         --bright-turquoise: 189.23, 78.44%, 48.24%; /* rgb(25 194 221) */
@@ -76,7 +76,7 @@ input {
     }
 
     .dark {
-        --overlay-color: 0, 0%, 3.14%, 0.66; /* rgba(8, 8, 8, 0.66) */
+        --overlay-color: 0, 0%, 0%; /* rgba(8, 8, 8, 0.66) */
         --primary: 248.89, 84.72%, 56.08%; /* rgb(74 44 242) */
         --primary-text: 249.6, 83.05%, 96.47%; /* rgb(242, 239, 254) */
         --bright-turquoise: 189.2, 78.44%, 48.24%; /* rgb(25, 194, 221) */

@@ -14,6 +14,7 @@ import { TNotification } from '@/interface/notification.interface';
 import { socket } from '@/lib/socket';
 import { toast } from 'sonner';
 import { Skeleton } from '../ui/skeleton';
+import { handleNewNotification } from '../utilities/notifications/handleNewNotification';
 
 const NotificationMenu = () => {
     const [page, setPage] = useState(1);
@@ -35,12 +36,14 @@ const NotificationMenu = () => {
     };
 
     useEffect(() => {
-        const handleNewNotification = (payload: TNotification) => {
+        const handleNewNoti = (payload: TNotification) => {
             const audio = new Audio('/notification_2.wav');
             audio.play().catch((err) => console.log(err));
             toast(payload.text || 'new notification', {
                 position: 'bottom-right',
             });
+
+            handleNewNotification(payload);
 
             setNotifications((prev) => [payload, ...prev]);
             setUnreadCount((prev) => prev + 1);
@@ -72,12 +75,12 @@ const NotificationMenu = () => {
             );
         };
 
-        socket?.on('newNotification', handleNewNotification);
+        socket?.on('newNotification', handleNewNoti);
         socket?.on('notificationRead', handleRead);
         socket?.on('markedAllasRead', handleUpdateMarkAllRead);
 
         return () => {
-            socket?.off('newNotification', handleNewNotification);
+            socket?.off('newNotification', handleNewNoti);
             socket?.off('notificationRead', handleRead);
             socket?.off('markedAllasRead', handleUpdateMarkAllRead);
         };

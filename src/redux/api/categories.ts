@@ -1,6 +1,7 @@
 import { TCreateCategory, TUpdateCategory } from '@/interface/category';
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
+import { socket } from '@/lib/socket';
 
 const categoriesApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -11,6 +12,22 @@ const categoriesApi = baseApi.injectEndpoints({
                     method: 'GET',
                 };
             },
+
+            async onCacheEntryAdded(
+                arg,
+                { cacheDataLoaded, cacheEntryRemoved, updateCachedData },
+            ) {
+                try {
+                    await cacheDataLoaded;
+
+                    socket?.on('category', (data) => {
+                        console.log(data);
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+
             keepUnusedDataFor: 320,
             providesTags: [tagTypes.categories],
         }),
