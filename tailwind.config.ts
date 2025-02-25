@@ -48,7 +48,7 @@ const config: Config = {
                     'hsla(var(--vivid-violet), var(--tw-bg-opacity,1))',
                 'rich-black': 'hsla(var(--rich-black), var(--tw-bg-opacity,1))',
                 gray: 'hsla(var(--gray), var(--tw-bg-opacity,1))',
-                'border-color': 'hsla(var(--border), var(--tw-bg-opacity,1))',
+                'border-color': 'hsla(var(--border-c), var(--tw-bg-opacity,1))',
                 background: {
                     DEFAULT: 'hsla(var(--white), var(--tw-bg-opacity,1))',
                     foreground:
@@ -70,6 +70,20 @@ const config: Config = {
                 'solid-saffron-orange':
                     'hsla(var(--solid-saffron-orange), var(--tw-bg-opacity,1))',
                 white: 'hsla(var(--white), var(--tw-bg-opacity,1))',
+                border: 'hsl(var(--border))',
+                ring: 'hsl(var(--ring))',
+                sidebar: {
+                    DEFAULT: 'hsl(var(--sidebar-background))',
+                    foreground: 'hsl(var(--sidebar-foreground))',
+                    primary: 'hsl(var(--sidebar-primary))',
+                    'primary-foreground':
+                        'hsl(var(--sidebar-primary-foreground))',
+                    accent: 'hsl(var(--sidebar-accent))',
+                    'accent-foreground':
+                        'hsl(var(--sidebar-accent-foreground))',
+                    border: 'hsl(var(--sidebar-border))',
+                    ring: 'hsl(var(--sidebar-ring))',
+                },
             },
             keyframes: {
                 'accordion-down': {

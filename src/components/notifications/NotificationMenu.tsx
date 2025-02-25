@@ -127,7 +127,8 @@ const NotificationMenu = () => {
         <DropdownMenu>
             <DropdownMenuTrigger className='outline-none'>
                 <BadgeButtton
-                    icon={<Bell />}
+                    className='size-8'
+                    icon={<Bell size={18} />}
                     count={unreadCount}
                     tooptip='Notificatons'
                 />

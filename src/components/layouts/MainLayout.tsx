@@ -13,6 +13,8 @@ import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
 import { connectSocket, disconnectSocket, socket } from '@/lib/socket';
+import { SidebarProvider, useSidebar } from '../ui/sidebar';
+import { AppSidebar } from '../shared/AppSidebar';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();
@@ -84,21 +86,21 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         }
     }, [isAuthenticated, router, dispatch]);
 
+    const { state } = useSidebar();
+
     return (
         <>
             {hydrated ? (
-                <div className='flex overflow-hidden bg-background-foreground'>
-                    <div>
-                        <Sidebar />
-                    </div>
-                    <div
-                        className={`main-layout h-screen w-screen overflow-y-auto px-4 min-[1200px]:w-[calc(100vw-260px)] 2xl:w-[calc(100vw-280px)]`}
+                <div className='flex bg-background-foreground w-full'>
+                    <AppSidebar />
+                    <main
+                        className={`relative bg-background ${state === 'expanded' ? 'md:w-[calc(100%-256px)]' : 'md:w-[calc(100%-48px)]'} w-full`}
                     >
                         <Navbar />
-                        <div className='mt-4 rounded-md bg-background p-5'>
+                        <div className='w-full rounded-md bg-background p-3'>
                             {children}
                         </div>
-                    </div>
+                    </main>
                     <ToastContainer theme={theme} />
                 </div>
             ) : (

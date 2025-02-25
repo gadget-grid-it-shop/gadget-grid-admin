@@ -1,4 +1,5 @@
 'use client';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { persistor, store } from '@/redux/store';
 import { ThemeProvider } from 'next-themes';
 import React, { useEffect, useState } from 'react';
@@ -22,7 +23,7 @@ const GlobalProvider = ({
         <ThemeProvider attribute='class'>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    {children}
+                    <SidebarProvider>{children}</SidebarProvider>
                 </PersistGate>
             </Provider>
         </ThemeProvider>
