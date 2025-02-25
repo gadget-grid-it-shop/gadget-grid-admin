@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
 import React, { useEffect, useRef, useState } from 'react';
-import { IoMdClose } from 'react-icons/io';
 import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
@@ -25,6 +24,7 @@ import {
 } from '@/redux/api/filtersApi';
 import { TProductFilter } from '@/interface/product.interface';
 import { generateCategoryTree } from '@/components/utilities/category/categoryUtils';
+import { X } from 'lucide-react';
 
 const AddBasicData = ({ edit }: { edit: boolean }) => {
     const dispatch = useAppDispatch();
@@ -268,7 +268,7 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                                                 }
                                                 className='absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red'
                                             >
-                                                <IoMdClose />
+                                                <X />
                                             </div>
                                             <Image
                                                 src={thumbnail}
@@ -313,7 +313,7 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                                                 }
                                                 className='absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red'
                                             >
-                                                <IoMdClose />
+                                                <X />
                                             </div>
                                             <Image
                                                 src={img}

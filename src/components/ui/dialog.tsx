@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import { cn } from '@/lib/utils';
-import { HiMiniXMark } from 'react-icons/hi2';
+import { X } from 'lucide-react';
 
 const Dialog = React.forwardRef<
     HTMLDivElement,
@@ -29,7 +29,7 @@ const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = React.forwardRef<
-    React.ElementRef<typeof DialogPrimitive.Overlay>,
+    React.ComponentRef<typeof DialogPrimitive.Overlay>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Overlay
@@ -44,7 +44,7 @@ const DialogOverlay = React.forwardRef<
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
-    React.ElementRef<typeof DialogPrimitive.Content>,
+    React.ComponentRef<typeof DialogPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
     <DialogPortal>
@@ -65,7 +65,7 @@ const DialogContent = React.forwardRef<
         >
             {children}
             <DialogPrimitive.Close className='absolute right-4 top-4 rounded-sm opacity-70 outline-none ring-offset-background transition-opacity hover:opacity-100 focus:outline-none'>
-                <HiMiniXMark className='h-6 w-6 text-black' />
+                <X className='h-6 w-6 text-black' />
             </DialogPrimitive.Close>
         </DialogPrimitive.Content>
     </DialogPortal>
@@ -101,7 +101,7 @@ const DialogFooter = ({
 DialogFooter.displayName = 'DialogFooter';
 
 const DialogTitle = React.forwardRef<
-    React.ElementRef<typeof DialogPrimitive.Title>,
+    React.ComponentRef<typeof DialogPrimitive.Title>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Title
@@ -116,7 +116,7 @@ const DialogTitle = React.forwardRef<
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 const DialogDescription = React.forwardRef<
-    React.ElementRef<typeof DialogPrimitive.Description>,
+    React.ComponentRef<typeof DialogPrimitive.Description>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Description

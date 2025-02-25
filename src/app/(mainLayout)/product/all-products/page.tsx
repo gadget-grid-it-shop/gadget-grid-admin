@@ -24,12 +24,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
 import ColumnSettings from '@/components/shared/ColumnSettings';
-import { BsFillGrid3X3GapFill, BsTable } from 'react-icons/bs';
 import AllProductsGridView from '@/components/product/all-product/AllProductsGridView';
 import ProductSkeleton from '@/components/product/all-product/ProductSkeleton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setViewMode } from '@/redux/reducers/products/productSlice';
 import UserCard from '@/components/common/UserCard';
+import { Grid3X3, Sheet } from 'lucide-react';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -265,7 +265,7 @@ const AllProducts = () => {
                             size={'icon'}
                             onClick={() => dispatch(setViewMode('grid'))}
                         >
-                            <BsFillGrid3X3GapFill />
+                            <Grid3X3 />
                         </Button>
                         <Button
                             tooltip='Table view'
@@ -275,7 +275,7 @@ const AllProducts = () => {
                             size={'icon'}
                             onClick={() => dispatch(setViewMode('table'))}
                         >
-                            <BsTable />
+                            <Sheet />
                         </Button>
                         <ColumnSettings
                             columns={columns}

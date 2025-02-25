@@ -5,7 +5,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '../ui/dialog';
-import { FiPlus } from 'react-icons/fi';
 import { Button } from '../ui/button';
 import {
     AlertDialog,
@@ -32,6 +31,7 @@ import { ZodError } from 'zod';
 import { toast } from 'sonner';
 import { useCreateRoleMutation } from '@/redux/api/rolesApi';
 import { globalError } from '@/lib/utils';
+import { Plus } from 'lucide-react';
 
 type TProps = {
     open: boolean;
@@ -122,7 +122,7 @@ const CreateRoleModal = ({ open, setOpen }: TProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className='primary-btn'>
-                <FiPlus size={18} /> Create Role
+                <Plus size={18} /> Create Role
             </DialogTrigger>
             <DialogContent className='w-[90vw] sm:max-w-[80vw] md:max-w-[70vw] xl:max-w-[60vw] 2xl:max-w-[50vw]'>
                 <DialogTitle>Create new Role</DialogTitle>

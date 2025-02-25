@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { DownloadIcon } from 'lucide-react';
-import { GrCloudUpload } from 'react-icons/gr';
+import { Cloud, CloudUpload, DownloadIcon, Trash } from 'lucide-react';
 import React, {
     ChangeEvent,
     Dispatch,
@@ -10,7 +9,6 @@ import React, {
     useState,
 } from 'react';
 import { CSVLink } from 'react-csv';
-import { FiTrash2 } from 'react-icons/fi';
 
 type TProps = {
     file: File | null;
@@ -114,7 +112,7 @@ const UploadSvg = ({ file, setFile }: TProps) => {
                 onDragOver={handleDragOver}
                 className={`flex h-40 w-full flex-col items-center justify-center rounded-md border-2 border-dotted border-primary bg-background text-bright-turquoise ${isDragging ? 'bg-overlay' : ''}`}
             >
-                <GrCloudUpload className='text-5xl' />
+                <CloudUpload className='text-5xl' />
                 <p className='text-lg text-bright-turquoise'>
                     Drag and drop files or upload
                 </p>
@@ -131,7 +129,7 @@ const UploadSvg = ({ file, setFile }: TProps) => {
                             variant={'icon'}
                             size={'base'}
                         >
-                            <FiTrash2 className='text-red' />
+                            <Trash className='text-red' />
                         </Button>
                     </div>
                 </div>

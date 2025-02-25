@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { TSelectOptions } from '../categories/interface';
-import { FaXmark } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
-import { FaAngleDown } from 'react-icons/fa';
+import { ChevronDown, X } from 'lucide-react';
 
 interface CustomSelectProps {
     data: TSelectOptions[];
@@ -99,10 +98,10 @@ const Select: React.FC<CustomSelectProps> = ({
                         onClick={handleDeselect}
                         className='ms-auto text-gray'
                     >
-                        <FaXmark />
+                        <X />
                     </span>
                 ) : (
-                    <FaAngleDown className='ms-auto text-base text-gray' />
+                    <ChevronDown className='ms-auto text-base text-gray' />
                 )}
             </div>
 

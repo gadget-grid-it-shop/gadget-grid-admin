@@ -41,7 +41,8 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
         isLoading,
     } = useGetDetailsCategoriesQuery(undefined);
     const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
-    const [updateCategory] = useUpdateCategoryMutation();
+    const [updateCategory, { isLoading: isUpdating }] =
+        useUpdateCategoryMutation();
 
     const selectOptions = detailsCategoryData?.data?.map(
         (item: TProductCategory) => {
@@ -175,7 +176,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                         </p>
                     )}
                 </div>
-                <Button>Update Category</Button>
+                <Button loading={isUpdating}>Update Category</Button>
             </form>
         </Form>
     );

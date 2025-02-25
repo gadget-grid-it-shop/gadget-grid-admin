@@ -2,7 +2,6 @@
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
     resetProductData,
-    setCreateProductStep,
     setProductForUpdate,
     setUpdateProductStep,
 } from '@/redux/reducers/products/productSlice';
@@ -10,7 +9,6 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import AddBasicData from '@/components/product/createProduct/AddBasicData';
 import AddSpecifications from '@/components/product/createProduct/AddSpecifications';
 import { Button } from '@/components/ui/button';
-import Modal from '@/components/custom/Modal';
 import {
     useGetSingleProductQuery,
     useUpdateProductMutation,

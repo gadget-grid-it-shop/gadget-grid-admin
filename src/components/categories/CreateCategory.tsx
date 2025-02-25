@@ -5,7 +5,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '../ui/dialog';
-import { FiPlus } from 'react-icons/fi';
 import { Form, FormField, FormItem, FormMessage } from '../ui/form';
 import { useForm, FieldErrors } from 'react-hook-form';
 import { z } from 'zod';
@@ -19,6 +18,7 @@ import { useCreateCategoryMutation } from '@/redux/api/categories';
 import { toast } from 'sonner';
 import { TParentCat } from '@/app/(mainLayout)/category/page';
 import { globalError } from '@/lib/utils';
+import { Plus } from 'lucide-react';
 
 type TCategoryProps = {
     parent: TParentCat;
@@ -75,8 +75,6 @@ const CreateCategory = ({
     });
 
     const errors: FieldErrors<FormData> = form.formState.errors;
-
-    console.log(errors);
 
     useEffect(() => {
         if (parent) {
@@ -137,8 +135,6 @@ const CreateCategory = ({
         }
     };
 
-    console.log(parent);
-
     return (
         <div>
             <Dialog
@@ -152,7 +148,7 @@ const CreateCategory = ({
                 }}
             >
                 <DialogTrigger className='primary-btn'>
-                    <FiPlus size={18} /> Create Category
+                    <Plus size={18} /> Create Category
                 </DialogTrigger>
                 <DialogContent>
                     <DialogTitle>Create New Category</DialogTitle>

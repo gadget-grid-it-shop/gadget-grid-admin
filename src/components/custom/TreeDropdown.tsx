@@ -2,8 +2,8 @@ import { TCategory, TTreeCategory } from '@/interface/category';
 import { cn } from '@/lib/utils';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import React, { useEffect, useState } from 'react';
-import { FaAngleDown } from 'react-icons/fa6';
 import { generateCategoryTree } from '../utilities/category/categoryUtils';
+import { ChevronDown } from 'lucide-react';
 
 export interface TProductCategory {
     main: boolean;
@@ -100,7 +100,7 @@ const TreeDropdown = ({
                             onClick={() => handleCatSelect(cat)}
                             className={`${selectedCat.find((c) => c.id === cat._id) ? 'text-primary' : 'text-gray'} flex items-center gap-2 pt-1 text-gray`}
                         >
-                            {cat.subCategories?.length !== 0 && <FaAngleDown />}
+                            {cat.subCategories?.length !== 0 && <ChevronDown />}
                             <span
                                 className={`${cat.parent_id && cat.subCategories?.length === 0 && 'ps-4'} text-inherit`}
                             >

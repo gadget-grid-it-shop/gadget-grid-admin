@@ -1,9 +1,7 @@
 'use client';
-
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa6';
 import {
     Dialog,
     DialogContent,
@@ -13,12 +11,12 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { HiMiniXMark } from 'react-icons/hi2';
 import { useForm } from 'react-hook-form';
 import { Form, FormField, FormItem, FormMessage } from '../ui/form';
 import { toast } from 'react-toastify';
 import { useCreateDetailsCategoryMutation } from '@/redux/api/detailsCategory';
 import { globalError } from '@/lib/utils';
+import { Plus, X } from 'lucide-react';
 
 interface Field {
     field: string;
@@ -156,7 +154,7 @@ const CreateNewDetailsCategory = () => {
             <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
                 <DialogTrigger>
                     <div className='primary-btn'>
-                        <FaPlus /> Create Details Category
+                        <Plus /> Create Details Category
                     </div>
                 </DialogTrigger>
                 <DialogContent>
@@ -220,7 +218,7 @@ const CreateNewDetailsCategory = () => {
                                                 }
                                                 className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white'
                                             >
-                                                <HiMiniXMark />
+                                                <X />
                                             </div>
                                         </div>
                                         {fieldError &&

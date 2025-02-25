@@ -19,9 +19,8 @@ import {
     useDeleteCategoryMutation,
     useGetAllCategoriesQuery,
 } from '@/redux/api/categories';
+import { ChevronDown, CircleDot } from 'lucide-react';
 import React, { useState } from 'react';
-import { FaAngleDown } from 'react-icons/fa6';
-import { LuLocate } from 'react-icons/lu';
 import { toast } from 'sonner';
 
 export interface TParentCat {
@@ -44,7 +43,8 @@ const Category = () => {
         isLoading,
     } = useGetAllCategoriesQuery(undefined);
     const [editOpen, setEditOpen] = useState(false);
-    const [deleteCategory] = useDeleteCategoryMutation();
+    const [deleteCategory, { isLoading: deleting }] =
+        useDeleteCategoryMutation();
     const [editCategory, setEditCategory] = useState<TCategory | null>(null);
     const [deleteOpen, setDeleteOpen] = useState<TDeleteOpen>({
         open: false,
@@ -131,8 +131,6 @@ const Category = () => {
 
     const treeCategory = generateCategoryTree(categories, null);
 
-    console.log(treeCategory);
-
     const renderCategory = (categories: TTreeCategory[], level: number) => {
         return (
             <div className=''>
@@ -166,11 +164,11 @@ const Category = () => {
                                         }`}
                                     >
                                         {subCategories.length > 0 ? (
-                                            <FaAngleDown
+                                            <ChevronDown
                                                 className={`${isSubCatOpen && 'rotate-180 transition-all'}`}
                                             />
                                         ) : (
-                                            <LuLocate />
+                                            <CircleDot />
                                         )}
                                     </div>
                                     {category.name}
@@ -315,6 +313,7 @@ const Category = () => {
                                 Cancel
                             </Button>
                             <Button
+                                loading={deleting}
                                 onClick={handleDelete}
                                 className='w-full'
                                 variant={'delete_solid'}

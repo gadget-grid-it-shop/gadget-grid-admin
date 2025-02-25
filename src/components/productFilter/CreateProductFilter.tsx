@@ -3,13 +3,13 @@ import Modal from '../custom/Modal';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FormField, FormItem, Form, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { HiMiniXMark } from 'react-icons/hi2';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateProductFilterMutation } from '@/redux/api/filtersApi';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { globalError } from '@/lib/utils';
+import { X } from 'lucide-react';
 
 const createFilterSchema = z.object({
     title: z
@@ -115,7 +115,7 @@ const CreateProductFilter = () => {
                                         onClick={() => remove(index)}
                                         className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white'
                                     >
-                                        <HiMiniXMark />
+                                        <X />
                                     </div>
                                 </div>
                                 {errors.options?.[index] && (

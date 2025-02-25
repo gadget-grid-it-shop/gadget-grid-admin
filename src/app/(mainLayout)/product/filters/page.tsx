@@ -2,7 +2,13 @@
 import PageHeader from '@/components/common/PageHeader';
 import Modal from '@/components/custom/Modal';
 import DetailsCategorySkeleton from '@/components/details-category/DetailsCategorySkeleton';
-import CreateProductFilter from '@/components/productFilter/CreateProductFilter';
+const CreateProductFilter = dynamic(
+    () => import('@/components/productFilter/CreateProductFilter'),
+    {
+        ssr: false,
+    },
+);
+
 import ProductFilterCard from '@/components/productFilter/ProductFilterCard';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
@@ -15,9 +21,10 @@ import {
     useUpdateProductFilterMutation,
 } from '@/redux/api/filtersApi';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { HiMiniXMark } from 'react-icons/hi2';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -196,7 +203,7 @@ const ProductFilterPage = () => {
                                             onClick={() => remove(index)}
                                             className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white'
                                         >
-                                            <HiMiniXMark />
+                                            <X />
                                         </div>
                                     </div>
                                     {errors.options?.[index] && (

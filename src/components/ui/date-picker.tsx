@@ -10,8 +10,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import { LuCalendarDays } from 'react-icons/lu';
-import { FaXmark } from 'react-icons/fa6';
+import { CalendarDays, X } from 'lucide-react';
 
 interface DatePickerDemoProps {
     value?: Dayjs | string | null;
@@ -80,7 +79,7 @@ export function DatePicker({
                     )}
                     disabled={disabled}
                 >
-                    <LuCalendarDays className='mr-1 h-[14px] w-[14px] text-gray' />
+                    <CalendarDays className='mr-1 h-[14px] w-[14px] text-gray' />
                     {date ? (
                         date.format('MMM D, YYYY')
                     ) : (
@@ -92,7 +91,7 @@ export function DatePicker({
                             onClick={handleClearDate}
                             className='absolute right-2 bg-transparent'
                         >
-                            <FaXmark />
+                            <X />
                         </button>
                     )}
                 </Button>

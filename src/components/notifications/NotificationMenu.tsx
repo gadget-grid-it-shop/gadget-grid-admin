@@ -5,7 +5,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { BsBellFill } from 'react-icons/bs';
 import BadgeButtton from '../ui/BadgeButtton';
 import { useGetNotificationsQuery } from '@/redux/api/notificationApi';
 import UserCard from '../common/UserCard';
@@ -14,7 +13,9 @@ import { TNotification } from '@/interface/notification.interface';
 import { socket } from '@/lib/socket';
 import { toast } from 'sonner';
 import { Skeleton } from '../ui/skeleton';
-import { handleNewNotification } from '../utilities/notifications/handleNewNotification';
+import { handleNotificationClick } from '../utilities/notifications/handleNotificationClick';
+import { useRouter } from 'nextjs-toploader/app';
+import { Bell } from 'lucide-react';
 
 const NotificationMenu = () => {
     const [page, setPage] = useState(1);
@@ -28,11 +29,18 @@ const NotificationMenu = () => {
     const [notifications, setNotifications] = useState<TNotification[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [unreadCount, setUnreadCount] = useState(0);
+    const router = useRouter();
+
+    const goToRoute = (route: string) => {
+        router.push(route);
+    };
 
     const handleClick = (noti: TNotification) => {
         if (!noti.opened) {
             socket?.emit('notificationClicked', noti._id);
         }
+
+        handleNotificationClick(noti, goToRoute);
     };
 
     useEffect(() => {
@@ -42,8 +50,6 @@ const NotificationMenu = () => {
             toast(payload.text || 'new notification', {
                 position: 'bottom-right',
             });
-
-            handleNewNotification(payload);
 
             setNotifications((prev) => [payload, ...prev]);
             setUnreadCount((prev) => prev + 1);
@@ -121,7 +127,7 @@ const NotificationMenu = () => {
         <DropdownMenu>
             <DropdownMenuTrigger className='outline-none'>
                 <BadgeButtton
-                    icon={<BsBellFill />}
+                    icon={<Bell />}
                     count={unreadCount}
                     tooptip='Notificatons'
                 />
@@ -161,9 +167,9 @@ const NotificationMenu = () => {
                                         (noti.userFrom as unknown as string)
                                     }
                                 />
-                                <p className='text-xs text-gray'>
+                                <div className='text-xs text-gray'>
                                     {dayjs(noti?.createdAt)?.fromNow()}
-                                </p>
+                                </div>
                             </div>
                         </div>
                     ))}

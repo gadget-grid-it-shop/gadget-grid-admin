@@ -15,11 +15,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
 // import { toast } from 'sonner'
 import { z } from 'zod';
 import dayjs from '@/components/utilities/Customdayjs';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -177,9 +177,9 @@ const LoginPage = () => {
                                                 }
                                             >
                                                 {passwordHidden ? (
-                                                    <FaRegEyeSlash />
+                                                    <EyeOff />
                                                 ) : (
-                                                    <FaRegEye />
+                                                    <Eye />
                                                 )}
                                             </button>
                                         </div>

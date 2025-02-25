@@ -23,13 +23,7 @@ import { TImage } from '@/interface/image';
 import Image from 'next/image';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
-import { BiSelectMultiple } from 'react-icons/bi';
-import {
-    AiOutlineCloudUpload,
-    AiOutlineDelete,
-    AiOutlineLoading3Quarters,
-} from 'react-icons/ai';
-import { MdOutlineAdd } from 'react-icons/md';
+
 import { toast } from 'sonner';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateProduct } from '@/redux/reducers/products/productSlice';
@@ -39,19 +33,27 @@ import {
     useGetFoldersQuery,
     useUpdateFolderMutation,
 } from '@/redux/api/galleryFolderApi';
-import { FcFolder } from 'react-icons/fc';
 import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbList,
     BreadcrumbPage,
 } from '../ui/breadcrumb';
-import { FaChevronRight } from 'react-icons/fa6';
-import { LuFolderPlus } from 'react-icons/lu';
 import { Input } from '../ui/input';
-import { BiSolidEditAlt } from 'react-icons/bi';
-import { PiTrashSimpleFill } from 'react-icons/pi';
 import { globalError } from '@/lib/utils';
+import {
+    ChevronRight,
+    Cloudy,
+    Folder,
+    FolderPlus,
+    ListCheck,
+    ListChecks,
+    LoaderCircle,
+    Pencil,
+    Plus,
+    Trash,
+    Trash2,
+} from 'lucide-react';
 
 type TProp = {
     open: boolean;
@@ -228,11 +230,9 @@ const ImageGallery = ({
             formData.append('type', 'product');
             formData.append('folder', parentFolder);
 
-            console.log(formData);
-
             try {
                 const res = await uploadImage(formData).unwrap();
-                console.log(res);
+
                 toast.success(res.message);
             } catch (err) {
                 globalError(err);
@@ -266,7 +266,6 @@ const ImageGallery = ({
     };
 
     const handleAddFolder = async () => {
-        console.log(folderName);
         try {
             const res = await createFolder({
                 name: folderName,
@@ -327,7 +326,7 @@ const ImageGallery = ({
                     onClick={() => setAddFolderModal(true)}
                     className='flex size-32 flex-col items-center justify-center gap-2 rounded-md bg-lavender-mist'
                 >
-                    <LuFolderPlus className='text-gray' size={25} />
+                    <FolderPlus className='text-gray' size={25} />
                     <p className='text-sm'>Add Folder</p>
                 </div>
                 {folders.map((folder: TGalleryFolder) => {
@@ -343,7 +342,7 @@ const ImageGallery = ({
                             key={folder._id}
                             className='relative flex min-h-32 w-32 flex-col items-center justify-center gap-2 rounded-md bg-background p-2 text-black shadow-sm'
                         >
-                            <FcFolder className='text-gray' size={40} />
+                            <Folder className='text-gray' size={40} />
                             <p className='line-clamp-2 text-ellipsis text-xs'>
                                 {folder.name}
                             </p>
@@ -359,7 +358,7 @@ const ImageGallery = ({
                                                 variant={'icon'}
                                                 className='text-sm'
                                             >
-                                                <BiSolidEditAlt />
+                                                <Pencil />
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent>
@@ -399,7 +398,7 @@ const ImageGallery = ({
                                                 variant={'icon'}
                                                 className='text-sm'
                                             >
-                                                <PiTrashSimpleFill />
+                                                <Trash />
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent>
@@ -447,7 +446,7 @@ const ImageGallery = ({
             >
                 {isUploadLoading ? (
                     <div className='flex flex-col items-center justify-center gap-2'>
-                        <AiOutlineLoading3Quarters className='animate-spin text-3xl text-primary lg:text-3xl' />
+                        <LoaderCircle className='animate-spin text-3xl text-primary lg:text-3xl' />
                         <p className='text-base'>uploading, please wait</p>
                     </div>
                 ) : (
@@ -455,7 +454,7 @@ const ImageGallery = ({
                         <h3 className='text-center text-base'>
                             upload photos to this folder
                         </h3>
-                        <AiOutlineCloudUpload className='text-3xl text-lavender-mist lg:text-6xl' />
+                        <Cloudy className='text-3xl text-lavender-mist lg:text-6xl' />
                         <h3 className='text-base text-primary'>Click here</h3>
                         <input
                             name='photos'
@@ -489,7 +488,7 @@ const ImageGallery = ({
                                         onClick={handleAdd}
                                         className='gap-2'
                                     >
-                                        <MdOutlineAdd size={18} /> Add
+                                        <Plus size={18} /> Add
                                     </Button>
                                 )}
                                 <Button
@@ -497,7 +496,7 @@ const ImageGallery = ({
                                     className='gap-2'
                                     onClick={() => setSelected([])}
                                 >
-                                    <BiSelectMultiple /> Deselect All
+                                    <ListChecks /> Deselect All
                                 </Button>
                                 <Dialog
                                     open={deleteModalOpen}
@@ -508,7 +507,7 @@ const ImageGallery = ({
                                             variant={'delete_solid'}
                                             className='gap-2'
                                         >
-                                            <AiOutlineDelete /> Delete
+                                            <Trash2 /> Delete
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent>
@@ -560,7 +559,7 @@ const ImageGallery = ({
                                                 }
                                             >
                                                 {item.name}{' '}
-                                                <FaChevronRight size={12} />
+                                                <ChevronRight size={12} />
                                             </div>
                                         </BreadcrumbPage>
                                     </BreadcrumbItem>
@@ -578,7 +577,7 @@ const ImageGallery = ({
                             onClick={() => setAddFolderModal(true)}
                             className='flex size-32 flex-col items-center justify-center gap-2 rounded-md bg-lavender-mist'
                         >
-                            <LuFolderPlus className='text-gray' size={25} />
+                            <FolderPlus className='text-gray' size={25} />
                             <p className='text-sm'>Add Folder</p>
                         </div>
                     )}

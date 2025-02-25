@@ -5,11 +5,11 @@ import { Input } from '@/components/ui/input';
 import axiosInstance from '@/lib/axiosInstance';
 import { globalError } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -102,9 +102,9 @@ const ResetPassword = () => {
                                         }
                                     >
                                         {passwordHidden ? (
-                                            <FaRegEyeSlash />
+                                            <EyeOff size={18} />
                                         ) : (
-                                            <FaRegEye />
+                                            <Eye size={18} />
                                         )}
                                     </button>
                                 </div>
@@ -139,9 +139,9 @@ const ResetPassword = () => {
                                         }
                                     >
                                         {passwordHidden ? (
-                                            <FaRegEyeSlash />
+                                            <EyeOff size={18} />
                                         ) : (
-                                            <FaRegEye />
+                                            <Eye size={18} />
                                         )}
                                     </button>
                                 </div>

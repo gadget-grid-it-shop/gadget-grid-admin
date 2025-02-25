@@ -3,29 +3,27 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-    MdOutlineLaptopChromebook,
-    MdListAlt,
-    MdOutlineClose,
-} from 'react-icons/md';
-import { BiCategory, BiAddToQueue } from 'react-icons/bi';
-import {
-    TbLayoutDashboard,
-    TbListDetails,
-    TbUsers,
-    TbUserShield,
-} from 'react-icons/tb';
-
 import { useMediaQuery } from 'react-responsive';
-
-import { FaChevronDown } from 'react-icons/fa6';
 import { Button } from '../ui/button';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
-import { FaUsersCog } from 'react-icons/fa';
-import { PiUsersThreeBold } from 'react-icons/pi';
-import { LuHardDriveUpload, LuTags } from 'react-icons/lu';
-import { BsSliders } from 'react-icons/bs';
+import {
+    ChevronDown,
+    DiamondPlusIcon,
+    GalleryVertical,
+    HardDriveUpload,
+    LayoutDashboard,
+    LayoutGrid,
+    ListTodo,
+    ShoppingCart,
+    SlidersHorizontal,
+    Tags,
+    UserCog,
+    UserPen,
+    Users,
+    UsersRound,
+    X,
+} from 'lucide-react';
 
 interface TMenu {
     id: number;
@@ -40,55 +38,55 @@ const menus: TMenu[] = [
         id: 1,
         title: 'Dashboard',
         link: '/',
-        icon: <TbLayoutDashboard />,
+        icon: <LayoutGrid size={18} />,
     },
     {
         id: 2,
         title: 'Details Category',
         link: '/details-category',
-        icon: <TbListDetails />,
+        icon: <LayoutDashboard size={18} />,
     },
     {
         id: 3,
         title: 'Brand',
         link: '/brand',
-        icon: <LuTags size={16} />,
+        icon: <Tags size={18} />,
     },
     {
         id: 4,
         title: 'Category',
-        icon: <BiCategory />,
+        icon: <ListTodo size={20} />,
         link: '/category',
     },
     {
         id: 5,
         title: 'Product',
-        icon: <MdOutlineLaptopChromebook />,
+        icon: <ShoppingCart size={18} />,
         link: '/product',
         children: [
             {
                 id: 1,
                 title: 'Create Product',
                 link: '/product/create-product',
-                icon: <BiAddToQueue />,
+                icon: <DiamondPlusIcon size={18} />,
             },
             {
                 id: 4,
                 title: 'Product Filters',
                 link: '/product/filters',
-                icon: <BsSliders />,
+                icon: <SlidersHorizontal size={18} />,
             },
             {
                 id: 2,
                 title: 'All Products',
                 link: '/product/all-products',
-                icon: <MdListAlt />,
+                icon: <GalleryVertical size={18} />,
             },
             {
                 id: 3,
                 title: 'Bulk Upload',
                 link: '/product/bulk-upload',
-                icon: <LuHardDriveUpload />,
+                icon: <HardDriveUpload size={18} />,
             },
         ],
     },
@@ -96,25 +94,25 @@ const menus: TMenu[] = [
         id: 6,
         title: 'Roles',
         link: '/roles',
-        icon: <FaUsersCog size={18} />,
+        icon: <UserCog size={18} />,
     },
     {
         id: 7,
         title: 'Users',
         link: '/users',
-        icon: <PiUsersThreeBold size={18} />,
+        icon: <Users size={18} />,
         children: [
             {
                 id: 1,
                 title: 'Admins',
                 link: '/users/admins',
-                icon: <TbUserShield />,
+                icon: <UserPen size={18} />,
             },
             {
                 id: 2,
                 title: 'Customers',
                 link: '/users/customers',
-                icon: <TbUsers />,
+                icon: <UsersRound size={18} />,
             },
         ],
     },
@@ -181,7 +179,7 @@ const Sidebar = () => {
                             variant={'icon'}
                             className='border border-border-color'
                         >
-                            <MdOutlineClose />
+                            <X />
                         </Button>
                     )}
                 </div>
@@ -214,7 +212,7 @@ const Sidebar = () => {
                                             {item.title}
                                         </div>
 
-                                        <FaChevronDown
+                                        <ChevronDown
                                             className={`${openRoute.find((id) => id === item.id) ? 'rotate-180' : 'rotate-0'} text-sm text-gray transition-all`}
                                         />
                                     </button>

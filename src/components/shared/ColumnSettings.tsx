@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
-import { IoSettingsSharp } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { ColumnDef } from '@tanstack/react-table';
 import { setTableChecklist } from '@/redux/reducers/tableCollumn/tableReducer';
@@ -12,6 +11,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { Settings } from 'lucide-react';
 
 interface TProps {
     columns: ColumnDef<any>[];
@@ -51,7 +51,6 @@ const ColumnSettings = ({ columns, tableName }: TProps) => {
         } else {
             newList.push(value);
         }
-        console.log(newList);
         dispatch(setTableChecklist({ route: tableName, list: newList }));
     };
     return (
@@ -63,7 +62,7 @@ const ColumnSettings = ({ columns, tableName }: TProps) => {
                         variant='edit'
                         size={'icon'}
                     >
-                        <IoSettingsSharp />
+                        <Settings />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='-right-10 w-36 p-2'>

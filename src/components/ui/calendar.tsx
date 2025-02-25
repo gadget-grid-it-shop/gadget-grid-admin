@@ -5,7 +5,7 @@ import { DayPicker } from 'react-day-picker';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { FaAnglesLeft, FaAnglesRight } from 'react-icons/fa6';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -61,13 +61,13 @@ function Calendar({
             }}
             components={{
                 IconLeft: ({ className, ...props }) => (
-                    <FaAnglesLeft
+                    <ChevronLeft
                         className={cn('h-4 w-4', className)}
                         {...props}
                     />
                 ),
                 IconRight: ({ className, ...props }) => (
-                    <FaAnglesRight
+                    <ChevronRight
                         className={cn('h-4 w-4', className)}
                         {...props}
                     />

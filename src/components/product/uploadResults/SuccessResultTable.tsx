@@ -24,8 +24,6 @@ const SuccessResultTable = ({
         setData(successData.slice(firstIndex, lastIndex));
     };
 
-    console.log(data);
-
     return (
         <>
             <div className='bg-white px-3 py-1'>

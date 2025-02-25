@@ -7,7 +7,7 @@ import ImageGallery from '../ImageGallery';
 import { Button } from '@/components/ui/button';
 import { handleProductChange, isValidUrl } from '@/lib/utils';
 import Image from 'next/image';
-import { IoMdClose } from 'react-icons/io';
+import { X } from 'lucide-react';
 
 const AddMetaData = ({ edit }: { edit: boolean }) => {
     const metaDescriptionRef = useRef<MDXEditorMethods>(null);
@@ -89,7 +89,7 @@ const AddMetaData = ({ edit }: { edit: boolean }) => {
                                             }
                                             className='absolute left-2 top-2 z-40 cursor-pointer bg-lavender-mist text-red'
                                         >
-                                            <IoMdClose />
+                                            <X />
                                         </div>
                                         <Image
                                             src={meta?.image as string}

@@ -97,9 +97,9 @@ const Roles = () => {
                                     {role.role}
                                 </TableCell>
                                 <TableCell>
-                                    <p className='line-clamp-2 max-w-[400px] overflow-hidden text-ellipsis whitespace-normal'>
+                                    <div className='line-clamp-2 max-w-[400px] overflow-hidden text-ellipsis whitespace-normal'>
                                         {role.description}
-                                    </p>
+                                    </div>
                                 </TableCell>
                                 <TableCell className='flex h-full items-center gap-3'>
                                     <Button

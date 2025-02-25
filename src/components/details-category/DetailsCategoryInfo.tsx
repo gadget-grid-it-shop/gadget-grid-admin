@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Form, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { HiMiniXMark } from 'react-icons/hi2';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -20,6 +19,7 @@ import {
     useUpdateDetailsCategoryMutation,
 } from '@/redux/api/detailsCategory';
 import { globalError } from '@/lib/utils';
+import { X } from 'lucide-react';
 
 type TProps = {
     data: TProductCategory[];
@@ -296,7 +296,7 @@ const DetailsCategoryInfo = ({ data }: TProps) => {
                                                 }
                                                 className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white'
                                             >
-                                                <HiMiniXMark />
+                                                <X />
                                             </div>
                                         </div>
                                         {fieldError &&

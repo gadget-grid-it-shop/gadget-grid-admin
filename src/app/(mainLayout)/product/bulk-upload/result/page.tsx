@@ -26,9 +26,9 @@ import { globalError } from '@/lib/utils';
 import { useGetAllUploadHistoryQuery } from '@/redux/api/bulkUploadApi';
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { FaAngleDown } from 'react-icons/fa6';
 
 const BulkUploadResultPage = () => {
     const { data, error, isLoading } = useGetAllUploadHistoryQuery(undefined);
@@ -244,7 +244,7 @@ const BulkUploadResultPage = () => {
                                                         )
                                                     }
                                                 >
-                                                    <FaAngleDown
+                                                    <ChevronDown
                                                         className={`${history._id === activeHistory?._id ? 'rotate-180 text-bright-cyan' : ''} transition-all`}
                                                         size={18}
                                                     />

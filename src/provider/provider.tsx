@@ -1,13 +1,23 @@
 'use client';
 import { persistor, store } from '@/redux/store';
 import { ThemeProvider } from 'next-themes';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 const GlobalProvider = ({
     children,
 }: Readonly<{ children: React.ReactNode }>) => {
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
+    if (!hydrated) {
+        return <></>;
+    }
+
     return (
         <ThemeProvider attribute='class'>
             <Provider store={store}>

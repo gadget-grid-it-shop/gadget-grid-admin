@@ -1,18 +1,15 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { PiTrashSimpleFill } from 'react-icons/pi';
-
 import { cn } from '@/lib/utils';
-import { FiLoader, FiPlus } from 'react-icons/fi';
-import { BiSolidEditAlt } from 'react-icons/bi';
-import { HiEye } from 'react-icons/hi2';
+
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from './tooltip';
+import { Eye, Loader, Pencil, Plus, Trash2 } from 'lucide-react';
 
 const buttonVariants = cva(
     'inline-flex items-center text-gray justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45',
@@ -95,15 +92,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                             disabled={loading || props.disabled}
                         >
                             {loading ? (
-                                <FiLoader className='animate-spin' size={20} />
+                                <Loader className='animate-spin' size={18} />
                             ) : variant === 'delete_button' ? (
-                                <PiTrashSimpleFill />
+                                <Trash2 size={18} />
                             ) : variant === 'edit_button' ? (
-                                <BiSolidEditAlt />
+                                <Pencil size={18} />
                             ) : variant === 'view_button' ? (
-                                <HiEye />
+                                <Eye size={18} />
                             ) : variant === 'create_button' ? (
-                                <FiPlus />
+                                <Plus size={18} />
                             ) : (
                                 children
                             )}
@@ -120,15 +117,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 disabled={loading || props.disabled}
             >
                 {loading ? (
-                    <FiLoader className='animate-spin' size={20} />
+                    <Loader className='animate-spin' size={18} />
                 ) : variant === 'delete_button' ? (
-                    <PiTrashSimpleFill />
+                    <Trash2 size={18} />
                 ) : variant === 'edit_button' ? (
-                    <BiSolidEditAlt />
+                    <Pencil size={18} />
                 ) : variant === 'view_button' ? (
-                    <HiEye />
+                    <Eye size={18} />
                 ) : variant === 'create_button' ? (
-                    <FiPlus />
+                    <Plus size={18} />
                 ) : (
                     children
                 )}

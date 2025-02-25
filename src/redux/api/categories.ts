@@ -29,7 +29,26 @@ const categoriesApi = baseApi.injectEndpoints({
                     socket?.on(
                         'category',
                         (data: TSocketResponse<TCategory>) => {
-                            console.log(data);
+                            updateCachedData((draft) => {
+                                if (data?.actionType === 'update') {
+                                    draft.data = draft.data.map((dc) => {
+                                        if (dc._id === data?.data?._id) {
+                                            return data?.data;
+                                        } else {
+                                            return dc;
+                                        }
+                                    });
+                                } else if (data?.actionType === 'delete') {
+                                    draft.data = draft.data?.filter(
+                                        (c) => c._id !== data?.data?._id,
+                                    );
+                                }
+                                if (data?.actionType === 'create') {
+                                    draft?.data?.push(data?.data);
+                                } else {
+                                    return draft;
+                                }
+                            });
                         },
                     );
                 } catch (err) {

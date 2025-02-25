@@ -7,7 +7,7 @@ import { resetAuthData, updateAuthData } from '@/redux/reducers/auth/authSlice';
 import { clearCookie } from '@/actions/logout';
 import { toast } from 'sonner';
 
-const isClient = typeof window !== 'undefined';
+const isClient = true;
 
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_URL,

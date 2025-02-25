@@ -3,7 +3,6 @@
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '../ui/button';
 import { useMediaQuery } from 'react-responsive';
-import { HiMiniBars3BottomLeft } from 'react-icons/hi2';
 import { setMenuOpen } from '@/redux/reducers/general/generalReducer';
 import {
     DropdownMenu,
@@ -16,15 +15,19 @@ import {
 } from '../ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useEffect, useState } from 'react';
-import { BsMoonFill } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
-import { TbPhotoSquareRounded, TbSunFilled } from 'react-icons/tb';
-import { FaRegUserCircle } from 'react-icons/fa';
-import { IoSettingsOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import { handleLogout } from '@/lib/utils';
 import ImageGallery from '../product/ImageGallery';
 import NotificationMenu from '../notifications/NotificationMenu';
+import {
+    CircleUserRound,
+    Images,
+    Menu,
+    Moon,
+    Settings,
+    Sun,
+} from 'lucide-react';
 
 const Navbar = () => {
     const [loaded, setLoaded] = useState(false);
@@ -50,7 +53,7 @@ const Navbar = () => {
                         onClick={() => dispatch(setMenuOpen(true))}
                         variant={'icon'}
                     >
-                        <HiMiniBars3BottomLeft />
+                        <Menu />
                     </Button>
                 )}
                 <div className='flex w-full justify-end gap-2'>
@@ -58,7 +61,7 @@ const Navbar = () => {
                         onClick={() => setGalleryOpen(true)}
                         className='gap-1 bg-bright-turquoise text-sm'
                     >
-                        <TbPhotoSquareRounded size={18} /> Gallery
+                        <Images size={18} /> Gallery
                     </Button>
 
                     <NotificationMenu />
@@ -110,7 +113,7 @@ const Navbar = () => {
                                                 href={'/my-profile'}
                                                 className='flex items-center gap-3'
                                             >
-                                                <FaRegUserCircle size={18} />
+                                                <CircleUserRound size={18} />
                                                 <span>Profile</span>
                                             </Link>
                                         </DropdownMenuItem>
@@ -119,7 +122,7 @@ const Navbar = () => {
                                                 href={'/settings'}
                                                 className='flex items-center gap-3'
                                             >
-                                                <IoSettingsOutline size={18} />
+                                                <Settings size={18} />
                                                 <span>Settings</span>
                                             </Link>
                                         </DropdownMenuItem>
@@ -143,7 +146,7 @@ const Navbar = () => {
                                                 : 'bg-primary text-pure-white'
                                         }`}
                                     >
-                                        <BsMoonFill />
+                                        <Moon />
                                     </button>
                                     <button
                                         onClick={() =>
@@ -159,7 +162,7 @@ const Navbar = () => {
                                                 : ''
                                         }`}
                                     >
-                                        <TbSunFilled />
+                                        <Sun />
                                     </button>
                                 </div>
                             )}

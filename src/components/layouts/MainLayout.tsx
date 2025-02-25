@@ -13,9 +13,6 @@ import axiosInstance from '@/lib/axiosInstance';
 import { setUserData } from '@/redux/reducers/auth/authSlice';
 import { globalError, handleLogout } from '@/lib/utils';
 import { connectSocket, disconnectSocket, socket } from '@/lib/socket';
-import { toast } from 'sonner';
-import { baseApi } from '@/redux/api/baseApi';
-import notificationApi from '@/redux/api/notificationApi';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
     const { theme } = useTheme();

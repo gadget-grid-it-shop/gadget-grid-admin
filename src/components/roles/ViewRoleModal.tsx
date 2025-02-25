@@ -32,9 +32,9 @@ const ViewRoleModal = ({ viewData, setOpen }: TProps) => {
                         <h3 className='text-base font-semibold text-black'>
                             Description:
                         </h3>
-                        <p className='mt-3 whitespace-pre-wrap rounded-md border border-border-color bg-background p-4 text-gray'>
+                        <h4 className='mt-3 font-normal whitespace-pre-wrap rounded-md border border-border-color bg-background p-4 text-gray'>
                             {viewData?.description}
-                        </p>
+                        </h4>
                     </div>
 
                     <div>

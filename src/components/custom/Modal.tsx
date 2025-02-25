@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '../ui/dialog';
-import { FiPlus } from 'react-icons/fi';
+import { Plus } from 'lucide-react';
 
 type TProps = React.ComponentPropsWithRef<typeof Dialog> & {
     open: boolean;
@@ -42,7 +42,7 @@ const Modal = React.forwardRef<HTMLDivElement, TProps>(
                     >
                         {typeof triggerText === 'string' ? (
                             <>
-                                <FiPlus size={18} />
+                                <Plus size={18} />
                                 {triggerText}
                             </>
                         ) : (

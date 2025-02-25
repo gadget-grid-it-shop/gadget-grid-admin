@@ -2,15 +2,13 @@
 import { TAdminData } from '@/interface/admin.interface';
 import { globalError } from '@/lib/utils';
 import { useGetSingleUserQuery } from '@/redux/api/usersApi';
-import React from 'react';
+import React, { use } from 'react';
 
-const AdminDetails = ({
-    params,
-    // searchParams,
-}: {
-    params: { userId: string };
-    searchParams: Record<string, string | string[] | undefined>;
+const AdminDetails = (props: {
+    params: Promise<{ userId: string }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) => {
+    const params = use(props.params);
     const userId = params.userId;
 
     const { data, error, isLoading } = useGetSingleUserQuery({

@@ -3,7 +3,7 @@ import useGetAdminData from '@/hooks/useGetAdminData';
 import { TAdminData } from '@/interface/admin.interface';
 import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { FaUser } from 'react-icons/fa6';
+import { UserRound } from 'lucide-react';
 
 const UserCard = ({ id, size = 'lg' }: { id: string; size?: 'sm' | 'lg' }) => {
     const { findAdmin } = useGetAdminData();
@@ -23,7 +23,7 @@ const UserCard = ({ id, size = 'lg' }: { id: string; size?: 'sm' | 'lg' }) => {
                 />
                 <AvatarFallback className='capitalize'>
                     <div className='flex size-10 items-center justify-center rounded-full bg-background'>
-                        <FaUser />
+                        <UserRound />
                     </div>
                 </AvatarFallback>
             </Avatar>

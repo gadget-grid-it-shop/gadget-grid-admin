@@ -12,7 +12,7 @@ import { useCreateBrandMutation } from '@/redux/api/brandApi';
 import { globalError } from '@/lib/utils';
 import { toast } from 'sonner';
 import Image from 'next/image';
-import { FaXmark } from 'react-icons/fa6';
+import { X } from 'lucide-react';
 
 const addBrandSchema = z.object({
     name: z.string({
@@ -102,7 +102,7 @@ const CreateBrand = () => {
                                                 }
                                                 className='absolute -right-5 -top-1'
                                             >
-                                                <FaXmark />
+                                                <X size={18} />
                                             </button>
                                             <Image
                                                 src={

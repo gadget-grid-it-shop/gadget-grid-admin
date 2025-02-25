@@ -23,13 +23,13 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { FaUser } from 'react-icons/fa';
 import CreateAdminModal from '@/components/users/admin/CreateAdminModal';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/custom/Modal';
 import { useAppSelector } from '@/redux/hooks';
 import NoData from '@/components/shared/NoData';
+import { User } from 'lucide-react';
 
 const Admins = () => {
     const {
@@ -101,7 +101,7 @@ const Admins = () => {
                                             />
                                             <AvatarFallback className='capitalize'>
                                                 <div className='flex size-10 items-center justify-center rounded-full bg-background'>
-                                                    <FaUser />
+                                                    <User />
                                                 </div>
                                             </AvatarFallback>
                                         </Avatar>
