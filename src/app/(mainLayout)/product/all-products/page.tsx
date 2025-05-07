@@ -1,7 +1,6 @@
 'use client';
 import { TSelectOptions } from '@/components/categories/interface';
 import CustomAvatar from '@/components/custom/CustomAvatar';
-import { DataTable } from '@/components/custom/DataTable';
 import EllipsisText from '@/components/custom/EllipsisText';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Button } from '@/components/ui/button';
@@ -18,18 +17,19 @@ import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import { useGetAllProductsQuery } from '@/redux/api/productApi';
 import { useGetAllAdminsQuery } from '@/redux/api/usersApi';
-import { ColumnDef } from '@tanstack/react-table';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import PageHeader from '@/components/common/PageHeader';
-import ColumnSettings from '@/components/shared/ColumnSettings';
 import AllProductsGridView from '@/components/product/all-product/AllProductsGridView';
 import ProductSkeleton from '@/components/product/all-product/ProductSkeleton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setViewMode } from '@/redux/reducers/products/productSlice';
 import UserCard from '@/components/common/UserCard';
 import { Grid3X3, Sheet } from 'lucide-react';
+import GlobalTable, {
+    TCustomColumnDef,
+} from '@/components/common/GlobalTable/GlobalTable';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -43,6 +43,7 @@ const AllProducts = () => {
     const {
         data: productData,
         error,
+        isLoading,
         isFetching,
     } = useGetAllProductsQuery(
         {
@@ -67,13 +68,16 @@ const AllProducts = () => {
     const dispatch = useAppDispatch();
     const { viewMode } = useAppSelector((s) => s.products);
 
-    const columns: ColumnDef<TProduct>[] = [
+    const columns: TCustomColumnDef<TProduct>[] = [
         {
             accessorKey: '_id',
             header: 'Serial',
             cell: ({ row }) => {
                 return <p>{row.index + 1}</p>;
             },
+            id: 'id',
+            visible: true,
+            canHide: false,
         },
         {
             accessorKey: 'name',
@@ -83,61 +87,60 @@ const AllProducts = () => {
                     <div>
                         <EllipsisText
                             className='text-gray'
-                            text={row.getValue('name')}
+                            text={row.original.name}
                         />
                     </div>
                 );
             },
+            id: 'name',
+            visible: true,
+            canHide: false,
         },
         {
             accessorKey: 'mainCategory',
             header: 'Category',
             cell: ({ row }) => {
-                const category: TCategory = row.getValue('mainCategory');
-                return (
-                    <EllipsisText
-                        width={120}
-                        className='text-gray'
-                        text={category?.name}
-                    />
-                );
+                const category = row.original.mainCategory;
+                return <p className='truncate'>{category?.name}</p>;
             },
+            id: 'mainCategory',
+            visible: true,
         },
         {
             accessorKey: 'brand',
             header: 'Brand',
             cell: ({ row }) => {
-                const brand: TBrand = row.getValue('brand');
+                const brand = row.original.brand as TBrand;
                 return (
                     <div className='flex items-center gap-1'>
-                        <CustomAvatar src={brand.image} />
-                        <EllipsisText
-                            width={60}
-                            className='text-gray'
-                            text={brand.name}
-                        />
+                        <CustomAvatar src={brand?.image} />
+                        <p className='truncate'>{brand?.name}</p>
                     </div>
                 );
             },
+            id: 'brand',
+            visible: true,
         },
         {
             accessorKey: 'createdAt',
             header: 'Created At',
             cell: ({ row }) => {
-                const createdAt = row.getValue('createdAt');
+                const createdAt = row.original.createdAt;
                 return (
                     <div className='min-w-24'>
                         {dayjs(createdAt as string).format('DD MMM, YYYY')}
                     </div>
                 );
             },
+            id: 'createdAt',
+            visible: true,
         },
         {
             accessorKey: 'updatedAt',
             header: 'Updated At',
             cell: ({ row }) => {
-                const createdAt = row.getValue('createdAt') as string;
-                const updatedAt = row.getValue('updatedAt') as string;
+                const createdAt = row.original.createdAt as string;
+                const updatedAt = row.original.updatedAt as string;
                 const isSame = createdAt === updatedAt;
                 return (
                     <div className='min-w-24'>
@@ -149,6 +152,8 @@ const AllProducts = () => {
                     </div>
                 );
             },
+            id: 'updatedAt',
+            visible: true,
         },
 
         // {
@@ -163,21 +168,25 @@ const AllProducts = () => {
             accessorKey: 'price',
             header: 'Price',
             cell: ({ row }) => {
-                return <div className=''>${row.getValue('price')}</div>;
+                return <div className=''>${row.original.price}</div>;
             },
+            id: 'price',
+            visible: true,
         },
         {
             accessorKey: 'quantity',
             header: 'Stock',
             cell: ({ row }) => {
-                return <div className=''>{row.getValue('quantity')}</div>;
+                return <div className=''>{row.original.quantity}</div>;
             },
+            id: 'quantiy',
+            visible: true,
         },
         {
             accessorKey: 'warranty',
             header: 'Warranty',
             cell: ({ row }) => {
-                const warranty: TProductWarrenty = row.getValue('warranty');
+                const warranty: TProductWarrenty = row.original.warranty;
                 return (
                     <div>
                         <p className='text-gray'>
@@ -188,20 +197,24 @@ const AllProducts = () => {
                     </div>
                 );
             },
+            id: 'warranty',
+            visible: true,
         },
         {
             accessorKey: 'createdBy',
             header: 'CreatedBy',
             cell: ({ row }) => {
-                const createdBy: string = row.getValue('createdBy');
+                const createdBy: string = row.original.createdBy;
                 return <UserCard size='sm' id={createdBy} />;
             },
+            id: 'createdBy',
+            visible: true,
         },
         {
             accessorKey: 'actions',
             header: 'Actions',
             cell: ({ row }) => {
-                const _id = row.getValue('_id');
+                const _id = row.original._id;
                 return (
                     <div className='flex gap-2'>
                         <Button variant={'view_button'} size={'base'} />
@@ -216,6 +229,9 @@ const AllProducts = () => {
                     </div>
                 );
             },
+            id: 'actions',
+            canHide: false,
+            visible: true,
         },
     ];
 
@@ -277,10 +293,6 @@ const AllProducts = () => {
                         >
                             <Sheet />
                         </Button>
-                        <ColumnSettings
-                            columns={columns}
-                            tableName='product_table'
-                        />
                     </>
                 }
             />
@@ -320,25 +332,22 @@ const AllProducts = () => {
                 />
             </div>
 
-            {isFetching ? (
-                viewMode === 'table' ? (
-                    <TableSkeleton className='pt-2' />
-                ) : (
-                    <ProductSkeleton className='pt-2' />
-                )
-            ) : !error && productData?.data ? (
-                viewMode === 'table' ? (
-                    <DataTable
-                        tableName='product_table'
-                        columns={columns}
-                        data={productData?.data || []}
-                    />
+            {viewMode === 'table' && (
+                <GlobalTable
+                    isLoading={isFetching || isLoading}
+                    data={productData?.data || []}
+                    defaultColumns={columns}
+                    limit={limit}
+                    tableName='all-product-table'
+                />
+            )}
+
+            {viewMode === 'grid' &&
+                (isLoading || isFetching ? (
+                    <ProductSkeleton />
                 ) : (
                     <AllProductsGridView data={productData?.data || []} />
-                )
-            ) : (
-                <div>Error loading data</div> // Handle the error case
-            )}
+                ))}
 
             <Pagination
                 currentPage={page}

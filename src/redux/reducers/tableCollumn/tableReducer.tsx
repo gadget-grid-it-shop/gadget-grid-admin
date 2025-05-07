@@ -1,38 +1,39 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { TCustomColumnDef } from '@/components/common/GlobalTable/GlobalTable';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ColumnSizingState } from '@tanstack/react-table';
 
-type TColumnSetting = {
-    route: string;
-    list: string[];
+type TTableSizeData = {
+    tableName: string;
+    columnSizing: ColumnSizingState;
+    columns: TCustomColumnDef<any>[] | [];
 };
 
-type TInitailState = {
-    tableChecklist: TColumnSetting[];
+type TInitialState = {
+    tableSizeData: TTableSizeData[];
 };
 
-const initialState: TInitailState = {
-    tableChecklist: [],
+const initialState: TInitialState = {
+    tableSizeData: [],
 };
 
 const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
-        setTableChecklist: (state, action) => {
-            const { route, list } = action.payload;
-            if (route && list) {
-                const exist = state.tableChecklist.find(
-                    (c) => c.route === route,
-                );
-                if (exist) {
-                    exist.list = list;
-                } else {
-                    state.tableChecklist.push({ route: route, list: list });
-                }
+        setColumnSizing: (state, action: PayloadAction<TTableSizeData>) => {
+            const exist = state.tableSizeData.find(
+                (d) => d.tableName === action.payload.tableName,
+            );
+
+            if (exist) {
+                exist.columnSizing = action.payload.columnSizing;
+                exist.columns = action.payload.columns;
+            } else {
+                state.tableSizeData.push({ ...action.payload });
             }
         },
     },
 });
 
-export const { setTableChecklist } = tableSlice.actions;
-
+export const { setColumnSizing } = tableSlice.actions;
 export default tableSlice.reducer;

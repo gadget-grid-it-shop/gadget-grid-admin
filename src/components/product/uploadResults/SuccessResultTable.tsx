@@ -1,4 +1,6 @@
-import { DataTable } from '@/components/custom/DataTable';
+import GlobalTable, {
+    TCustomColumnDef,
+} from '@/components/common/GlobalTable/GlobalTable';
 import Pagination from '@/components/ui/pagination';
 import { TSuccessData } from '@/interface/bulkupload.interface';
 import { ColumnDef } from '@tanstack/react-table';
@@ -9,7 +11,7 @@ const SuccessResultTable = ({
     columns,
 }: {
     successData: TSuccessData[];
-    columns: ColumnDef<TSuccessData>[];
+    columns: TCustomColumnDef<TSuccessData>[];
 }) => {
     const [data, setData] = useState<TSuccessData[]>([]);
     const [currentPage] = useState(1);
@@ -27,9 +29,9 @@ const SuccessResultTable = ({
     return (
         <>
             <div className='bg-white px-3 py-1'>
-                <DataTable
+                <GlobalTable
                     tableName='update-result-table'
-                    columns={columns}
+                    defaultColumns={columns}
                     data={data}
                 />
                 <Pagination

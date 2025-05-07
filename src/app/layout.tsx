@@ -6,6 +6,7 @@ import GlobalProvider from '@/provider/provider';
 import '@mdxeditor/editor/style.css';
 import { Suspense } from 'react';
 import { Toaster } from 'sonner';
+import 'simplebar-react/dist/simplebar.min.css';
 
 const inter = Inter({ subsets: ['latin'] });
 

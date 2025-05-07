@@ -1,9 +1,9 @@
 'use client';
+import { TCustomColumnDef } from '@/components/common/GlobalTable/GlobalTable';
 import PageHeader from '@/components/common/PageHeader';
 import CustomAvatar from '@/components/custom/CustomAvatar';
 import EllipsisText from '@/components/custom/EllipsisText';
 import SuccessResultTable from '@/components/product/uploadResults/SuccessResultTable';
-import ColumnSettings from '@/components/shared/ColumnSettings';
 import TableSkeleton from '@/components/shared/TableSkeleton';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -44,13 +44,15 @@ const BulkUploadResultPage = () => {
         router.push(`/product/create-product?updateId=${id}`);
     };
 
-    const columns: ColumnDef<TSuccessData>[] = [
+    const columns: TCustomColumnDef<TSuccessData>[] = [
         {
             accessorKey: '_id',
             header: 'Serial',
             cell: ({ row }) => {
                 return <p>{row.index + 1}</p>;
             },
+            id: 'id',
+            visible: true,
         },
         {
             accessorKey: 'name',
@@ -58,12 +60,14 @@ const BulkUploadResultPage = () => {
             cell: ({ row }) => {
                 return <p>{row.getValue('name')}</p>;
             },
+            id: 'name',
+            visible: true,
         },
         {
             accessorKey: 'mainCategory',
             header: 'Category',
             cell: ({ row }) => {
-                const category: TCategory = row.getValue('mainCategory');
+                const category: TCategory = row.original.mainCategory;
                 return (
                     <EllipsisText
                         width={120}
@@ -72,6 +76,8 @@ const BulkUploadResultPage = () => {
                     />
                 );
             },
+            id: 'mainCategory',
+            visible: true,
         },
         {
             accessorKey: 'brand',
@@ -89,6 +95,8 @@ const BulkUploadResultPage = () => {
                     </div>
                 );
             },
+            id: 'brand',
+            visible: true,
         },
         {
             accessorKey: 'createdAt',
@@ -101,6 +109,8 @@ const BulkUploadResultPage = () => {
                     </div>
                 );
             },
+            id: 'createdAt',
+            visible: true,
         },
         {
             accessorKey: 'updatedAt',
@@ -112,13 +122,15 @@ const BulkUploadResultPage = () => {
                 return (
                     <div className='min-w-24'>
                         {!isSame ? (
-                            dayjs(createdAt as string).format('DD MMM, YYYY')
+                            dayjs(updatedAt as string).format('DD MMM, YYYY')
                         ) : (
                             <span className='text-red-orange'>Not updated</span>
                         )}
                     </div>
                 );
             },
+            id: 'updatedAt',
+            visible: true,
         },
         {
             accessorKey: '',
@@ -136,6 +148,8 @@ const BulkUploadResultPage = () => {
                     </div>
                 );
             },
+            id: 'actions',
+            visible: true,
         },
     ];
 
@@ -152,14 +166,7 @@ const BulkUploadResultPage = () => {
             <PageHeader
                 title='Bulk Upload History'
                 subtitle='View and Track Bulk Product Upload History'
-                buttons={
-                    <>
-                        <ColumnSettings
-                            columns={columns}
-                            tableName='update-result-table'
-                        />
-                    </>
-                }
+                buttons={<></>}
             />
             <Tabs defaultValue='upload-history' className='mb-4 w-[400px]'>
                 <TabsList>
