@@ -1,4 +1,4 @@
-import Sidebar from '@/components/shared/Sidebar';
+import { AppSidebar } from '@/components/shared/AppSidebar';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -6,7 +6,7 @@ import React from 'react';
 const NotFound = () => {
     return (
         <div className='flex h-screen w-screen bg-background-foreground'>
-            <Sidebar />
+            <AppSidebar />
             <div className='flex h-screen w-full flex-col items-center justify-center'>
                 <Image
                     src={'/error-page.png'}

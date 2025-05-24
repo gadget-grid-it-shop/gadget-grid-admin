@@ -6,7 +6,6 @@ import Navbar from '../shared/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from 'next-themes';
-import Sidebar from '../shared/Sidebar';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';

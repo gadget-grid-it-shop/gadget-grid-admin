@@ -4,7 +4,13 @@ import {
     TUpdateCategory,
 } from '@/interface/category';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Form, FormField, FormItem, FormMessage } from '../ui/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from '../ui/form';
 import { Input } from '../ui/input';
 import MultipleSelector, { Option } from '../ui/multiselect';
 import { Button } from '../ui/button';
@@ -14,6 +20,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useUpdateCategoryMutation } from '@/redux/api/categories';
 import { useGetDetailsCategoriesQuery } from '@/redux/api/detailsCategory';
+import ImageSelect from '../common/ImageSelect';
+import { Checkbox } from '../ui/checkbox';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../ui/select';
 
 type TProps = {
     editOpen: boolean;
@@ -28,6 +43,8 @@ const CategorySchema = z.object({
             invalid_type_error: 'Category name is required',
         })
         .min(1, { message: 'Category name is required' }),
+    image: z.string(),
+    isFeatured: z.boolean(),
 });
 
 const EditCategory = ({ category, setEditOpen }: TProps) => {
@@ -57,6 +74,8 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
         resolver: zodResolver(CategorySchema),
         defaultValues: {
             name: '',
+            image: '',
+            isFeatured: false,
         },
     });
 
@@ -64,6 +83,8 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
         if (category && form) {
             form.reset({
                 name: category.name,
+                image: category?.image || '',
+                isFeatured: category.isFeatured,
             });
 
             setDetailsCategories(
@@ -78,34 +99,30 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
     }, [category, form]);
 
     const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
-        console.log('works');
-
         setDetailsCategoryError({ error: false, message: '' });
-
-        const detailsCategorySchema = z
-            .array(z.string())
-            .min(1, { message: 'Please select at least one details category' });
 
         const product_details_categories = detailsCategories.map(
             (item) => item.value,
         );
 
-        const check = detailsCategorySchema.safeParse(
-            product_details_categories,
-        );
+        // const check = detailsCategorySchema.safeParse(
+        //     product_details_categories,
+        // );
 
-        if (!check.success) {
-            setDetailsCategoryError({
-                error: true,
-                message: check.error.errors[0]?.message,
-            });
+        // if (!check.success) {
+        //     setDetailsCategoryError({
+        //         error: true,
+        //         message: check.error.errors[0]?.message,
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
 
         const payload: TUpdateCategory = {
             name: values.name,
             product_details_categories,
+            isFeatured: values.isFeatured,
+            image: values?.image,
         };
 
         if (category) {
@@ -115,14 +132,14 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                     payload,
                 }).unwrap();
 
-                console.log(res);
-
                 if (res.success) {
                     toast.success(res.message);
 
                     setEditOpen(false);
                     form.reset({
                         name: '',
+                        image: '',
+                        isFeatured: false,
                     });
                     setDetailsCategories([]);
                 }
@@ -138,6 +155,27 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                 onSubmit={form.handleSubmit(onsubmit)}
                 className='flex flex-col gap-4'
             >
+                <FormField
+                    control={form.control}
+                    name='image'
+                    render={({ field, fieldState }) => (
+                        <FormItem>
+                            <label className='text-black'>
+                                Category Image *
+                            </label>
+                            <ImageSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+
+                            {fieldState.error && (
+                                <FormMessage className='text-sm text-red'>
+                                    {fieldState.error.message}
+                                </FormMessage>
+                            )}
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name='name'
@@ -158,10 +196,43 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name='isFeatured'
+                    render={({ field, fieldState }) => (
+                        <FormItem>
+                            <label className='text-black'>Featured</label>
+                            <Select
+                                defaultValue={String(field.value)}
+                                value={String(field.value)}
+                                onValueChange={(val: string) =>
+                                    field.onChange(
+                                        val === 'true' ? true : false,
+                                    )
+                                }
+                            >
+                                <FormControl>
+                                    <SelectTrigger className='bg-background'>
+                                        <SelectValue placeholder='Select featured' />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value='true'>Yes</SelectItem>
+                                    <SelectItem value='false'>No</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {fieldState.error && (
+                                <FormMessage className='text-sm text-red'>
+                                    {fieldState.error.message}
+                                </FormMessage>
+                            )}
+                        </FormItem>
+                    )}
+                />
 
                 <div className='flex flex-col gap-2'>
                     <label className='text-black'>
-                        Product Details Category *
+                        Product Details Category
                     </label>
                     {!isLoading && !error && (
                         <MultipleSelector

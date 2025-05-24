@@ -2,9 +2,10 @@
 import { TSelectOptions } from '@/components/categories/interface';
 import Modal from '@/components/custom/Modal';
 import { Button } from '@/components/ui/button';
+import { Combobox, Option } from '@/components/ui/combobox';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Select from '@/components/ui/select';
+import { Select } from '@/components/ui/select';
 import { TRole } from '@/interface/auth.interface';
 import { globalError } from '@/lib/utils';
 import { useGetRolesQuery } from '@/redux/api/rolesApi';
@@ -61,14 +62,13 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
         },
     });
 
-    const selectOptions: TSelectOptions[] = roleData?.data?.map(
-        (role: TRole) => {
-            return {
-                label: role.role,
-                value: role._id,
-            };
-        },
-    );
+    const selectOptions: Option[] = roleData?.data?.map((role: TRole) => {
+        return {
+            label: role.role,
+            value: role._id,
+            searchValue: role.role,
+        };
+    });
 
     async function onSubmit(values: z.infer<typeof createAdminSchema>) {
         setRoleError(false);
@@ -213,23 +213,13 @@ const CreateAdminModal = ({ open, setOpen }: TProps) => {
 
                         <div className='flex flex-col gap-2'>
                             <label>Role *</label>
-                            {/* <SingleSelector
-                  options={selectOptions}
-                  value={selectedRole || undefined}
-                  placeholder="Select role for the user"
-                  onChange={(value) => {
-                    setSelectedRole(value);
-                    setRoleError(false);
-                  }}
-                /> */}
-                            <Select
-                                placeholder='Select role'
-                                className='bg-background'
-                                data={selectOptions}
+                            <Combobox
                                 onChange={(val) => {
                                     setSelectedRole(val as string);
                                     setRoleError(false);
                                 }}
+                                value={selectedRole || ''}
+                                options={selectOptions}
                             />
 
                             {roleError && (

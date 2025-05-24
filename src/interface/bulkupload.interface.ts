@@ -11,6 +11,7 @@ export type TSuccessData = {
     name: string;
     slug: string;
     sku: string;
+    mainCategory: string;
     _id: string;
 };
 

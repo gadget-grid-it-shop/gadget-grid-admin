@@ -1,11 +1,12 @@
 import { TCreateProductFilter } from '@/redux/api/filtersApi';
 import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from '../ui/button';
+import { TFilter } from '@/interface/product.filter';
 
 type TProps = {
-    setUpdateFilter: Dispatch<SetStateAction<TCreateProductFilter | null>>;
-    setDeleteOpen: Dispatch<SetStateAction<TCreateProductFilter | null>>;
-    data: TCreateProductFilter[];
+    setUpdateFilter: Dispatch<SetStateAction<TFilter | null>>;
+    setDeleteOpen: Dispatch<SetStateAction<TFilter | null>>;
+    data: TFilter[];
 };
 
 const ProductFilterCard = ({
@@ -15,7 +16,7 @@ const ProductFilterCard = ({
 }: TProps) => {
     return (
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {data?.map((filter: TCreateProductFilter) => (
+            {data?.map((filter: TFilter) => (
                 <div
                     className='z-0 flex h-full flex-col rounded-md border border-border-color bg-light-gray p-4 transition-all hover:scale-[1.01] hover:shadow-md'
                     key={filter._id}
@@ -27,9 +28,9 @@ const ProductFilterCard = ({
                         {filter.options?.map((field) => (
                             <div
                                 className='rounded-[5px] bg-white px-3 py-[6px] text-gray'
-                                key={field}
+                                key={field.optionId}
                             >
-                                {field}
+                                {field.value}
                             </div>
                         ))}
                     </div>

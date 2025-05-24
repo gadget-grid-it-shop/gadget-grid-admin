@@ -5,7 +5,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '../ui/dialog';
-import { Form, FormField, FormItem, FormMessage } from '../ui/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from '../ui/form';
 import { useForm, FieldErrors } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +25,16 @@ import { toast } from 'sonner';
 import { TParentCat } from '@/app/(mainLayout)/category/page';
 import { globalError } from '@/lib/utils';
 import { Plus } from 'lucide-react';
+import slugify from 'slugify';
+import ImageSelect from '../common/ImageSelect';
+import { Checkbox } from '@radix-ui/react-checkbox';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../ui/select';
 
 type TCategoryProps = {
     parent: TParentCat;
@@ -35,6 +51,9 @@ const CategorySchema = z.object({
         })
         .min(1, { message: 'Category name is required' }),
     parent_id: z.string().optional(),
+    slug: z.string().optional(),
+    image: z.string().optional(),
+    isFeatured: z.boolean().optional(),
 });
 
 const CreateCategory = ({
@@ -71,10 +90,11 @@ const CreateCategory = ({
         defaultValues: {
             name: '',
             parent_id: '',
+            slug: '',
+            isFeatured: false,
+            image: '',
         },
     });
-
-    const errors: FieldErrors<FormData> = form.formState.errors;
 
     useEffect(() => {
         if (parent) {
@@ -86,13 +106,9 @@ const CreateCategory = ({
     }, [parent, form]);
 
     const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
-        console.log('works');
-
         setDetailsCategoryError({ error: false, message: '' });
 
-        const detailsCategorySchema = z
-            .array(z.string())
-            .min(1, { message: 'Please select at least one details category' });
+        const detailsCategorySchema = z.array(z.string()).optional();
 
         const product_details_categories = detailsCategories.map(
             (item) => item.value,
@@ -115,7 +131,13 @@ const CreateCategory = ({
             name: values.name,
             parent_id: values.parent_id || null,
             product_details_categories,
+            image: values.image || '',
+            isFeatured: values.isFeatured,
         };
+
+        if (values.slug) {
+            payload.slug = values.slug;
+        }
 
         try {
             const res = await createCategory(payload).unwrap();
@@ -160,6 +182,27 @@ const CreateCategory = ({
                         >
                             <FormField
                                 control={form.control}
+                                name='image'
+                                render={({ field, fieldState }) => (
+                                    <FormItem>
+                                        <label className='text-black'>
+                                            Category Image *
+                                        </label>
+                                        <ImageSelect
+                                            value={field.value || ''}
+                                            onChange={field.onChange}
+                                        />
+
+                                        {fieldState.error && (
+                                            <FormMessage className='text-sm text-red'>
+                                                {fieldState.error.message}
+                                            </FormMessage>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name='name'
                                 render={({ field, fieldState }) => (
                                     <FormItem>
@@ -167,6 +210,72 @@ const CreateCategory = ({
                                             Name *
                                         </label>
                                         <Input
+                                            {...field}
+                                            placeholder='Enter category name'
+                                            type='text'
+                                        />
+
+                                        {fieldState.error && (
+                                            <FormMessage className='text-sm text-red'>
+                                                {fieldState.error.message}
+                                            </FormMessage>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='isFeatured'
+                                render={({ field, fieldState }) => (
+                                    <FormItem>
+                                        <label className='text-black'>
+                                            Featured
+                                        </label>
+                                        <Select
+                                            defaultValue={String(field.value)}
+                                            value={String(field.value)}
+                                            onValueChange={(val: string) =>
+                                                field.onChange(
+                                                    val === 'true'
+                                                        ? true
+                                                        : false,
+                                                )
+                                            }
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className='bg-background'>
+                                                    <SelectValue placeholder='Select featured' />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value='true'>
+                                                    Yes
+                                                </SelectItem>
+                                                <SelectItem value='false'>
+                                                    No
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {fieldState.error && (
+                                            <FormMessage className='text-sm text-red'>
+                                                {fieldState.error.message}
+                                            </FormMessage>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='slug'
+                                render={({ field, fieldState }) => (
+                                    <FormItem>
+                                        <label className='text-black'>
+                                            slug
+                                        </label>
+                                        <Input
+                                            defaultValue={slugify(
+                                                form.watch('name'),
+                                            )}
                                             {...field}
                                             placeholder='Enter category name'
                                             type='text'

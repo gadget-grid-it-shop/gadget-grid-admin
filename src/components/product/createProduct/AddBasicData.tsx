@@ -10,7 +10,13 @@ import Image from 'next/image';
 import ImageGallery from '../ImageGallery';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
 import TreeDropdown from '@/components/custom/TreeDropdown';
-import Select from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { TSelectOptions } from '@/components/categories/interface';
 import { TBrand } from '@/interface/brand.interface';
@@ -18,13 +24,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
 import { cn, handleProductChange, isValidUrl } from '@/lib/utils';
 import MultipleSelector, { Option } from '@/components/ui/multiselect';
-import {
-    TCreateProductFilter,
-    useGetAllProductFiltersQuery,
-} from '@/redux/api/filtersApi';
+import { useGetAllProductFiltersQuery } from '@/redux/api/filtersApi';
 import { TProductFilter } from '@/interface/product.interface';
 import { generateCategoryTree } from '@/components/utilities/category/categoryUtils';
 import { X } from 'lucide-react';
+import { Combobox } from '@/components/ui/combobox';
+import { FormControl } from '@/components/ui/form';
+import { TFilter } from '@/interface/product.filter';
 
 const AddBasicData = ({ edit }: { edit: boolean }) => {
     const dispatch = useAppDispatch();
@@ -60,17 +66,8 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
     };
     const [selectedFilters, setSelectedFilters] = useState<Option[]>([]);
 
-    const brandDropdownData: TSelectOptions[] = brandData?.data?.map(
-        (brand: TBrand) => {
-            return {
-                label: brand.name,
-                value: brand._id,
-            };
-        },
-    );
-
     const filtersDropdownData: Option[] = filtersData?.data?.map(
-        (filter: TCreateProductFilter) => {
+        (filter: TFilter) => {
             return {
                 label: filter.title,
                 value: filter?._id,
@@ -95,20 +92,18 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
         setSelectedFilters(val);
     };
 
-    const handleFilterChange = (
-        value: string | null,
-        filter: string,
-        key: string,
-    ) => {
+    const handleFilterChange = (value: string | null, filter: string) => {
         const exist = filters?.find((f) => f.filter === filter);
-
+        const filterData: TFilter = filtersData?.data?.find(
+            (f: TFilter) => f._id === filter,
+        );
         let newfilters: TProductFilter[] = [...(filters || [])];
 
         if (!exist) {
             newfilters.push({
                 filter,
-                key,
-                value: value || '',
+                value: Number(value),
+                filterId: Number(filterData.filterId),
             });
         }
 
@@ -117,7 +112,7 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                 if (f.filter === filter) {
                     return {
                         ...f,
-                        value,
+                        value: Number(value),
                     };
                 } else {
                     return f;
@@ -161,13 +156,21 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
 
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Brand *</label>
-                    <Select
+                    <Combobox
+                        placeholder='Select Brand'
+                        searchPlaceholder='Search Brand'
+                        emptyPlaceholder='No Brands Found'
                         value={brand as string}
                         onChange={(val) =>
                             handleProductChange('brand', val as string, edit)
                         }
-                        data={brandDropdownData}
-                        placeholder='Select brand'
+                        options={brandData?.data?.map((brand: TBrand) => {
+                            return {
+                                label: brand.name,
+                                value: brand._id,
+                                searchValue: brand.name,
+                            };
+                        })}
                     />
                 </div>
                 <div className='mb-3 flex flex-col gap-2'>
@@ -209,29 +212,33 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                 </div>
 
                 {selectedFilters.map((s) => {
-                    const options: TSelectOptions[] =
-                        (filtersData?.data as TCreateProductFilter[])
+                    const options =
+                        (filtersData?.data as TFilter[])
                             ?.find((f) => f._id === s.value)
-                            ?.options.map((op) => ({ label: op, value: op })) ||
-                        [];
+                            ?.options.map((op) => ({
+                                value: String(op.optionId) || '',
+                                label: op.value,
+                                searchValue: op.value,
+                            })) || [];
 
                     return (
                         <div key={s.value} className='mb-3 flex flex-col gap-2'>
                             <label className='text-sm'>{s.label} *</label>
-                            <Select
+                            <Combobox
+                                placeholder={`Select ${s.label}`}
+                                searchPlaceholder={`Search ${s.label}`}
+                                emptyPlaceholder={`No ${s.label} Found`}
                                 value={
-                                    filters?.find((f) => s.value === f.filter)
-                                        ?.value
+                                    String(
+                                        filters?.find(
+                                            (f) => s.value === f.filter,
+                                        )?.value,
+                                    ) || ''
                                 }
                                 onChange={(val) =>
-                                    handleFilterChange(
-                                        val as string,
-                                        s.value,
-                                        s.label,
-                                    )
+                                    handleFilterChange(val as string, s.value)
                                 }
-                                data={options}
-                                placeholder={`Select ${s.label}`}
+                                options={options}
                             />
                         </div>
                     );

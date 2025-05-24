@@ -5,8 +5,10 @@ import {
     BookOpen,
     ChevronRight,
     FileText,
+    GalleryHorizontalEnd,
     GalleryVerticalEnd,
     LayoutDashboard,
+    Store,
 } from 'lucide-react';
 
 import {
@@ -82,6 +84,20 @@ const menus: TMenu[] = [
         title: 'Category',
         icon: <ListTodo size={20} />,
         link: '/category',
+    },
+    {
+        id: 11,
+        title: 'Shop',
+        icon: <Store size={20} />,
+        link: '/shop',
+        children: [
+            {
+                id: 1,
+                title: 'Banner Builder',
+                link: '/shop/banner-builder',
+                icon: <GalleryHorizontalEnd size={18} />,
+            },
+        ],
     },
     {
         id: 5,

@@ -63,22 +63,22 @@ const BulkUploadResultPage = () => {
             id: 'name',
             visible: true,
         },
-        {
-            accessorKey: 'mainCategory',
-            header: 'Category',
-            cell: ({ row }) => {
-                const category: TCategory = row.original.mainCategory;
-                return (
-                    <EllipsisText
-                        width={120}
-                        className='text-gray'
-                        text={category?.name}
-                    />
-                );
-            },
-            id: 'mainCategory',
-            visible: true,
-        },
+        // {
+        //     accessorKey: 'mainCategory',
+        //     header: 'Category',
+        //     cell: ({ row }) => {
+        //         const category: TCategory = row.original.mainCategory;
+        //         return (
+        //             <EllipsisText
+        //                 width={120}
+        //                 className='text-gray'
+        //                 text={category?.name}
+        //             />
+        //         );
+        //     },
+        //     id: 'mainCategory',
+        //     visible: true,
+        // },
         {
             accessorKey: 'brand',
             header: 'Brand',

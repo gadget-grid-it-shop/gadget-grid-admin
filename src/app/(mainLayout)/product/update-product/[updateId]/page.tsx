@@ -58,6 +58,8 @@ const UpdateProduct = () => {
 
     const [resetOpen, setResetOpen] = useState(false);
 
+    console.log(editProduct);
+
     const handleUpdateProduct = async () => {
         try {
             const res = await updateProduct({

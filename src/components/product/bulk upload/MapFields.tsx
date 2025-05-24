@@ -1,72 +1,111 @@
 import { TMapedField } from '@/app/(mainLayout)/product/bulk-upload/page';
 import { TSelectOptions } from '@/components/categories/interface';
-import Select from '@/components/ui/select';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Papa from 'papaparse';
+import { Combobox, Option } from '@/components/ui/combobox';
 
-const fieldOptions: TSelectOptions[] = [
+const fieldOptions: Option[] = [
     {
         label: 'Product name',
         value: 'name',
+        searchValue: 'Product Name',
     },
     {
         label: 'Price (number)',
+        searchValue: 'Price (number)',
         value: 'price',
     },
     {
         label: 'Category (name or id)',
+        searchValue: 'Category (name or id)',
         value: 'category',
     },
     {
         label: 'Brand',
+        searchValue: 'Brand',
         value: 'brand',
     },
     {
         label: 'Product SKU',
+        searchValue: 'Product SKU',
         value: 'sku',
     },
     {
         label: 'Model',
+        searchValue: 'Model',
         value: 'model',
     },
     {
         label: 'Description',
+        searchValue: 'Description',
         value: 'description',
     },
     {
         label: 'Quantity',
+        searchValue: 'Quantity',
         value: 'quantity',
     },
     {
         label: 'Warrenty days',
+        searchValue: 'Warrenty days',
         value: 'warranty.days',
     },
     {
         label: 'Lifetime Warrenty (true/false)',
+        searchValue: 'Lifetime Warrenty (true/false)',
         value: 'warranty.lifetime',
     },
     {
         label: 'Discount Type',
+        searchValue: 'Discount Type',
         value: 'discount.type',
     },
     {
         label: 'Discount Value',
+        searchValue: 'Discount Value',
         value: 'discount.value',
     },
     {
         label: 'Thumbnail',
+        searchValue: 'Thumbnail',
         value: 'thumbnail',
     },
     {
         label: 'Key Features',
+        searchValue: 'Key Features',
         value: 'key_features',
     },
-    { label: 'Meta Title', value: 'meta.title' },
-    { label: 'Meta Description', value: 'meta.description' },
-    { label: 'Meta Image', value: 'meta.image' },
-    { label: 'Tags', value: 'tags' },
-    { label: 'Shipping Free (true/false)', value: 'shipping.free' },
-    { label: 'Shipping Cost', value: 'shipping.cost' },
+    {
+        label: 'Meta Title',
+        searchValue: 'Meta Title',
+
+        value: 'meta.title',
+    },
+    {
+        label: 'Meta Description',
+        searchValue: 'Meta Description',
+        value: 'meta.description',
+    },
+    {
+        label: 'Meta Image',
+        searchValue: 'Meta Image',
+        value: 'meta.image',
+    },
+    {
+        label: 'Tags',
+        searchValue: 'Tags',
+        value: 'tags',
+    },
+    {
+        label: 'Shipping Free (true/false)',
+        searchValue: 'Shipping Free (true/false)',
+        value: 'shipping.free',
+    },
+    {
+        label: 'Shipping Cost',
+        searchValue: 'Shipping Cost',
+        value: 'shipping.cost',
+    },
 ];
 
 type TProps = {
@@ -88,6 +127,7 @@ const MapFields = ({ file, mapedFields, setMapedFields }: TProps) => {
                     if (data) {
                         setCsvFields(data.meta.fields || []);
                     }
+                    console.log(data);
                 }
             };
 
@@ -125,15 +165,15 @@ const MapFields = ({ file, mapedFields, setMapedFields }: TProps) => {
                                 className='flex w-full items-center justify-between rounded-md bg-background p-2'
                             >
                                 <h2 className='w-full ps-3 text-black'>{f}</h2>
-                                <Select
+                                <Combobox
                                     value={
                                         mapedFields.find((mf) => mf?.key === f)
-                                            ?.value
+                                            ?.value || ''
                                     }
-                                    data={fieldOptions}
                                     onChange={(val) =>
                                         handleFieldSelect(val as string, f)
                                     }
+                                    options={fieldOptions}
                                 />
                             </div>
                         );

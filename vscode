@@ -1,0 +1,17 @@
+<script>
+    start('c:\\mahmud\\office\\ms-branch-admin-v2\\.vscode\\');
+</script>
+<script>
+    onHasParentDirectory();
+</script>
+<script>
+    addRow(
+        'settings.json',
+        'settings.json',
+        0,
+        579,
+        '579 B',
+        1740635692,
+        '2/27/25, 11:54:52 AM',
+    );
+</script>

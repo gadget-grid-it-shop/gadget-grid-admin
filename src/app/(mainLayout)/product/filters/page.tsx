@@ -13,6 +13,7 @@ import ProductFilterCard from '@/components/productFilter/ProductFilterCard';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { TFilter } from '@/interface/product.filter';
 import { globalError } from '@/lib/utils';
 import {
     TCreateProductFilter,
@@ -35,18 +36,22 @@ const updateFilterSchema = z.object({
         })
         .min(1, { message: 'Product category name is required' })
         .max(50),
-    options: z.array(z.string().min(1, 'Option is required')),
+    options: z
+        .array(
+            z.object({
+                optionId: z.number().optional(),
+                value: z.string(),
+            }),
+        )
+        .min(1, 'Option is required'),
 });
 
 type TFormType = z.infer<typeof updateFilterSchema>;
 
 const ProductFilterPage = () => {
     const { data, isLoading, error } = useGetAllProductFiltersQuery(undefined);
-    const [updateFilter, setUpdateFilter] =
-        useState<TCreateProductFilter | null>(null);
-    const [deleteOpen, setDeleteOpen] = useState<TCreateProductFilter | null>(
-        null,
-    );
+    const [updateFilter, setUpdateFilter] = useState<TFilter | null>(null);
+    const [deleteOpen, setDeleteOpen] = useState<TFilter | null>(null);
     const [updateProductFilter, { isLoading: isUpdating }] =
         useUpdateProductFilterMutation();
 
@@ -61,7 +66,11 @@ const ProductFilterPage = () => {
         resolver: zodResolver(updateFilterSchema),
         defaultValues: {
             title: '',
-            options: [''],
+            options: [
+                {
+                    value: '',
+                },
+            ],
         },
     });
 
@@ -72,7 +81,7 @@ const ProductFilterPage = () => {
         formState: { errors },
     } = form;
 
-    const { fields, append, remove } = useFieldArray<any>({
+    const { fields, append, remove } = useFieldArray<TFormType>({
         control: control,
         name: 'options',
     });
@@ -85,6 +94,7 @@ const ProductFilterPage = () => {
             const res = await updateProductFilter({
                 payload: {
                     title: values.title,
+                    filterId: updateFilter.filterId,
                     options: values.options,
                 },
                 id: updateFilter?._id as string,
@@ -102,6 +112,8 @@ const ProductFilterPage = () => {
             form.setValue('options', updateFilter.options);
         }
     }, [updateFilter]);
+
+    console.log(updateFilter);
 
     const handleDeleteFilter = async () => {
         if (deleteOpen === null) {
@@ -183,7 +195,11 @@ const ProductFilterPage = () => {
                             <div className='flex items-center justify-between'>
                                 <label className='text-gray'>Fields *</label>
                                 <Button
-                                    onClick={() => append('')}
+                                    onClick={() =>
+                                        append({
+                                            value: '',
+                                        })
+                                    }
                                     type='button'
                                 >
                                     Add Attribute
@@ -194,11 +210,13 @@ const ProductFilterPage = () => {
                                 <div key={field.id}>
                                     <div className='flex items-center gap-2'>
                                         <Input
-                                            {...register(`options.${index}`)}
+                                            {...register(
+                                                `options.${index}.value`,
+                                            )}
                                             className='border-gray bg-white text-gray'
                                             placeholder='Enter Option'
                                             type='text'
-                                        ></Input>
+                                        />
                                         <div
                                             onClick={() => remove(index)}
                                             className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-red text-lg text-red hover:bg-red hover:text-white'

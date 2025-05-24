@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import Pagination from '@/components/ui/pagination';
-import Select from '@/components/ui/select';
+import { Select } from '@/components/ui/select';
 import useDebounce from '@/hooks/useDebounce';
 import { TAdminData } from '@/interface/admin.interface';
 import { TBrand } from '@/interface/brand.interface';
@@ -303,7 +303,7 @@ const AllProducts = () => {
                     className='border border-border-color bg-background-foreground'
                     placeholder='Search by name/sku/key features'
                 />
-                <Select
+                {/* <Select
                     bordered
                     placeholder='Brand'
                     value={brand}
@@ -323,7 +323,7 @@ const AllProducts = () => {
                     value={category}
                     data={categorySelectData}
                     onChange={(val) => setCategory(val as string)}
-                />
+                /> */}
                 <DatePicker
                     value={createdAt}
                     bordered={true}

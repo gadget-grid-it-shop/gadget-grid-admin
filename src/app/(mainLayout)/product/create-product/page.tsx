@@ -81,6 +81,7 @@ const CreateProduct = () => {
         return match ? match.element : <></>;
     };
 
+    console.log(product);
     const handleNext = async () => {
         if (step === 1) {
             try {

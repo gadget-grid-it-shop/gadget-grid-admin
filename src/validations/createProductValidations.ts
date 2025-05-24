@@ -68,8 +68,8 @@ const generalDataValidationSchema = z.object({
     filters: z.array(
         z.object({
             filter: z.string(),
-            key: z.string(),
-            value: z.string().min(1, 'Please select filter value'),
+            filterId: z.number(),
+            value: z.number().min(1, 'Please select filter value'),
         }),
     ),
 });

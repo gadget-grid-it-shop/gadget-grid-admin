@@ -1,8 +1,16 @@
 import { baseApi } from './baseApi';
 import { tagTypes } from './tagTypes';
 
+export type TUpdateProductFilter = {
+    title: string;
+    filterId: number;
+    options: {
+        optionId?: number;
+        value: string;
+    }[];
+};
+
 export type TCreateProductFilter = {
-    _id?: string;
     title: string;
     options: string[];
 };
@@ -18,7 +26,7 @@ const filtersApi = baseApi.injectEndpoints({
         }),
 
         createProductFilter: build.mutation({
-            query: (payload: TCreateProductFilter) => ({
+            query: (payload: Partial<TCreateProductFilter>) => ({
                 url: '/product-filters/create',
                 method: 'POST',
                 data: payload,
@@ -39,7 +47,7 @@ const filtersApi = baseApi.injectEndpoints({
                 payload,
                 id,
             }: {
-                payload: TCreateProductFilter;
+                payload: Partial<TUpdateProductFilter>;
                 id: string;
             }) => ({
                 url: `/product-filters/update/${id}`,
