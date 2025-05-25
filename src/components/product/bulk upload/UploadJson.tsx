@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useGetAllBrandsQuery } from '@/redux/api/brandApi';
 import { useGetAllCategoriesQuery } from '@/redux/api/categories';
-import { Cloud, CloudUpload, DownloadIcon, Trash } from 'lucide-react';
+import { CloudUpload, Trash } from 'lucide-react';
 import React, {
     ChangeEvent,
     Dispatch,
@@ -10,44 +10,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { CSVLink } from 'react-csv';
 
 type TProps = {
     file: File | null;
     setFile: Dispatch<SetStateAction<File | null>>;
 };
 
-const headers: { label: string; key: string }[] = [
-    { label: 'Product Name *', key: 'name' },
-    { label: 'Price *', key: 'price' },
-    { label: 'Discount Type (flat/percent) *', key: 'discount.type' },
-    { label: 'Discount Value *', key: 'discount.value' },
-    { label: 'SKU *', key: 'sku' },
-    { label: 'Brand *', key: 'brand' },
-    { label: 'Model *', key: 'model' },
-    { label: 'Warranty Days *', key: 'warranty.days' },
-    { label: 'Lifetime Warrenty (true/false)', key: 'warranty.lifetime' },
-    { label: 'Key Features *', key: 'key_features' },
-    { label: 'Quantity *', key: 'quantity' },
-    { label: 'Categories (Main) *', key: 'category' },
-    { label: 'Description', key: 'description' },
-    { label: 'Thumbnail *', key: 'thumbnail' },
-    { label: 'Meta Title', key: 'meta.title' },
-    { label: 'Meta Description', key: 'meta.description' },
-    { label: 'Meta Image', key: 'meta.image' },
-    { label: 'Tags', key: 'tags' },
-    { label: 'Shipping Free', key: 'shipping.free' },
-    { label: 'Shipping Cost', key: 'shipping.cost' },
-];
-
-const brandHeaders: { label: string; key: string }[] = [
-    {
-        label: 'Name',
-        key: 'name',
-    },
-];
-
-const UploadSvg = ({ file, setFile }: TProps) => {
+const UploadJson = ({ file, setFile }: TProps) => {
     const filesRef = useRef<HTMLInputElement>(null);
     const { data: brandData } = useGetAllBrandsQuery(undefined);
     const { data: categoryData } = useGetAllCategoriesQuery(undefined);
@@ -83,7 +52,6 @@ const UploadSvg = ({ file, setFile }: TProps) => {
     const handleDragLeave = () => {
         setIsDragging(false);
     };
-
     return (
         <div className='flex w-full flex-col gap-4'>
             <div className='flex w-full flex-col gap-2 rounded-md bg-light-cyan px-7 py-6'>
@@ -100,42 +68,24 @@ const UploadSvg = ({ file, setFile }: TProps) => {
                 </h3>
             </div>
 
-            <CSVLink
-                filename={'product_data_template.csv'}
-                className='w-fit'
-                headers={headers}
-                data={[]}
-            >
-                <Button
-                    variant={'default_outline'}
-                    className='flex gap-2 w-fit'
-                >
-                    <DownloadIcon size={18} />
-                    Download Skeleton CSV
-                </Button>
-            </CSVLink>
-            <CSVLink
-                filename={'category_data.csv'}
-                className='w-full'
-                headers={brandHeaders}
-                data={categoryData?.data || []}
-            >
-                <Button variant={'default_outline'} className='flex gap-2'>
-                    <DownloadIcon size={18} />
-                    Download Categories
-                </Button>
-            </CSVLink>
-            <CSVLink
-                filename={'brand_data.csv'}
-                className='w-full'
-                headers={brandHeaders}
-                data={brandData?.data || []}
-            >
-                <Button variant={'default_outline'} className='flex gap-2'>
-                    <DownloadIcon size={18} />
-                    Download Brands
-                </Button>
-            </CSVLink>
+            {/* <CSVLink filename={"product_data_template.csv"} className='w-fit' headers={headers} data={[]}>
+                    <Button variant={'default_outline'} className='flex gap-2 w-fit'>
+                        <DownloadIcon size={18} />
+                        Download Skeleton CSV
+                    </Button>
+                </CSVLink>
+                <CSVLink filename={"category_data.csv"} className='w-full' headers={brandHeaders} data={categoryData?.data || []}>
+                    <Button variant={'default_outline'} className='flex gap-2'>
+                        <DownloadIcon size={18} />
+                        Download Categories
+                    </Button>
+                </CSVLink>
+                <CSVLink filename={"brand_data.csv"} className='w-full' headers={brandHeaders} data={brandData?.data || []}>
+                    <Button variant={'default_outline'} className='flex gap-2'>
+                        <DownloadIcon size={18} />
+                        Download Brands
+                    </Button>
+                </CSVLink> */}
 
             <input
                 className='hidden'
@@ -178,4 +128,4 @@ const UploadSvg = ({ file, setFile }: TProps) => {
     );
 };
 
-export default UploadSvg;
+export default UploadJson;

@@ -56,8 +56,6 @@ const UpdateProduct = () => {
         }
     }, [dispatch, productData, updateId]);
 
-    const [resetOpen, setResetOpen] = useState(false);
-
     console.log(editProduct);
 
     const handleUpdateProduct = async () => {
@@ -104,6 +102,8 @@ const UpdateProduct = () => {
         const match = compByStep.find((s) => s.step === editStep);
         return match ? match.element : <></>;
     };
+
+    console.log(editProduct);
 
     const handleNext = async () => {
         if (editStep === 1) {

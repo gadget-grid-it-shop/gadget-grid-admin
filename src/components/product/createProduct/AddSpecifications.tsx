@@ -50,8 +50,6 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
         } else {
             handleProductChange('attributes', [], edit);
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentProduct.category]);
 
     const handleChange = (attrName: string, key: string, value: string) => {
