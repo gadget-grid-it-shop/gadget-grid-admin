@@ -24,6 +24,7 @@ export const connectSocket = async () => {
         };
         socket = io(process.env.NEXT_PUBLIC_SK_URL, options);
     }
+    console.log({ socket });
     return socket;
 };
 

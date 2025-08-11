@@ -35,6 +35,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../ui/select';
+import { Textarea } from '../ui/textarea';
 
 type TCategoryProps = {
     parent: TParentCat;
@@ -54,6 +55,9 @@ const CategorySchema = z.object({
     slug: z.string().optional(),
     image: z.string().optional(),
     isFeatured: z.boolean().optional(),
+    description: z
+        .string({ invalid_type_error: 'Description has to be a string' })
+        .optional(),
 });
 
 const CreateCategory = ({
@@ -93,6 +97,7 @@ const CreateCategory = ({
             slug: '',
             isFeatured: false,
             image: '',
+            description: '',
         },
     });
 
@@ -133,6 +138,7 @@ const CreateCategory = ({
             product_details_categories,
             image: values.image || '',
             isFeatured: values.isFeatured,
+            discription: values?.description || '',
         };
 
         if (values.slug) {
@@ -279,6 +285,27 @@ const CreateCategory = ({
                                             {...field}
                                             placeholder='Enter category name'
                                             type='text'
+                                        />
+
+                                        {fieldState.error && (
+                                            <FormMessage className='text-sm text-red'>
+                                                {fieldState.error.message}
+                                            </FormMessage>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='description'
+                                render={({ field, fieldState }) => (
+                                    <FormItem>
+                                        <label className='text-black'>
+                                            Description
+                                        </label>
+                                        <Textarea
+                                            {...field}
+                                            placeholder='Enter category description'
                                         />
 
                                         {fieldState.error && (

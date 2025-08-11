@@ -1,6 +1,5 @@
 'use client';
 import TableSkeleton from '@/components/shared/TableSkeleton';
-import { TAdminData } from '@/interface/admin.interface';
 import { globalError } from '@/lib/utils';
 import {
     useDeleteUserMutation,
@@ -30,6 +29,7 @@ import Modal from '@/components/custom/Modal';
 import { useAppSelector } from '@/redux/hooks';
 import NoData from '@/components/shared/NoData';
 import { User } from 'lucide-react';
+import { TUser } from '@/interface/auth.interface';
 
 const Admins = () => {
     const {
@@ -84,99 +84,95 @@ const Admins = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {adminData?.data?.map(
-                            (admin: TAdminData, i: number) => (
-                                <TableRow key={admin?._id}>
-                                    <TableCell>{i + 1}</TableCell>
-                                    <TableCell>
-                                        {`${admin?.name?.firstName} ${admin?.name?.lastName}`}{' '}
-                                        {user?._id === admin._id && `(me)`}
-                                    </TableCell>
-                                    <TableCell className='flex items-center gap-3'>
-                                        {/* <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' /> */}
-                                        <Avatar>
-                                            <AvatarImage
-                                                className='size-10 object-cover'
-                                                src={admin?.profilePicture}
-                                            />
-                                            <AvatarFallback className='capitalize'>
-                                                <div className='flex size-10 items-center justify-center rounded-full bg-background'>
-                                                    <User />
-                                                </div>
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        {admin?.email}
-                                    </TableCell>
-                                    <TableCell className='font-semibold'>
-                                        {!admin?.role?.isDeleted ? (
-                                            <p className='text-gray'>
-                                                {admin?.role?.role}
-                                            </p>
-                                        ) : (
-                                            <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger>
-                                                        <p className='text-red'>
-                                                            {admin?.role?.role}
-                                                        </p>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        The role was probably
-                                                        deleted
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className='font-semibold'>
-                                        {admin?.user?.isActive ? (
-                                            <p className='text-green-600'>
-                                                True
-                                            </p>
-                                        ) : (
-                                            <p className='text-red'>False</p>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className='font-semibold'>
-                                        {admin?.user?.isVerified ? (
-                                            <p className='text-green-600'>
-                                                True
-                                            </p>
-                                        ) : (
-                                            <p className='text-red'>False</p>
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className='flex items-center gap-3'>
+                        {adminData?.data?.map((admin: TUser, i: number) => (
+                            <TableRow key={admin?._id}>
+                                <TableCell>{i + 1}</TableCell>
+                                <TableCell>
+                                    {admin?.name && (
+                                        <>
+                                            {`${admin?.name?.firstName} ${admin?.name?.lastName}`}{' '}
+                                            {user?._id === admin._id && `(me)`}
+                                        </>
+                                    )}
+                                </TableCell>
+                                <TableCell className='flex items-center gap-3'>
+                                    {/* <Image src={admin?.profilePicture} alt={admin?.name?.firstName} width={30} height={30} className='size-8 rounded-full' /> */}
+                                    <Avatar>
+                                        <AvatarImage
+                                            className='size-10 object-cover'
+                                            src={admin?.profilePicture}
+                                        />
+                                        <AvatarFallback className='capitalize'>
+                                            <div className='flex size-10 items-center justify-center rounded-full bg-background'>
+                                                <User />
+                                            </div>
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    {admin?.email}
+                                </TableCell>
+                                <TableCell className='font-semibold'>
+                                    {!admin?.role?.isDeleted ? (
+                                        <p className='text-gray'>
+                                            {admin?.role?.role}
+                                        </p>
+                                    ) : (
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <p className='text-red'>
+                                                        {admin?.role?.role}
+                                                    </p>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    The role was probably
+                                                    deleted
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    )}
+                                </TableCell>
+                                <TableCell className='font-semibold'>
+                                    {admin?.isActive ? (
+                                        <p className='text-green-600'>True</p>
+                                    ) : (
+                                        <p className='text-red'>False</p>
+                                    )}
+                                </TableCell>
+                                <TableCell className='font-semibold'>
+                                    {admin?.isVerified ? (
+                                        <p className='text-green-600'>True</p>
+                                    ) : (
+                                        <p className='text-red'>False</p>
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    <div className='flex items-center gap-3'>
+                                        <Button
+                                            variant={'view_button'}
+                                            size={'base'}
+                                            onClick={() =>
+                                                router.push(
+                                                    `/users/admins/${admin._id}`,
+                                                )
+                                            }
+                                        ></Button>
+                                        <Button
+                                            variant={'edit_button'}
+                                            size={'base'}
+                                        ></Button>
+                                        {user?._id !== admin._id && (
                                             <Button
-                                                variant={'view_button'}
-                                                size={'base'}
                                                 onClick={() =>
-                                                    router.push(
-                                                        `/users/admins/${admin._id}`,
-                                                    )
+                                                    setDeleteOpen(admin._id)
                                                 }
-                                            ></Button>
-                                            <Button
-                                                variant={'edit_button'}
+                                                variant={'delete_button'}
                                                 size={'base'}
                                             ></Button>
-                                            {user?._id !== admin._id && (
-                                                <Button
-                                                    onClick={() =>
-                                                        setDeleteOpen(
-                                                            admin.user._id,
-                                                        )
-                                                    }
-                                                    variant={'delete_button'}
-                                                    size={'base'}
-                                                ></Button>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ),
-                        )}
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             )}

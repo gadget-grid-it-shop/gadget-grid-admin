@@ -15,16 +15,16 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
         <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 pt-2'>
             {data.map((product) => {
                 const isValid = isValidUrl(
-                    product.thumbnail || (product?.gallery?.[0] as string),
+                    product?.thumbnail || (product?.gallery?.[0] as string),
                 );
 
                 const createdAt = product?.createdAt as string;
-                const updatedAt = product.updatedAt as string;
+                const updatedAt = product?.updatedAt as string;
                 const isSame = createdAt === updatedAt;
 
                 return (
                     <div
-                        key={product._id}
+                        key={product?._id}
                         className='flex flex-col gap-2 border border-border-color p-2 rounded-md bg-background-foreground'
                     >
                         <Image
@@ -32,7 +32,7 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
                             alt='product image'
                             src={
                                 isValid
-                                    ? ((product.thumbnail ||
+                                    ? ((product?.thumbnail ||
                                           product?.gallery?.[0]) as string)
                                     : '/product-placeholder.jpg'
                             }
@@ -45,7 +45,7 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
                                     Name:
                                 </h2>
                                 <h2 className='text-sm col-span-2 text-gray'>
-                                    {product.name}
+                                    {product?.name}
                                 </h2>
                             </div>
                             <div className='grid grid-cols-3 gap-1'>
@@ -104,7 +104,7 @@ const AllProductsGridView = ({ data }: { data: TProduct[] }) => {
                                 </h2>
                                 <div className='text-gray text-sm col-span-2'>
                                     <UserCard
-                                        id={product.createdBy}
+                                        id={product?.createdBy}
                                         size='sm'
                                     />
                                 </div>

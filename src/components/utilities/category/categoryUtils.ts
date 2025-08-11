@@ -26,6 +26,7 @@ export const generateCategoryTree = (
                 subCategories: generateCategoryTree(categories, category._id),
                 isDeleted: false,
                 image: category.image,
+                description: category?.description,
                 isFeatured: category.isFeatured,
             });
         }

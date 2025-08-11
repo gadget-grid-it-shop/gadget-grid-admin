@@ -31,7 +31,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const initilaAction = async () => {
             await connectSocket();
-            socket?.emit('adminJoin', { user: user?.user?._id });
+            socket?.emit('adminJoin', { user: user?._id });
         };
 
         initilaAction();

@@ -45,6 +45,7 @@ const NotificationMenu = () => {
 
     useEffect(() => {
         const handleNewNoti = (payload: TNotification) => {
+            console.log({ payload });
             const audio = new Audio('/notification_2.wav');
             audio.play().catch((err) => console.log(err));
             toast(payload.text || 'new notification', {
@@ -94,10 +95,14 @@ const NotificationMenu = () => {
 
     useEffect(() => {
         if (data?.data) {
-            for (const noti of data?.data?.notifications) {
-                const exist = notifications.find((nt) => noti._id === nt._id);
-                if (!exist) {
-                    setNotifications((prev) => [...prev, noti]);
+            if (data.data?.notifications) {
+                for (const noti of data.data.notifications) {
+                    const exist = notifications.find(
+                        (nt) => noti._id === nt._id,
+                    );
+                    if (!exist) {
+                        setNotifications((prev) => [...prev, noti]);
+                    }
                 }
             }
 
@@ -109,7 +114,7 @@ const NotificationMenu = () => {
         if (!containerRef.current || isLoading || isFetching) {
             return;
         }
-        const { scrollTop, scrollHeight, clientHeight } = containerRef?.current;
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
         if (
             scrollTop + clientHeight > scrollHeight - 30 &&

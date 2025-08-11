@@ -52,9 +52,9 @@ const generalDataValidationSchema = z.object({
     // reviews: z.array(ReviewSchema).optional(),
     key_features: z
         .string({
-            required_error: 'Please enter the key features of the product.',
+            required_error: 'Please enter the key features of the product?.',
         })
-        .min(1, 'Please enter the key features of the product.'),
+        .min(1, 'Please enter the key features of the product?.'),
     quantity: z
         .number({ required_error: 'Please specify the product quantity.' })
         .min(1, 'Please specify the product quantity.'),

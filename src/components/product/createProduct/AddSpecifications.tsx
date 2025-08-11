@@ -25,10 +25,11 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
     }
 
     useEffect(() => {
-        if (currentProduct.category.length !== 0) {
+        if (currentProduct?.category.length !== 0) {
             const category: TCategory | undefined = categoryData?.data.find(
                 (cat: TCategory) =>
-                    cat._id === currentProduct.category.find((c) => c.main)?.id,
+                    cat._id ===
+                    currentProduct?.category.find((c) => c.main)?.id,
             );
 
             if (category) {
@@ -50,7 +51,7 @@ const AddSpecifications = ({ edit }: { edit: boolean }) => {
         } else {
             handleProductChange('attributes', [], edit);
         }
-    }, [currentProduct.category]);
+    }, [currentProduct?.category]);
 
     const handleChange = (attrName: string, key: string, value: string) => {
         const newAttributes = attributes?.map((attr) => {

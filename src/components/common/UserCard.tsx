@@ -1,13 +1,13 @@
 'use client';
 import useGetAdminData from '@/hooks/useGetAdminData';
-import { TAdminData } from '@/interface/admin.interface';
 import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { UserRound } from 'lucide-react';
+import { TUser } from '@/interface/auth.interface';
 
 const UserCard = ({ id, size = 'lg' }: { id: string; size?: 'sm' | 'lg' }) => {
     const { findAdmin } = useGetAdminData();
-    const [user, setUser] = useState<TAdminData>();
+    const [user, setUser] = useState<TUser>();
 
     useEffect(() => {
         const foundUser = findAdmin(id);

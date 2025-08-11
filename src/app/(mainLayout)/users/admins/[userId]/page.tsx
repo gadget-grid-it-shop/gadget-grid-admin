@@ -1,5 +1,5 @@
 'use client';
-import { TAdminData } from '@/interface/admin.interface';
+import { TUser } from '@/interface/auth.interface';
 import { globalError } from '@/lib/utils';
 import { useGetSingleUserQuery } from '@/redux/api/usersApi';
 import React, { use } from 'react';
@@ -20,7 +20,7 @@ const AdminDetails = (props: {
         globalError(error);
     }
 
-    const userData: TAdminData = data?.data;
+    const userData: TUser = data?.data;
 
     return (
         <div>

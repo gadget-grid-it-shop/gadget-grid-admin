@@ -1,10 +1,9 @@
-import { TAdminData } from './admin.interface';
 import { TUser } from './auth.interface';
 
 export type TNotification = {
     _id: string;
     userTo: TUser | string;
-    userFrom: TAdminData;
+    userFrom: TUser;
     opened: boolean;
     notificationType:
         | 'gallery'

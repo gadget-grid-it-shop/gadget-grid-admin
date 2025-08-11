@@ -7,9 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import Pagination from '@/components/ui/pagination';
-import { Select } from '@/components/ui/select';
 import useDebounce from '@/hooks/useDebounce';
-import { TAdminData } from '@/interface/admin.interface';
 import { TBrand } from '@/interface/brand.interface';
 import { TCategory } from '@/interface/category';
 import { TProduct, TProductWarrenty } from '@/interface/product.interface';
@@ -30,6 +28,7 @@ import { Grid3X3, Sheet } from 'lucide-react';
 import GlobalTable, {
     TCustomColumnDef,
 } from '@/components/common/GlobalTable/GlobalTable';
+import { TUser } from '@/interface/auth.interface';
 
 const AllProducts = () => {
     const [page, setPage] = useState(1);
@@ -236,9 +235,9 @@ const AllProducts = () => {
     ];
 
     const adminSelectData: TSelectOptions[] = adminData?.data?.map(
-        (admin: TAdminData) => ({
+        (admin: TUser) => ({
             label: admin?.fullName,
-            value: admin?.user?._id,
+            value: admin?._id,
         }),
     );
     const brandSelectData: TSelectOptions[] = brandData?.data?.map(

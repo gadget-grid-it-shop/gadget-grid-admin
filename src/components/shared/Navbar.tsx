@@ -66,13 +66,17 @@ const Navbar = () => {
                                                 src={user?.profilePicture}
                                             />
                                             <AvatarFallback className='capitalize'>
-                                                {user?.name.firstName.slice(
-                                                    0,
-                                                    1,
-                                                )}
-                                                {user?.name.lastName.slice(
-                                                    0,
-                                                    1,
+                                                {user?.name && (
+                                                    <>
+                                                        {user?.name?.firstName?.slice(
+                                                            0,
+                                                            1,
+                                                        )}
+                                                        {user?.name?.lastName?.slice(
+                                                            0,
+                                                            1,
+                                                        )}
+                                                    </>
                                                 )}
                                             </AvatarFallback>
                                         </Avatar>
@@ -85,8 +89,8 @@ const Navbar = () => {
                                             src={user?.profilePicture}
                                         />
                                         <AvatarFallback className='capitalize'>
-                                            {user?.name.firstName.slice(0, 1)}
-                                            {user?.name.lastName.slice(0, 1)}
+                                            {user?.fullName?.slice(0, 1)}
+                                            {user?.fullName?.slice(0, 1)}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>

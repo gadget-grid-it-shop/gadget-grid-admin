@@ -56,5 +56,7 @@ export interface TUser {
     isDeleted: boolean;
     isVerified: boolean;
     isMasterAdmin?: boolean;
+    phoneNumber: string;
     profilePicture: string;
+    fullName?: string;
 }

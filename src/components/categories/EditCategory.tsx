@@ -29,6 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../ui/select';
+import { Textarea } from '../ui/textarea';
 
 type TProps = {
     editOpen: boolean;
@@ -45,6 +46,9 @@ const CategorySchema = z.object({
         .min(1, { message: 'Category name is required' }),
     image: z.string(),
     isFeatured: z.boolean(),
+    description: z
+        .string({ invalid_type_error: 'Description has to be a string' })
+        .optional(),
 });
 
 const EditCategory = ({ category, setEditOpen }: TProps) => {
@@ -76,6 +80,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
             name: '',
             image: '',
             isFeatured: false,
+            description: '',
         },
     });
 
@@ -85,6 +90,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                 name: category.name,
                 image: category?.image || '',
                 isFeatured: category.isFeatured,
+                description: category?.description || '',
             });
 
             setDetailsCategories(
@@ -123,6 +129,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
             product_details_categories,
             isFeatured: values.isFeatured,
             image: values?.image,
+            description: values?.description || '',
         };
 
         if (category) {
@@ -186,6 +193,25 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                                 {...field}
                                 placeholder='Enter category name'
                                 type='text'
+                            />
+
+                            {fieldState.error && (
+                                <FormMessage className='text-sm text-red'>
+                                    {fieldState.error.message}
+                                </FormMessage>
+                            )}
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name='description'
+                    render={({ field, fieldState }) => (
+                        <FormItem>
+                            <label className='text-black'>Description</label>
+                            <Textarea
+                                {...field}
+                                placeholder='Enter category description'
                             />
 
                             {fieldState.error && (
