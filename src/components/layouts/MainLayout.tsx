@@ -41,27 +41,6 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
         };
     }, [user]);
 
-    // useEffect(() => {
-    //     socket?.on('newNotification', (payload) => {
-    //         const audio = new Audio('/notification_2.wav');
-    //         audio.play().catch((err) => console.log(err));
-    //         toast(payload.text || 'new notification', {
-    //             position: 'bottom-right',
-    //         });
-
-    //         dispatch(
-    //             notificationApi.util.updateQueryData(
-    //                 'getNotifications',
-    //                 undefined,
-    //                 (draft) => {
-    //                     draft.data.notifications.unshift(payload);
-    //                     draft.data.unreadCount = draft.data.unreadCount + 1;
-    //                 },
-    //             ),
-    //         );
-    //     });
-    // });
-
     useEffect(() => {
         if (isAuthenticated) {
             axiosInstance
