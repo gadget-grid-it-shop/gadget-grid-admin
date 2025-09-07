@@ -39,7 +39,7 @@ const updateFilterSchema = z.object({
     options: z
         .array(
             z.object({
-                optionId: z.number().optional(),
+                optionId: z.string().optional(),
                 value: z.string(),
             }),
         )
@@ -94,7 +94,7 @@ const ProductFilterPage = () => {
             const res = await updateProductFilter({
                 payload: {
                     title: values.title,
-                    filterId: updateFilter.filterId,
+                    filterId: String(updateFilter.filterId),
                     options: values.options,
                 },
                 id: updateFilter?._id as string,

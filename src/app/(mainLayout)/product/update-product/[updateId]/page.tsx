@@ -56,8 +56,6 @@ const UpdateProduct = () => {
         }
     }, [dispatch, productData, updateId]);
 
-    console.log(editProduct);
-
     const handleUpdateProduct = async () => {
         try {
             const res = await updateProduct({
@@ -103,7 +101,7 @@ const UpdateProduct = () => {
         return match ? match.element : <></>;
     };
 
-    console.log(editProduct);
+    console.log({ editProduct });
 
     const handleNext = async () => {
         if (editStep === 1) {

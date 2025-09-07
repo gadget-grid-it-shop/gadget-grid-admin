@@ -23,9 +23,9 @@ export interface TProductAttribute {
 }
 
 export type TProductFilter = {
-    filterId: number;
+    filterId: string;
     filter: string;
-    value: number;
+    value: string;
 };
 
 export interface TMeta {

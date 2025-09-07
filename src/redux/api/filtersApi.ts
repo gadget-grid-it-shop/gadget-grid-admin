@@ -3,9 +3,9 @@ import { tagTypes } from './tagTypes';
 
 export type TUpdateProductFilter = {
     title: string;
-    filterId: number;
+    filterId: string;
     options: {
-        optionId?: number;
+        optionId?: string;
         value: string;
     }[];
 };

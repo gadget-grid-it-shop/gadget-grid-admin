@@ -65,13 +65,26 @@ const generalDataValidationSchema = z.object({
         .string({ required_error: 'Please upload a product thumbnail.' })
         .min(1, 'Please upload a product thumbnail.'),
     gallery: z.array(z.string()).optional(),
-    filters: z.array(
-        z.object({
-            filter: z.string(),
-            filterId: z.number(),
-            value: z.number().min(1, 'Please select filter value'),
-        }),
-    ),
+    filters: z
+        .array(
+            z.object({
+                filter: z.union([z.string(), z.number()]),
+                filterId: z.union([z.string(), z.number()]),
+                value: z.union([z.string(), z.number()]).refine(
+                    (val) => {
+                        if (typeof val === 'string') {
+                            return val.length >= 1;
+                        }
+                        if (typeof val === 'number') {
+                            return val >= 1;
+                        }
+                        return false;
+                    },
+                    { message: 'Please select filter value' },
+                ),
+            }),
+        )
+        .optional(),
 });
 
 const attributeValidationSchema = z.object({

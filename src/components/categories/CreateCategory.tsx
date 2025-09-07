@@ -19,7 +19,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useGetDetailsCategoriesQuery } from '@/redux/api/detailsCategory';
 import { TCreateCategory, TProductCategory } from '@/interface/category';
-import MultipleSelector, { Option } from '../ui/multiselect';
+import { MultiSelect, Option } from '../ui/multiselect';
 import { useCreateCategoryMutation } from '@/redux/api/categories';
 import { toast } from 'sonner';
 import { TParentCat } from '@/app/(mainLayout)/category/page';
@@ -66,7 +66,7 @@ const CreateCategory = ({
     setOpen,
     setParent,
 }: TCategoryProps) => {
-    const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
+    const [detailsCategories, setDetailsCategories] = useState<string[]>([]);
     const {
         data: detailsCategoryData,
         error,
@@ -115,9 +115,7 @@ const CreateCategory = ({
 
         const detailsCategorySchema = z.array(z.string()).optional();
 
-        const product_details_categories = detailsCategories.map(
-            (item) => item.value,
-        );
+        const product_details_categories = detailsCategories;
 
         const check = detailsCategorySchema.safeParse(
             product_details_categories,
@@ -341,9 +339,9 @@ const CreateCategory = ({
                                     Product Details Category *
                                 </label>
                                 {!isLoading && !error && (
-                                    <MultipleSelector
+                                    <MultiSelect
                                         options={selectOptions}
-                                        value={detailsCategories}
+                                        selected={detailsCategories}
                                         onChange={(value) =>
                                             setDetailsCategories(value)
                                         }

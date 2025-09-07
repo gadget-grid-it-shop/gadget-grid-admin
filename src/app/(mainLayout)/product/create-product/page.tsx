@@ -41,6 +41,8 @@ const CreateProduct = () => {
         setResetOpen(false);
     };
 
+    console.log({ product });
+
     const hanldeAddProduct = async () => {
         try {
             const res = await addNewProduct(product).unwrap();

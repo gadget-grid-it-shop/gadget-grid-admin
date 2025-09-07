@@ -66,7 +66,7 @@ const VerifyEmail = () => {
             setIsVerifying(true);
 
             axiosInstance
-                .post('/auth/verify-email', {
+                .post('/auth/verify-otp', {
                     email,
                     otp: otp,
                 })

@@ -12,7 +12,7 @@ import {
     FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import MultipleSelector, { Option } from '../ui/multiselect';
+import { MultiSelect, Option } from '../ui/multiselect';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -61,7 +61,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
         error,
         isLoading,
     } = useGetDetailsCategoriesQuery(undefined);
-    const [detailsCategories, setDetailsCategories] = useState<Option[]>([]);
+    const [detailsCategories, setDetailsCategories] = useState<string[]>([]);
     const [updateCategory, { isLoading: isUpdating }] =
         useUpdateCategoryMutation();
 
@@ -94,12 +94,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
             });
 
             setDetailsCategories(
-                category.product_details_categories.map((item) => {
-                    return {
-                        label: item.name,
-                        value: item._id,
-                    };
-                }),
+                category.product_details_categories.map((item) => item._id),
             );
         }
     }, [category, form]);
@@ -107,9 +102,7 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
     const onsubmit = async (values: z.infer<typeof CategorySchema>) => {
         setDetailsCategoryError({ error: false, message: '' });
 
-        const product_details_categories = detailsCategories.map(
-            (item) => item.value,
-        );
+        const product_details_categories = detailsCategories;
 
         // const check = detailsCategorySchema.safeParse(
         //     product_details_categories,
@@ -261,9 +254,9 @@ const EditCategory = ({ category, setEditOpen }: TProps) => {
                         Product Details Category
                     </label>
                     {!isLoading && !error && (
-                        <MultipleSelector
+                        <MultiSelect
                             options={selectOptions}
-                            value={detailsCategories}
+                            selected={detailsCategories}
                             onChange={(value) => setDetailsCategories(value)}
                         />
                     )}

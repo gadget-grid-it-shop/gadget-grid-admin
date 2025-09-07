@@ -23,7 +23,7 @@ import { TBrand } from '@/interface/brand.interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MDXEditorMethods } from '@mdxeditor/editor';
 import { cn, handleProductChange, isValidUrl } from '@/lib/utils';
-import MultipleSelector, { Option } from '@/components/ui/multiselect';
+import { MultiSelect, Option } from '@/components/ui/multiselect';
 import { useGetAllProductFiltersQuery } from '@/redux/api/filtersApi';
 import { TProductFilter } from '@/interface/product.interface';
 import { generateCategoryTree } from '@/components/utilities/category/categoryUtils';
@@ -64,13 +64,16 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
 
         dispatch(updateProduct({ key: 'gallery', value: filteredGallery }));
     };
-    const [selectedFilters, setSelectedFilters] = useState<Option[]>([]);
+    const [selectedFilters, setSelectedFilters] = useState<string[]>(
+        editProduct?.filters?.map((f) => f.filter) || [],
+    );
 
     const filtersDropdownData: Option[] = filtersData?.data?.map(
         (filter: TFilter) => {
             return {
                 label: filter.title,
                 value: filter?._id,
+                searchValue: filter.title,
             };
         },
     );
@@ -88,7 +91,7 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
         handleProductChange('key_features', val, edit);
     };
 
-    const handleFilterSelect = (val: Option[]) => {
+    const handleFilterSelect = (val: string[]) => {
         setSelectedFilters(val);
     };
 
@@ -102,8 +105,8 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
         if (!exist) {
             newfilters.push({
                 filter,
-                value: Number(value),
-                filterId: Number(filterData.filterId),
+                value: String(value || ''),
+                filterId: String(filterData.filterId),
             });
         }
 
@@ -112,7 +115,8 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                 if (f.filter === filter) {
                     return {
                         ...f,
-                        value: Number(value),
+                        filterId: String(f.filterId),
+                        value: String(value),
                     };
                 } else {
                     return f;
@@ -202,9 +206,9 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
 
                 <div className='mb-3 flex flex-col gap-2'>
                     <label className='text-sm'>Filters</label>
-                    <MultipleSelector
+                    <MultiSelect
                         className='bg-background-foreground'
-                        value={selectedFilters}
+                        selected={selectedFilters}
                         onChange={handleFilterSelect}
                         placeholder='Select filters'
                         options={filtersDropdownData}
@@ -212,31 +216,33 @@ const AddBasicData = ({ edit }: { edit: boolean }) => {
                 </div>
 
                 {selectedFilters.map((s) => {
+                    const matchFilter = (filtersData?.data as TFilter[])?.find(
+                        (f) => f._id === s,
+                    );
                     const options =
-                        (filtersData?.data as TFilter[])
-                            ?.find((f) => f._id === s.value)
-                            ?.options.map((op) => ({
-                                value: String(op.optionId) || '',
-                                label: op.value,
-                                searchValue: op.value,
-                            })) || [];
+                        matchFilter?.options.map((op) => ({
+                            value: String(op.optionId) || '',
+                            label: op.value,
+                            searchValue: op.value,
+                        })) || [];
 
                     return (
-                        <div key={s.value} className='mb-3 flex flex-col gap-2'>
-                            <label className='text-sm'>{s.label} *</label>
+                        <div key={s} className='mb-3 flex flex-col gap-2'>
+                            <label className='text-sm'>
+                                {matchFilter?.title} *
+                            </label>
                             <Combobox
-                                placeholder={`Select ${s.label}`}
-                                searchPlaceholder={`Search ${s.label}`}
-                                emptyPlaceholder={`No ${s.label} Found`}
+                                placeholder={`Select ${matchFilter?.title}`}
+                                searchPlaceholder={`Search ${matchFilter?.title}`}
+                                emptyPlaceholder={`No ${matchFilter?.title} Found`}
                                 value={
                                     String(
-                                        filters?.find(
-                                            (f) => s.value === f.filter,
-                                        )?.value,
+                                        filters?.find((f) => s === f.filter)
+                                            ?.value,
                                     ) || ''
                                 }
                                 onChange={(val) =>
-                                    handleFilterChange(val as string, s.value)
+                                    handleFilterChange(val as string, s)
                                 }
                                 options={options}
                             />

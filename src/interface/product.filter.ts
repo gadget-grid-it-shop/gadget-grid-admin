@@ -1,9 +1,9 @@
 export type TFilter = {
     _id?: string;
     title: string;
-    filterId: number;
+    filterId: string;
     options: {
-        optionId?: number;
+        optionId?: string;
         value: string;
     }[];
 };
