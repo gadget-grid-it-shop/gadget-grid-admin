@@ -1,4 +1,11 @@
-import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import React, {
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react';
+import GlobalModal from '../GlobalModal';
 import { Button } from '@/components/ui/button';
 import CrossCircle from '@/components/svgs/common/CrossCircle';
 import SaveIcon from '@/components/svgs/common/SavedIcon';
@@ -9,7 +16,6 @@ import {
     useSortable,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import ThreeDotIcon from '@/components/svgs/common/ThreeDotIcon';
 import { ColumnDef, ColumnSizingState, Table } from '@tanstack/react-table';
 import RightArrowCircle from '@/components/svgs/common/RightArrowCircle';
 import {
@@ -27,14 +33,12 @@ import {
 } from '@dnd-kit/core';
 import DragIcon from '@/components/svgs/common/DragIcon';
 import { motion } from 'framer-motion';
-
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { cn } from '@/lib/utils';
 import { CSS } from '@dnd-kit/utilities';
 import { EyeOff } from 'lucide-react';
 import { TCustomColumnDef } from './GlobalTable';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setColumnSizing } from '@/redux/reducers/tableCollumn/tableReducer';
-import GlobalModal from '../GlobalModal';
 
 type TProps = {
     open: boolean;
@@ -56,7 +60,7 @@ function Column({ id, children }: ColumnProps) {
     return (
         <div
             ref={setNodeRef}
-            className={`rounded-lg h-full w-full transition-colors`}
+            className={`h-full w-full rounded-lg transition-colors`}
         >
             {children}
         </div>
@@ -67,10 +71,12 @@ const DraggableItem = ({
     col,
     preview = false,
     onClick,
+    table,
 }: {
-    col: ColumnDef<any>;
+    col: TCustomColumnDef<any>;
     preview?: boolean;
     onClick?: () => void;
+    table: Table<any>;
 }) => {
     const {
         attributes,
@@ -97,7 +103,7 @@ const DraggableItem = ({
             <div
                 ref={setNodeRef}
                 style={style}
-                className='h-10 w-full flex gap-3 transition-all duration-200'
+                className='flex h-10 w-full gap-3 transition-all duration-200'
             >
                 <div className='size-6'></div>
                 <div className='bg-row-line h-full w-full rounded-lg'></div>
@@ -112,20 +118,24 @@ const DraggableItem = ({
             {...attributes}
             ref={setNodeRef}
             className={cn(
-                'flex gap-3 w-full items-center h-10 overflow-y-auto',
+                'flex h-10 w-full items-center gap-3 overflow-y-auto',
             )}
         >
-            <Button variant={'plain'} className='w-2' {...listeners}>
+            <Button
+                variant={'secondary'}
+                className='hidden w-2 cursor-move lg:flex'
+                {...listeners}
+            >
                 <DragIcon className='fill-dark-gray' />
             </Button>
             <p
                 className={cn(
-                    'bg-background-foreground w-full flex items-center p-3 rounded-lg border border-forground-border text-sm text-dark-gray h-full',
+                    'bg-background-foreground border-forground-border text-dark-gray flex h-full w-full items-center rounded-lg border p-3 text-sm',
                     isDragging && 'bg-row-line shadow-md',
                     preview && 'border-primary',
                 )}
             >
-                {typeof col.header === 'function' ? '' : col.header}
+                {typeof col.header === 'function' ? col?.title : col.header}
             </p>
             <Button onClick={onClick} variant={'plain'} size={'icon'}>
                 <CrossCircle />
@@ -134,7 +144,7 @@ const DraggableItem = ({
     );
 };
 
-const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
+const ColumnSettingsModal = ({ open, setOpen, tableName, table }: TProps) => {
     const { tableSizeData } = useAppSelector((s) => s.table);
     const dispatch = useAppDispatch();
     const columnData = tableSizeData.find((d) => d.tableName === tableName);
@@ -196,6 +206,12 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
         setOpen(false);
     };
 
+    useEffect(() => {
+        if (columnData?.columns) {
+            setLocalColumns(columnData?.columns);
+        }
+    }, [columnData?.columns]);
+
     const sensors = useSensors(
         useSensor(TouchSensor),
         useSensor(PointerSensor),
@@ -209,27 +225,18 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
         setActiveColumn(e.active.data?.current?.col);
     };
 
+    console.log({ localColumns });
+
     return (
         <GlobalModal
-            className='xl:min-w-[50vw] lg:min-w-[60vw] md:min-w-[70vw] sm:min-w-[90vw] h-[60vh]'
+            className='h-[60vh] sm:min-w-[90vw] md:min-w-[70vw] lg:min-w-[60vw] xl:min-w-[50vw]'
             title={'Customize Columns '}
             subTitle='Adjust and organize columns'
             buttons={
-                <div className='flex gap-2 items-center'>
-                    <Button
-                        className='text-gray stroke-gray'
-                        variant={'secondary'}
-                        onClick={() => setOpen(false)}
-                    >
-                        <CrossCircle />
-                        Cancel
-                    </Button>
+                <div className='flex items-center gap-2'>
                     <Button onClick={handleSave} variant={'default'}>
-                        <SaveIcon />
+                        <SaveIcon className='stroke-pure-white' />
                         Save Changes
-                    </Button>
-                    <Button variant={'secondary'} size={'icon'}>
-                        <ThreeDotIcon className='stroke-primary' />
                     </Button>
                 </div>
             }
@@ -242,11 +249,15 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                 collisionDetection={closestCenter}
                 onDragStart={handleDragStart}
             >
-                <div className='grid grid-cols-1 md:grid-cols-2 md:gap-0 gap-3 pt-3 h-full'>
+                <div className='grid h-full grid-cols-1 gap-3 pt-3 md:grid-cols-2 md:gap-0'>
                     <Column id='hidden'>
                         <SortableContext
                             items={localColumns
-                                .filter((c) => c.visible === false)
+                                .filter(
+                                    (c) =>
+                                        c.visible === false &&
+                                        c.id !== 'rowSelect',
+                                )
                                 .map((d) => ({
                                     ...d,
                                     id: d.id as string,
@@ -255,19 +266,21 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                         >
                             <div key={'left'} className='h-full'>
                                 {isdragging ? (
-                                    <div className='bg-sidebar flex gap-1 items-center justify-center text-dark-gray text-sm h-full mr-3 border-2 border-spacing-1 border-secondary-border rounded-md border-dotted'>
+                                    <div className='bg-sidebar text-dark-gray border-secondary-border mr-3 flex h-full border-spacing-1 items-center justify-center gap-1 rounded-md border-2 border-dotted text-sm'>
                                         <EyeOff size={18} /> Hide Column
                                     </div>
                                 ) : (
                                     <>
-                                        <h3 className='text-sm text-black font-medium'>
+                                        <h3 className='text-sm font-medium text-black'>
                                             Hidden Fields
                                         </h3>
 
-                                        <div className='md:pr-2 pt-1'>
+                                        <div className='pt-1 md:pr-2'>
                                             {localColumns
                                                 .filter(
-                                                    (c) => c.visible === false,
+                                                    (c) =>
+                                                        c.visible === false &&
+                                                        c.id !== 'rowSelect',
                                                 )
                                                 ?.map((col, i) => (
                                                     <motion.div
@@ -287,12 +300,12 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                                                             duration: 0.3,
                                                         }}
                                                         key={i}
-                                                        className='flex justify-between items-center text-dark-gray text-sm'
+                                                        className='text-dark-gray flex items-center justify-between text-sm'
                                                     >
                                                         <p>
                                                             {typeof col.header ===
                                                             'function'
-                                                                ? ''
+                                                                ? col?.title
                                                                 : col.header}
                                                         </p>
                                                         <Button
@@ -336,16 +349,19 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                     <Column id='visible'>
                         <SortableContext
                             items={localColumns
-                                .filter((c) => c.visible === true)
+                                .filter(
+                                    (c) =>
+                                        c.visible === true &&
+                                        c.id !== 'rowSelect',
+                                )
                                 .map((d) => ({
                                     ...d,
                                     id: d.id as string,
-                                    key: d.id as string,
                                 }))}
                             strategy={verticalListSortingStrategy}
                         >
-                            <div className='md:border-l md:ps-3 border-forground-border w-full h-full'>
-                                <h3 className='text-sm text-black font-medium pb-3'>
+                            <div className='border-forground-border h-full w-full ps-2 pb-3 md:border-l md:ps-3'>
+                                <h3 className='pb-3 text-sm font-medium text-black'>
                                     Visible Fields
                                 </h3>
 
@@ -355,17 +371,18 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                                             .filter(
                                                 (c) =>
                                                     c.visible === true &&
-                                                    c.canHide === false,
+                                                    c.canHide === false &&
+                                                    c.id !== 'rowSelect',
                                             )
                                             .map((col) => (
                                                 <div
                                                     key={col.id}
-                                                    className='h-10 flex gap-3 items-center'
+                                                    className='flex h-10 items-center gap-3'
                                                 >
-                                                    <div className='size-7'></div>
+                                                    <div className='hidden size-7 lg:flex'></div>
                                                     <p
                                                         className={cn(
-                                                            'bg-background-foreground w-full flex items-center p-3 rounded-lg border border-forground-border text-sm text-dark-gray h-full',
+                                                            'bg-background-foreground border-forground-border text-dark-gray flex h-full w-full items-center rounded-lg border p-3 text-sm',
                                                         )}
                                                     >
                                                         {typeof col.header ===
@@ -386,6 +403,7 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
                                         ?.map((col) => {
                                             return (
                                                 <DraggableItem
+                                                    table={table}
                                                     onClick={() =>
                                                         setLocalColumns(
                                                             (prev) =>
@@ -420,7 +438,11 @@ const ColumnSettingsModal = ({ open, setOpen, tableName }: TProps) => {
 
                 <DragOverlay>
                     {activeColumn && (
-                        <DraggableItem preview={true} col={activeColumn} />
+                        <DraggableItem
+                            table={table}
+                            preview={true}
+                            col={activeColumn}
+                        />
                     )}
                 </DragOverlay>
             </DndContext>

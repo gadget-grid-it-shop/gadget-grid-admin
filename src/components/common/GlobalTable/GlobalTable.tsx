@@ -3,18 +3,21 @@ import React, { useEffect, useState } from 'react';
 import {
     useReactTable,
     getCoreRowModel,
-    ColumnDef,
+    type ColumnDef,
     flexRender,
-    Table,
+    type Table,
+    type RowSelectionState,
+    TableMeta,
 } from '@tanstack/react-table';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { cn } from '@/lib/utils';
 import SimpleBar from 'simplebar-react';
-import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import ColumnSettingsModal from './ColumnSettingsModal';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setColumnSizing } from '@/redux/reducers/tableCollumn/tableReducer';
-import { Skeleton } from '@/components/ui/skeleton';
+import EmptyData from './EmptyData';
 
 function TableBody<T>({
     table,
@@ -28,7 +31,7 @@ function TableBody<T>({
     totalColumn: number;
 }) {
     const [totalWidth, setTotalWidth] = useState(table.getTotalSize());
-    const { tableSizeData } = useAppSelector((s) => s.table);
+    const { tableSizeData } = useAppSelector((s) => s?.table);
 
     useEffect(() => {
         setTotalWidth(table.getTotalSize());
@@ -44,27 +47,29 @@ function TableBody<T>({
                 <div className=''>
                     {Array.from({ length: limit || 0 }, (_, i: number) => (
                         <div
-                            key={i}
-                            className='flex items-center space-x-4 w-full h-12 border-b border-border-color '
+                            key={`loading-row-${i}`}
+                            className='border-border-color flex h-14 w-full items-center space-x-4 border-b'
                         >
                             {Array.from(
                                 { length: totalColumn },
-                                (_, i: number) => {
+                                (_, j: number) => {
                                     const randomWidth =
                                         Math.floor(
-                                            Math.random() * (120 - 50 + 1),
+                                            Math.random() * (150 - 100 + 1),
                                         ) + 100;
                                     return (
                                         <div
-                                            key={i}
-                                            className='flex-1 overflow-hidden flex items-center border-r border-border-color h-full'
+                                            key={`loading-cell-${i}-${j}`}
+                                            className='border-border-color flex h-full flex-1 items-center overflow-hidden border-r'
                                         >
-                                            <Skeleton
-                                                className='h-6 rounded-md bg-background-foreground relative overflow-hidden'
+                                            <div
+                                                className='bg-background-foreground relative h-6 overflow-hidden rounded-md'
                                                 style={{
                                                     width: `${randomWidth}px`,
                                                 }}
-                                            ></Skeleton>
+                                            >
+                                                <div className='bg-background-foreground from-background-foreground via-background to-background-foreground absolute inset-0 animate-[shimmer_1.5s_infinite] bg-gradient-to-r'></div>
+                                            </div>
                                         </div>
                                     );
                                 },
@@ -81,7 +86,7 @@ function TableBody<T>({
                         return (
                             <div
                                 key={row.id}
-                                className='flex group min-h-[50px]'
+                                className='group flex min-h-[50px]'
                             >
                                 {visibleCells.map((cell, i) => {
                                     const isLastCell = i === lastCellIndex;
@@ -99,7 +104,7 @@ function TableBody<T>({
                                         <div
                                             key={cell.id}
                                             className={cn(
-                                                'border-b border-r border-border-color transition-colors duration-150 group-hover:bg-sidebar p-3 flex items-center first-of-type:border-l-0',
+                                                'border-border-color group-hover:bg-sidebar flex items-center border-r border-b p-2 transition-colors duration-150 first-of-type:border-l-0',
                                                 isLastCell && 'border-r-0 pr-2',
                                                 {
                                                     'pr-0':
@@ -108,7 +113,9 @@ function TableBody<T>({
                                             )}
                                             style={{ width: columnWidth }}
                                         >
-                                            <div className='truncate w-full text-sm text-black'>
+                                            <div
+                                                className={`w-full overflow-hidden text-sm text-black ${typeof cell.column.columnDef.cell === 'string' && 'truncate'}`}
+                                            >
                                                 {flexRender(
                                                     cell.column.columnDef
                                                         .cell || '-',
@@ -132,19 +139,26 @@ export const MemoizedTableBody = React.memo(
     (prev, next) => prev.table.options.data === next.table.options.data,
 ) as typeof TableBody;
 
-export type TCustomColumnDef<T> = ColumnDef<T> & {
+export type TCustomColumnDef<T> = ColumnDef<T & { serial?: number }> & {
     visible: boolean;
     canHide?: boolean;
-    id: string;
-    accessorKey: string;
+    id: keyof T | 'actions' | 'serial';
+    accessorKey: keyof T | 'actions' | 'serial';
+    dataType?: string;
+    title?: string;
 };
+
 interface GlobalTableProps<T> {
     tableName: string;
     defaultColumns: TCustomColumnDef<T>[];
-    data: T[];
+    data: (T & { serial?: number })[];
     height?: string;
     isLoading?: boolean;
     limit?: number;
+    showAddColumn?: boolean;
+    enableRowSelection?: boolean; // New prop to enable/disable row selection
+    onRowSelectionChange?: (selectedRows: T[]) => void; // Callback for selected rows
+    meta?: TableMeta<T & { serial?: number }>;
 }
 
 const GlobalTable = <T,>({
@@ -154,14 +168,57 @@ const GlobalTable = <T,>({
     data,
     height,
     limit,
+    showAddColumn = true,
+    enableRowSelection = false, // Default to false for backward compatibility
+    onRowSelectionChange,
+    meta,
 }: GlobalTableProps<T>) => {
     const [columnSettingsOpen, setCollumnSettings] = useState(false);
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const { tableSizeData } = useAppSelector((s) => s.table);
     const dispatch = useAppDispatch();
 
     const storeColumnSizing = tableSizeData.find(
         (d) => d.tableName === tableName,
     );
+
+    // Add selection column if row selection is enabled
+    const columnsWithSelection = React.useMemo(() => {
+        if (!enableRowSelection) {
+            return defaultColumns;
+        }
+
+        const selectionColumn: TCustomColumnDef<T> = {
+            id: 'rowSelect' as any,
+            accessorKey: 'select' as keyof T,
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        table.getIsSomePageRowsSelected()
+                    }
+                    onCheckedChange={(value) =>
+                        table.toggleAllPageRowsSelected(!!value)
+                    }
+                    aria-label='Select all'
+                />
+            ),
+            title: 'Row Selection',
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label='Select row'
+                />
+            ),
+            visible: true,
+            canHide: false,
+            minSize: 50,
+            maxSize: 50,
+        };
+
+        return [selectionColumn, ...defaultColumns];
+    }, [defaultColumns, enableRowSelection]);
 
     const mergedColumns = React.useMemo(() => {
         // Create a lookup for store columns by id
@@ -173,7 +230,7 @@ const GlobalTable = <T,>({
         );
 
         // Map default columns, apply store settings, and filter out invisible ones
-        return defaultColumns
+        return columnsWithSelection
             .map((col) => {
                 if (storeColumnsMap.has(col.id)) {
                     return {
@@ -184,18 +241,35 @@ const GlobalTable = <T,>({
                 return { ...col, visible: true }; // Ensure new columns are visible by default
             })
             .filter((col) => col.visible !== false); // Remove columns where visible is false
-    }, [storeColumnSizing, defaultColumns]);
+    }, [storeColumnSizing, columnsWithSelection]);
+
+    const columnsWithCustomSizing = React.useMemo(() => {
+        return mergedColumns.map((column) => {
+            if (column.id === 'select') {
+                return {
+                    ...column,
+                    size: 50,
+                    minSize: 50,
+                    maxSize: 50,
+                };
+            }
+            return column;
+        });
+    }, [mergedColumns]);
 
     const table = useReactTable({
         data,
-        columns: mergedColumns,
+        columns: columnsWithCustomSizing,
         defaultColumn: {
             minSize: 100,
             maxSize: 600,
         },
         state: {
             columnSizing: storeColumnSizing?.columnSizing || {},
+            rowSelection,
         },
+        enableRowSelection: enableRowSelection,
+        onRowSelectionChange: setRowSelection,
         onColumnSizingChange: (updater) => {
             dispatch(
                 setColumnSizing({
@@ -215,7 +289,18 @@ const GlobalTable = <T,>({
         debugTable: true,
         debugHeaders: true,
         debugColumns: true,
+        meta,
     });
+
+    // Call the callback when row selection changes
+    useEffect(() => {
+        if (enableRowSelection && onRowSelectionChange) {
+            const selectedRows = table
+                .getFilteredSelectedRowModel()
+                .rows.map((row) => row.original);
+            onRowSelectionChange(selectedRows);
+        }
+    }, [rowSelection, enableRowSelection]);
 
     useEffect(() => {
         if (!storeColumnSizing) {
@@ -223,14 +308,31 @@ const GlobalTable = <T,>({
                 setColumnSizing({
                     tableName,
                     columnSizing: table.getState().columnSizing,
-                    columns: defaultColumns.map((c) => ({
-                        ...c,
-                        visible: true,
-                    })),
+                    columns: columnsWithSelection,
+                }),
+            );
+        } else {
+            dispatch(
+                setColumnSizing({
+                    tableName,
+                    columnSizing: storeColumnSizing.columnSizing,
+                    columns: columnsWithSelection?.map((col) => {
+                        const found = storeColumnSizing?.columns?.find(
+                            (c) => c.id === col.id,
+                        );
+                        if (found) {
+                            return {
+                                ...col,
+                                visible: found.visible,
+                            };
+                        } else {
+                            return col;
+                        }
+                    }),
                 }),
             );
         }
-    }, []);
+    }, [defaultColumns]);
 
     const columnSizeVars = React.useMemo(() => {
         const headers = table?.getFlatHeaders();
@@ -258,15 +360,21 @@ const GlobalTable = <T,>({
                         },
                     }}
                 >
-                    <div className='thead sticky top-0 bg-background shadow-sm z-50'>
+                    <div
+                        className={
+                            !isLoading && table.getRowModel().rows.length === 0
+                                ? 'hidden'
+                                : 'thead bg-sidebar sticky top-0 z-50 shadow-sm'
+                        }
+                    >
                         <div className='relative flex'>
                             {table.getHeaderGroups().map((headerGroup, i) => (
-                                <div key={headerGroup.id} className='h-12 flex'>
+                                <div key={headerGroup.id} className='flex h-12'>
                                     {headerGroup.headers.map((header) => (
                                         <div
                                             key={header.id}
                                             className={
-                                                'flex items-center h-full text-dark-gray text-sm relative p-2 '
+                                                'text-black relative flex h-full items-center p-2 text-sm'
                                             }
                                             style={{
                                                 width:
@@ -284,57 +392,61 @@ const GlobalTable = <T,>({
                                                           header.getContext(),
                                                       )}
                                             </div>
-                                            <div
-                                                className={cn(
-                                                    'hover:border-r-2 hover:border-primary border-border-color absolute w-2 top-0 h-full right-0 cursor-col-resize select-none touch-none truncate',
-                                                    header.column.getIsResizing()
-                                                        ? 'opacity-100 border-primary'
-                                                        : '',
-                                                )}
-                                                {...{
-                                                    onDoubleClick: () =>
-                                                        header.column.resetSize(),
-                                                    onMouseDown:
-                                                        header.getResizeHandler(),
-                                                    onTouchStart:
-                                                        header.getResizeHandler(),
-                                                }}
-                                            />
+                                            {header.column.id !== 'select' && (
+                                                <div
+                                                    className={cn(
+                                                        'hover:border-primary border-border-color absolute top-0 right-0 h-full w-2 cursor-col-resize touch-none truncate select-none hover:border-r-2',
+                                                        header.column.getIsResizing()
+                                                            ? 'border-primary opacity-100'
+                                                            : '',
+                                                    )}
+                                                    {...{
+                                                        onDoubleClick: () =>
+                                                            header.column.resetSize(),
+                                                        onMouseDown:
+                                                            header.getResizeHandler(),
+                                                        onTouchStart:
+                                                            header.getResizeHandler(),
+                                                    }}
+                                                />
+                                            )}
                                         </div>
                                     ))}
                                 </div>
                             ))}
 
-                            <div className='sticky right-0 top-0 flex justify-end w-full'>
-                                <Button
-                                    onClick={() => setCollumnSettings(true)}
-                                    variant={'plain'}
-                                    size={'icon'}
-                                    className='bg-background border-none rounded-none w-9 z-40 justify-center h-12 flex items-center'
-                                >
-                                    <PlusCircle size={18} />
-                                </Button>
-                            </div>
+                            {/* Only show the Add Column button if showAddColumn is true */}
+                            {showAddColumn && (
+                                <div className='sticky top-0 right-0 flex w-full items-center justify-end pr-1'>
+                                    <Button
+                                        variant={'plain'}
+                                        tooltip='Customize Columns'
+                                        onClick={() => setCollumnSettings(true)}
+                                        className='text-gray z-40 flex h-12 w-9 items-center justify-center rounded-none border-none bg-transparent hover:bg-transparent'
+                                    >
+                                        <Settings />
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    {/* When resizing any column we will render this special memoized version of our table body */}
 
                     <>
                         {!isLoading && table.getRowModel().rows.length === 0 ? (
-                            <div className='w-[calc(100%-256px)] py-4 flex justify-center'>
-                                <div></div>
+                            <div className='flex w-[calc(100%)] justify-center py-4'>
+                                <EmptyData />
                             </div>
                         ) : table.getState().columnSizingInfo
                               .isResizingColumn && enableMemo ? (
                             <MemoizedTableBody
-                                totalColumn={defaultColumns?.length}
+                                totalColumn={columnsWithSelection?.length}
                                 isLoading={isLoading}
                                 table={table}
                                 limit={limit}
                             />
                         ) : (
                             <TableBody
-                                totalColumn={defaultColumns?.length}
+                                totalColumn={columnsWithSelection?.length}
                                 isLoading={isLoading}
                                 table={table}
                                 limit={limit}
@@ -343,12 +455,15 @@ const GlobalTable = <T,>({
                     </>
                 </div>
 
-                <ColumnSettingsModal
-                    table={table}
-                    tableName={tableName}
-                    open={columnSettingsOpen}
-                    setOpen={setCollumnSettings}
-                />
+                {/* Only render the column settings modal if showAddColumn is true */}
+                {showAddColumn && (
+                    <ColumnSettingsModal
+                        table={table}
+                        tableName={tableName}
+                        open={columnSettingsOpen}
+                        setOpen={setCollumnSettings}
+                    />
+                )}
             </div>
         </SimpleBar>
     );

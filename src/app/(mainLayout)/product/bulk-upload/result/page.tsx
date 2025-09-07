@@ -51,7 +51,7 @@ const BulkUploadResultPage = () => {
             cell: ({ row }) => {
                 return <p>{row.index + 1}</p>;
             },
-            id: 'id',
+            id: '_id',
             visible: true,
         },
         {
@@ -83,7 +83,7 @@ const BulkUploadResultPage = () => {
             accessorKey: 'brand',
             header: 'Brand',
             cell: ({ row }) => {
-                const brand: TBrand = row.getValue('brand');
+                const brand: TBrand = row.original.brand;
                 return (
                     <div className='flex items-center gap-1'>
                         <CustomAvatar src={brand?.image} />
@@ -133,7 +133,7 @@ const BulkUploadResultPage = () => {
             visible: true,
         },
         {
-            accessorKey: '',
+            accessorKey: '_id',
             header: 'Actions',
             cell: ({ row }) => {
                 const id = row.getValue('_id');

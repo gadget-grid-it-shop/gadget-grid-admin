@@ -74,7 +74,7 @@ const AllProducts = () => {
             cell: ({ row }) => {
                 return <p>{row.index + 1}</p>;
             },
-            id: 'id',
+            id: '_id',
             visible: true,
             canHide: false,
         },
@@ -178,7 +178,7 @@ const AllProducts = () => {
             cell: ({ row }) => {
                 return <div className=''>{row.original.quantity}</div>;
             },
-            id: 'quantiy',
+            id: 'quantity',
             visible: true,
         },
         {
@@ -234,23 +234,23 @@ const AllProducts = () => {
         },
     ];
 
-    const adminSelectData: TSelectOptions[] = adminData?.data?.map(
-        (admin: TUser) => ({
-            label: admin?.fullName,
-            value: admin?._id,
-        }),
-    );
-    const brandSelectData: TSelectOptions[] = brandData?.data?.map(
-        (brand: TBrand) => ({
-            label: brand?.name,
-            value: brand?._id,
-        }),
-    );
-    const categorySelectData: TSelectOptions[] =
-        categoryData?.data?.map((category: TCategory) => ({
-            label: category?.name,
-            value: category?._id,
-        })) || [];
+    // const adminSelectData: TSelectOptions[] = adminData?.data?.map(
+    //     (admin: TUser) => ({
+    //         label: admin?.fullName,
+    //         value: admin?._id,
+    //     }),
+    // );
+    // const brandSelectData: TSelectOptions[] = brandData?.data?.map(
+    //     (brand: TBrand) => ({
+    //         label: brand?.name,
+    //         value: brand?._id,
+    //     }),
+    // );
+    // const categorySelectData: TSelectOptions[] =
+    //     categoryData?.data?.map((category: TCategory) => ({
+    //         label: category?.name,
+    //         value: category?._id,
+    //     })) || [];
 
     const handlePageChange = (page: number, limit: number) => {
         setPage(page);
@@ -295,7 +295,7 @@ const AllProducts = () => {
                     </>
                 }
             />
-            <div className='grid grid-cols-2 gap-3 lg:grid-cols-5'>
+            <div className='grid grid-cols-2 gap-3 lg:grid-cols-5 mb-2'>
                 <Input
                     type='text'
                     onChange={(e) => setSearchTerm(e.target.value)}

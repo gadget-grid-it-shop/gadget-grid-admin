@@ -24,6 +24,7 @@ import {
     SidebarMenuSub,
     SidebarMenuSubItem,
     SidebarRail,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
@@ -51,6 +52,7 @@ import {
     CollapsibleTrigger,
 } from '../ui/collapsible';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 interface TMenu {
     id: number;
@@ -163,6 +165,7 @@ export function AppSidebar() {
     const { user } = useAppSelector((state) => state.auth);
     const pathName = usePathname();
     const [openRoute, setOpenRoute] = useState<number[]>([]);
+    const { state } = useSidebar();
 
     useEffect(() => {
         menus.forEach((menu) => {
@@ -235,18 +238,21 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size='lg'>
-                            <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+                            {/* <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
                                 <GalleryVerticalEnd className='size-4' />
-                            </div>
-                            <div className='flex flex-col gap-0.5 leading-none'>
+                            </div> */}
+                            <div className='flex shrink-0 flex-col gap-0.5 leading-none'>
                                 <Image
                                     src={
                                         theme !== 'dark'
-                                            ? '/logo/logo.png'
-                                            : '/logo/logo-white.png'
+                                            ? '/logo/logo-white.png'
+                                            : '/logo/logo-dark.png'
                                     }
                                     width={140}
-                                    height={40}
+                                    height={50}
+                                    className={cn('w-full h-12', {
+                                        'h-[34px]': state === 'collapsed',
+                                    })}
                                     alt='logo'
                                 />
                             </div>
