@@ -248,8 +248,8 @@ export function AppSidebar() {
                                             ? '/logo/logo-white.png'
                                             : '/logo/logo-dark.png'
                                     }
-                                    width={140}
-                                    height={50}
+                                    width={320}
+                                    height={170}
                                     className={cn('w-full h-12', {
                                         'h-[34px]': state === 'collapsed',
                                     })}
